@@ -1,0 +1,1202 @@
+[
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Critical Configuration / Secret File",
+    "severity": "HIGH",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/.env (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/.env",
+    "cwe_id": "CWE-530",
+    "entry": ".env"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Backup Archive File",
+    "severity": "HIGH",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/backup.zip (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/backup.zip",
+    "cwe_id": "CWE-530",
+    "entry": "backup.zip"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Critical Configuration / Secret File",
+    "severity": "HIGH",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/db.sqlite (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/db.sqlite",
+    "cwe_id": "CWE-530",
+    "entry": "db.sqlite"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Critical Configuration / Secret File",
+    "severity": "HIGH",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/database.sql (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/database.sql",
+    "cwe_id": "CWE-530",
+    "entry": "database.sql"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Backup Archive File",
+    "severity": "HIGH",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/app.bak (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/app.bak",
+    "cwe_id": "CWE-530",
+    "entry": "app.bak"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Configuration File",
+    "severity": "MEDIUM",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/docker-compose.yml (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/docker-compose.yml",
+    "cwe_id": "CWE-200",
+    "entry": "docker-compose.yml"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Configuration File",
+    "severity": "MEDIUM",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/sitemap.xml (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/sitemap.xml",
+    "cwe_id": "CWE-200",
+    "entry": "sitemap.xml"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Configuration File",
+    "severity": "MEDIUM",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/credential.xml (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/credential.xml",
+    "cwe_id": "CWE-200",
+    "entry": "credential.xml"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Configuration File",
+    "severity": "MEDIUM",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/rss.xml (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/rss.xml",
+    "cwe_id": "CWE-200",
+    "entry": "rss.xml"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Configuration File",
+    "severity": "MEDIUM",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/web.config (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/web.config",
+    "cwe_id": "CWE-200",
+    "entry": "web.config"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Configuration File",
+    "severity": "MEDIUM",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/swagger.json (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/swagger.json",
+    "cwe_id": "CWE-200",
+    "entry": "swagger.json"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/space.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/space.php",
+    "cwe_id": "CWE-200",
+    "entry": "space.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Configuration File",
+    "severity": "MEDIUM",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/config.json (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/config.json",
+    "cwe_id": "CWE-200",
+    "entry": "config.json"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/error.aspx (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/error.aspx",
+    "cwe_id": "CWE-200",
+    "entry": "error.aspx"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/test.html (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/test.html",
+    "cwe_id": "CWE-200",
+    "entry": "test.html"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/robots.txt (HTTP 200 OK, Size: 28 bytes)",
+    "endpoint": "http://127.0.0.1:3000/robots.txt",
+    "cwe_id": "CWE-200",
+    "entry": "robots.txt"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/index2.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/index2.php",
+    "cwe_id": "CWE-200",
+    "entry": "index2.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/inlinemod.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/inlinemod.php",
+    "cwe_id": "CWE-200",
+    "entry": "inlinemod.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/ask_a_question.html (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/ask_a_question.html",
+    "cwe_id": "CWE-200",
+    "entry": "ask_a_question.html"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/update.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/update.php",
+    "cwe_id": "CWE-200",
+    "entry": "update.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/showgroups.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/showgroups.php",
+    "cwe_id": "CWE-200",
+    "entry": "showgroups.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/shops_buyaction.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/shops_buyaction.php",
+    "cwe_id": "CWE-200",
+    "entry": "shops_buyaction.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/page-not-found.aspx (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/page-not-found.aspx",
+    "cwe_id": "CWE-200",
+    "entry": "page-not-found.aspx"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/unsubscribe.html (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/unsubscribe.html",
+    "cwe_id": "CWE-200",
+    "entry": "unsubscribe.html"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/account_edit.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/account_edit.php",
+    "cwe_id": "CWE-200",
+    "entry": "account_edit.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/pdf-order-slip.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/pdf-order-slip.php",
+    "cwe_id": "CWE-200",
+    "entry": "pdf-order-slip.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/sendtofriend.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/sendtofriend.php",
+    "cwe_id": "CWE-200",
+    "entry": "sendtofriend.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/ShoppingCart.asp (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/ShoppingCart.asp",
+    "cwe_id": "CWE-200",
+    "entry": "ShoppingCart.asp"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/statistics.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/statistics.php",
+    "cwe_id": "CWE-200",
+    "entry": "statistics.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/account.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/account.php",
+    "cwe_id": "CWE-200",
+    "entry": "account.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/reputation.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/reputation.php",
+    "cwe_id": "CWE-200",
+    "entry": "reputation.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/terms.html (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/terms.html",
+    "cwe_id": "CWE-200",
+    "entry": "terms.html"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/style.css (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/style.css",
+    "cwe_id": "CWE-200",
+    "entry": "style.css"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/checkout.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/checkout.php",
+    "cwe_id": "CWE-200",
+    "entry": "checkout.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/gv_send.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/gv_send.php",
+    "cwe_id": "CWE-200",
+    "entry": "gv_send.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/advanced_search.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/advanced_search.php",
+    "cwe_id": "CWE-200",
+    "entry": "advanced_search.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/footer.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/footer.php",
+    "cwe_id": "CWE-200",
+    "entry": "footer.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/WebResource.axd (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/WebResource.axd",
+    "cwe_id": "CWE-200",
+    "entry": "WebResource.axd"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/viewforum.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/viewforum.php",
+    "cwe_id": "CWE-200",
+    "entry": "viewforum.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/feedback_js.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/feedback_js.php",
+    "cwe_id": "CWE-200",
+    "entry": "feedback_js.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/memcp.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/memcp.php",
+    "cwe_id": "CWE-200",
+    "entry": "memcp.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/statistics.html (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/statistics.html",
+    "cwe_id": "CWE-200",
+    "entry": "statistics.html"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/addresses.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/addresses.php",
+    "cwe_id": "CWE-200",
+    "entry": "addresses.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/newthread.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/newthread.php",
+    "cwe_id": "CWE-200",
+    "entry": "newthread.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/contact_us.html (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/contact_us.html",
+    "cwe_id": "CWE-200",
+    "entry": "contact_us.html"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/user.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/user.php",
+    "cwe_id": "CWE-200",
+    "entry": "user.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/wpcallback.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/wpcallback.php",
+    "cwe_id": "CWE-200",
+    "entry": "wpcallback.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/posttocar.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/posttocar.php",
+    "cwe_id": "CWE-200",
+    "entry": "posttocar.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/post.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/post.php",
+    "cwe_id": "CWE-200",
+    "entry": "post.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/server.log (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/server.log",
+    "cwe_id": "CWE-200",
+    "entry": "server.log"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/moderator.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/moderator.php",
+    "cwe_id": "CWE-200",
+    "entry": "moderator.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/car.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/car.php",
+    "cwe_id": "CWE-200",
+    "entry": "car.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/wp-commentsrss2.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/wp-commentsrss2.php",
+    "cwe_id": "CWE-200",
+    "entry": "wp-commentsrss2.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/tags.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/tags.php",
+    "cwe_id": "CWE-200",
+    "entry": "tags.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/memberlist.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/memberlist.php",
+    "cwe_id": "CWE-200",
+    "entry": "memberlist.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/count.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/count.php",
+    "cwe_id": "CWE-200",
+    "entry": "count.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/contact_us.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/contact_us.php",
+    "cwe_id": "CWE-200",
+    "entry": "contact_us.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/INSTALL.pgsql.txt (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/INSTALL.pgsql.txt",
+    "cwe_id": "CWE-200",
+    "entry": "INSTALL.pgsql.txt"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/feedback.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/feedback.php",
+    "cwe_id": "CWE-200",
+    "entry": "feedback.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/checkout.aspx (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/checkout.aspx",
+    "cwe_id": "CWE-200",
+    "entry": "checkout.aspx"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/error_message.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/error_message.php",
+    "cwe_id": "CWE-200",
+    "entry": "error_message.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/misc.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/misc.php",
+    "cwe_id": "CWE-200",
+    "entry": "misc.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/ucp.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/ucp.php",
+    "cwe_id": "CWE-200",
+    "entry": "ucp.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/get-file.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/get-file.php",
+    "cwe_id": "CWE-200",
+    "entry": "get-file.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/address.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/address.php",
+    "cwe_id": "CWE-200",
+    "entry": "address.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/cookie_usage.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/cookie_usage.php",
+    "cwe_id": "CWE-200",
+    "entry": "cookie_usage.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/Default.aspx (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/Default.aspx",
+    "cwe_id": "CWE-200",
+    "entry": "Default.aspx"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/cycle_image.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/cycle_image.php",
+    "cwe_id": "CWE-200",
+    "entry": "cycle_image.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/vbseocp.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/vbseocp.php",
+    "cwe_id": "CWE-200",
+    "entry": "vbseocp.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/newsletter.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/newsletter.php",
+    "cwe_id": "CWE-200",
+    "entry": "newsletter.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/info.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/info.php",
+    "cwe_id": "CWE-200",
+    "entry": "info.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/search.aspx (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/search.aspx",
+    "cwe_id": "CWE-200",
+    "entry": "search.aspx"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/login.asp (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/login.asp",
+    "cwe_id": "CWE-200",
+    "entry": "login.asp"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/submit.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/submit.php",
+    "cwe_id": "CWE-200",
+    "entry": "submit.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/order-follow.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/order-follow.php",
+    "cwe_id": "CWE-200",
+    "entry": "order-follow.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/postings.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/postings.php",
+    "cwe_id": "CWE-200",
+    "entry": "postings.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/404.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/404.php",
+    "cwe_id": "CWE-200",
+    "entry": "404.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/index.cfm (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/index.cfm",
+    "cwe_id": "CWE-200",
+    "entry": "index.cfm"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/images.inc.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/images.inc.php",
+    "cwe_id": "CWE-200",
+    "entry": "images.inc.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/privacy.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/privacy.php",
+    "cwe_id": "CWE-200",
+    "entry": "privacy.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/topicadmin.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/topicadmin.php",
+    "cwe_id": "CWE-200",
+    "entry": "topicadmin.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/index.htm (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/index.htm",
+    "cwe_id": "CWE-200",
+    "entry": "index.htm"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/seccode.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/seccode.php",
+    "cwe_id": "CWE-200",
+    "entry": "seccode.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/affiche.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/affiche.php",
+    "cwe_id": "CWE-200",
+    "entry": "affiche.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/avatar.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/avatar.php",
+    "cwe_id": "CWE-200",
+    "entry": "avatar.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/header.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/header.php",
+    "cwe_id": "CWE-200",
+    "entry": "header.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/impressum.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/impressum.php",
+    "cwe_id": "CWE-200",
+    "entry": "impressum.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/mytag_js.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/mytag_js.php",
+    "cwe_id": "CWE-200",
+    "entry": "mytag_js.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/album.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/album.php",
+    "cwe_id": "CWE-200",
+    "entry": "album.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/payment_gateway.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/payment_gateway.php",
+    "cwe_id": "CWE-200",
+    "entry": "payment_gateway.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/license.txt (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/license.txt",
+    "cwe_id": "CWE-200",
+    "entry": "license.txt"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/pagination.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/pagination.php",
+    "cwe_id": "CWE-200",
+    "entry": "pagination.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/receipt.aspx (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/receipt.aspx",
+    "cwe_id": "CWE-200",
+    "entry": "receipt.aspx"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/readme.html (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/readme.html",
+    "cwe_id": "CWE-200",
+    "entry": "readme.html"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/report.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/report.php",
+    "cwe_id": "CWE-200",
+    "entry": "report.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/privmsg.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/privmsg.php",
+    "cwe_id": "CWE-200",
+    "entry": "privmsg.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/logout.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/logout.php",
+    "cwe_id": "CWE-200",
+    "entry": "logout.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/global.asa (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/global.asa",
+    "cwe_id": "CWE-200",
+    "entry": "global.asa"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/shop_closed.html (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/shop_closed.html",
+    "cwe_id": "CWE-200",
+    "entry": "shop_closed.html"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/popup.aspx (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/popup.aspx",
+    "cwe_id": "CWE-200",
+    "entry": "popup.aspx"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/.htaccess (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/.htaccess",
+    "cwe_id": "CWE-200",
+    "entry": ".htaccess"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/signin.aspx (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/signin.aspx",
+    "cwe_id": "CWE-200",
+    "entry": "signin.aspx"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/xmlrpc.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/xmlrpc.php",
+    "cwe_id": "CWE-200",
+    "entry": "xmlrpc.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/faq.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/faq.php",
+    "cwe_id": "CWE-200",
+    "entry": "faq.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/order-slip.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/order-slip.php",
+    "cwe_id": "CWE-200",
+    "entry": "order-slip.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/offers.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/offers.php",
+    "cwe_id": "CWE-200",
+    "entry": "offers.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/region.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/region.php",
+    "cwe_id": "CWE-200",
+    "entry": "region.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/search.html (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/search.html",
+    "cwe_id": "CWE-200",
+    "entry": "search.html"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/download.aspx (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/download.aspx",
+    "cwe_id": "CWE-200",
+    "entry": "download.aspx"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/viewonline.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/viewonline.php",
+    "cwe_id": "CWE-200",
+    "entry": "viewonline.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/product.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/product.php",
+    "cwe_id": "CWE-200",
+    "entry": "product.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/printthread.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/printthread.php",
+    "cwe_id": "CWE-200",
+    "entry": "printthread.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/print_order.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/print_order.php",
+    "cwe_id": "CWE-200",
+    "entry": "print_order.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/admin.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/admin.php",
+    "cwe_id": "CWE-200",
+    "entry": "admin.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/INSTALL.mysql.txt (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/INSTALL.mysql.txt",
+    "cwe_id": "CWE-200",
+    "entry": "INSTALL.mysql.txt"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/conditions.html (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/conditions.html",
+    "cwe_id": "CWE-200",
+    "entry": "conditions.html"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/404.aspx (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/404.aspx",
+    "cwe_id": "CWE-200",
+    "entry": "404.aspx"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/redirect.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/redirect.php",
+    "cwe_id": "CWE-200",
+    "entry": "redirect.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/usercp.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/usercp.php",
+    "cwe_id": "CWE-200",
+    "entry": "usercp.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/shopping_cart.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/shopping_cart.php",
+    "cwe_id": "CWE-200",
+    "entry": "shopping_cart.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/poll.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/poll.php",
+    "cwe_id": "CWE-200",
+    "entry": "poll.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/giftcert.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/giftcert.php",
+    "cwe_id": "CWE-200",
+    "entry": "giftcert.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/auth.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/auth.php",
+    "cwe_id": "CWE-200",
+    "entry": "auth.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/modcp.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/modcp.php",
+    "cwe_id": "CWE-200",
+    "entry": "modcp.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/login.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/login.php",
+    "cwe_id": "CWE-200",
+    "entry": "login.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/admin_index.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/admin_index.php",
+    "cwe_id": "CWE-200",
+    "entry": "admin_index.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/online.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/online.php",
+    "cwe_id": "CWE-200",
+    "entry": "online.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/config.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/config.php",
+    "cwe_id": "CWE-200",
+    "entry": "config.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/index.asp (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/index.asp",
+    "cwe_id": "CWE-200",
+    "entry": "index.asp"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/posting.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/posting.php",
+    "cwe_id": "CWE-200",
+    "entry": "posting.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/attachment.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/attachment.php",
+    "cwe_id": "CWE-200",
+    "entry": "attachment.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/ajax_cron.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/ajax_cron.php",
+    "cwe_id": "CWE-200",
+    "entry": "ajax_cron.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/INSTALL.txt (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/INSTALL.txt",
+    "cwe_id": "CWE-200",
+    "entry": "INSTALL.txt"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/newattachment.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/newattachment.php",
+    "cwe_id": "CWE-200",
+    "entry": "newattachment.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/api-docs (HTTP 200 OK, Size: 3106 bytes)",
+    "endpoint": "http://127.0.0.1:3000/api-docs",
+    "cwe_id": "CWE-200",
+    "entry": "api-docs"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/search.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/search.php",
+    "cwe_id": "CWE-200",
+    "entry": "search.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/test.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/test.php",
+    "cwe_id": "CWE-200",
+    "entry": "test.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/style.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/style.php",
+    "cwe_id": "CWE-200",
+    "entry": "style.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/forumdisplay.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/forumdisplay.php",
+    "cwe_id": "CWE-200",
+    "entry": "forumdisplay.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/antispam.txt (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/antispam.txt",
+    "cwe_id": "CWE-200",
+    "entry": "antispam.txt"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/help.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/help.php",
+    "cwe_id": "CWE-200",
+    "entry": "help.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/404.shtml (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/404.shtml",
+    "cwe_id": "CWE-200",
+    "entry": "404.shtml"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/default.asp (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/default.asp",
+    "cwe_id": "CWE-200",
+    "entry": "default.asp"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/userapp.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/userapp.php",
+    "cwe_id": "CWE-200",
+    "entry": "userapp.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/profile.aspx (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/profile.aspx",
+    "cwe_id": "CWE-200",
+    "entry": "profile.aspx"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/payments.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/payments.php",
+    "cwe_id": "CWE-200",
+    "entry": "payments.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/newreply.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/newreply.php",
+    "cwe_id": "CWE-200",
+    "entry": "newreply.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/reviews.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/reviews.php",
+    "cwe_id": "CWE-200",
+    "entry": "reviews.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/ad_js.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/ad_js.php",
+    "cwe_id": "CWE-200",
+    "entry": "ad_js.php"
+  },
+  {
+    "check_name": "CONTENT_DISCOVERY: Exposed Hidden File or Route",
+    "severity": "LOW",
+    "evidence": "Wordlist discovery hit at http://127.0.0.1:3000/stow.php (HTTP 200 OK, Size: 9426 bytes)",
+    "endpoint": "http://127.0.0.1:3000/stow.php",
+    "cwe_id": "CWE-200",
+    "entry": "stow.php"
+  }
+]

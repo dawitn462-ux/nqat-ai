@@ -1,0 +1,211 @@
+{
+  "scan_id": "scan_1788051426",
+  "target_url": "http://localhost:3000",
+  "timestamp": "2026-08-30T00:57:06.315168+00:00",
+  "summary": {
+    "total_endpoints_scanned": 4,
+    "total_vulnerabilities": 10,
+    "severity_counts": {
+      "CRITICAL": 1,
+      "HIGH": 2,
+      "MEDIUM": 1,
+      "LOW": 3,
+      "INFO": 3
+    },
+    "scan_duration_seconds": 0.68
+  },
+  "findings": [
+    {
+      "id": "SEC_HDR_001_STRICT_TRANSPORT_SECURITY",
+      "title": "Missing Security Header: Strict-Transport-Security",
+      "severity": "LOW",
+      "description": "Missing Strict-Transport-Security (HSTS) header. (Target: http://localhost:3000)",
+      "endpoint": "http://localhost:3000",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP/200 response headers missing &#x27;strict-transport-security&#x27;.",
+      "cwe": "CWE-523",
+      "remediation": "Enable HSTS in web server response headers (e.g. Strict-Transport-Security: max-age=31536000; includeSubDomains)."
+    },
+    {
+      "id": "SEC_HDR_001_CONTENT_SECURITY_POLICY",
+      "title": "Missing Security Header: Content-Security-Policy",
+      "severity": "MEDIUM",
+      "description": "Missing Content-Security-Policy (CSP) header. (Target: http://localhost:3000)",
+      "endpoint": "http://localhost:3000",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP/200 response headers missing &#x27;content-security-policy&#x27;.",
+      "cwe": "CWE-1021",
+      "remediation": "Define a restrictive Content-Security-Policy header to prevent XSS and data injection attacks."
+    },
+    {
+      "id": "SEC_HDR_001_REFERRER_POLICY",
+      "title": "Missing Security Header: Referrer-Policy",
+      "severity": "INFO",
+      "description": "Missing Referrer-Policy header. (Target: http://localhost:3000)",
+      "endpoint": "http://localhost:3000",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP/200 response headers missing &#x27;referrer-policy&#x27;.",
+      "cwe": "CWE-200",
+      "remediation": "Set Referrer-Policy: strict-origin-when-cross-origin to limit referrer leakage."
+    },
+    {
+      "id": "INFO_LEAK_001__API-DOCS",
+      "title": "Exposed API Documentation",
+      "severity": "INFO",
+      "description": "Publicly accessible OpenAPI / Swagger documentation. Found at http://localhost:3000/api-docs",
+      "endpoint": "http://localhost:3000/api-docs",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK (Response size: 3106 bytes)",
+      "cwe": "CWE-200",
+      "remediation": "Restrict unauthenticated access to '/api-docs' endpoint if not intended for public access."
+    },
+    {
+      "id": "INFO_LEAK_001__SWAGGER-UI",
+      "title": "Exposed Swagger UI",
+      "severity": "INFO",
+      "description": "Public Swagger UI endpoint. Found at http://localhost:3000/swagger-ui",
+      "endpoint": "http://localhost:3000/swagger-ui",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK (Response size: 9393 bytes)",
+      "cwe": "CWE-200",
+      "remediation": "Restrict unauthenticated access to '/swagger-ui' endpoint if not intended for public access."
+    },
+    {
+      "id": "INFO_LEAK_001__FTP",
+      "title": "Exposed FTP Directory",
+      "severity": "LOW",
+      "description": "Publicly accessible FTP directory/file browser. Found at http://localhost:3000/ftp",
+      "endpoint": "http://localhost:3000/ftp",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK (Response size: 11308 bytes)",
+      "cwe": "CWE-200",
+      "remediation": "Restrict unauthenticated access to '/ftp' endpoint if not intended for public access."
+    },
+    {
+      "id": "INFO_LEAK_001__GIT_HEAD",
+      "title": "Exposed Git Repository",
+      "severity": "HIGH",
+      "description": "Exposed .git directory allows source code download. Found at http://localhost:3000/.git/HEAD",
+      "endpoint": "http://localhost:3000/.git/HEAD",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK (Response size: 9393 bytes)",
+      "cwe": "CWE-200",
+      "remediation": "Restrict unauthenticated access to '/.git/HEAD' endpoint if not intended for public access."
+    },
+    {
+      "id": "INFO_LEAK_001__METRICS",
+      "title": "Exposed Metrics Endpoint",
+      "severity": "LOW",
+      "description": "Exposed Prometheus/application metrics endpoint. Found at http://localhost:3000/metrics",
+      "endpoint": "http://localhost:3000/metrics",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK (Response size: 26058 bytes)",
+      "cwe": "CWE-200",
+      "remediation": "Restrict unauthenticated access to '/metrics' endpoint if not intended for public access."
+    },
+    {
+      "id": "SQLI_001_SEARCH_Q",
+      "title": "SQL Injection Vulnerability in Product Search",
+      "severity": "HIGH",
+      "description": "The 'q' parameter in '/rest/products/search' is vulnerable to SQL injection. Unsanitized input allows manipulating backend database queries.",
+      "endpoint": "http://localhost:3000/rest/products/search",
+      "parameter": "q",
+      "payload": "' OR '1'='1",
+      "evidence": "Payload &#x27;&#x27; OR &#x27;1&#x27;=&#x27;1&#x27; produced HTTP 200 response containing database output/error.",
+      "cwe": "CWE-89",
+      "remediation": "Use parameterized queries / prepared statements (ORM parameter binding) instead of dynamic string concatenation."
+    },
+    {
+      "id": "SQLI_001_LOGIN_AUTH_BYPASS",
+      "title": "Authentication Bypass via SQL Injection on Login",
+      "severity": "CRITICAL",
+      "description": "The login endpoint '/rest/user/login' is vulnerable to SQL injection authentication bypass. Crafted input in the email field allows logging in without valid credentials.",
+      "endpoint": "http://localhost:3000/rest/user/login",
+      "parameter": "email",
+      "payload": "' OR 1=1--",
+      "evidence": "HTTP 200 OK with valid authentication token returned for SQLi payload.",
+      "cwe": "CWE-89",
+      "remediation": "Use parameterized queries for user authentication lookups."
+    }
+  ],
+  "structured_findings": [
+    {
+      "target": "http://localhost:3000",
+      "check_name": "Missing Security Header: Strict-Transport-Security",
+      "severity": "LOW",
+      "evidence": "HTTP/200 response headers missing &#x27;strict-transport-security&#x27;.",
+      "timestamp": "2026-08-30T00:57:06.315168+00:00"
+    },
+    {
+      "target": "http://localhost:3000",
+      "check_name": "Missing Security Header: Content-Security-Policy",
+      "severity": "MEDIUM",
+      "evidence": "HTTP/200 response headers missing &#x27;content-security-policy&#x27;.",
+      "timestamp": "2026-08-30T00:57:06.315168+00:00"
+    },
+    {
+      "target": "http://localhost:3000",
+      "check_name": "Missing Security Header: Referrer-Policy",
+      "severity": "INFO",
+      "evidence": "HTTP/200 response headers missing &#x27;referrer-policy&#x27;.",
+      "timestamp": "2026-08-30T00:57:06.315168+00:00"
+    },
+    {
+      "target": "http://localhost:3000/api-docs",
+      "check_name": "Exposed API Documentation",
+      "severity": "INFO",
+      "evidence": "HTTP 200 OK (Response size: 3106 bytes)",
+      "timestamp": "2026-08-30T00:57:06.315168+00:00"
+    },
+    {
+      "target": "http://localhost:3000/swagger-ui",
+      "check_name": "Exposed Swagger UI",
+      "severity": "INFO",
+      "evidence": "HTTP 200 OK (Response size: 9393 bytes)",
+      "timestamp": "2026-08-30T00:57:06.315168+00:00"
+    },
+    {
+      "target": "http://localhost:3000/ftp",
+      "check_name": "Exposed FTP Directory",
+      "severity": "LOW",
+      "evidence": "HTTP 200 OK (Response size: 11308 bytes)",
+      "timestamp": "2026-08-30T00:57:06.315168+00:00"
+    },
+    {
+      "target": "http://localhost:3000/.git/HEAD",
+      "check_name": "Exposed Git Repository",
+      "severity": "HIGH",
+      "evidence": "HTTP 200 OK (Response size: 9393 bytes)",
+      "timestamp": "2026-08-30T00:57:06.315168+00:00"
+    },
+    {
+      "target": "http://localhost:3000/metrics",
+      "check_name": "Exposed Metrics Endpoint",
+      "severity": "LOW",
+      "evidence": "HTTP 200 OK (Response size: 26058 bytes)",
+      "timestamp": "2026-08-30T00:57:06.315168+00:00"
+    },
+    {
+      "target": "http://localhost:3000/rest/products/search",
+      "check_name": "SQL Injection Vulnerability in Product Search",
+      "severity": "HIGH",
+      "evidence": "Payload &#x27;&#x27; OR &#x27;1&#x27;=&#x27;1&#x27; produced HTTP 200 response containing database output/error.",
+      "timestamp": "2026-08-30T00:57:06.315168+00:00"
+    },
+    {
+      "target": "http://localhost:3000/rest/user/login",
+      "check_name": "Authentication Bypass via SQL Injection on Login",
+      "severity": "CRITICAL",
+      "evidence": "HTTP 200 OK with valid authentication token returned for SQLi payload.",
+      "timestamp": "2026-08-30T00:57:06.315168+00:00"
+    }
+  ]
+}

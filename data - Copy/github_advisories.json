@@ -1,0 +1,2951 @@
+{
+  "last_cached_at": "2026-09-03T10:41:43.008708+00:00",
+  "count": 100,
+  "advisories": [
+    {
+      "ghsaId": "GHSA-2mw5-23gm-pccq",
+      "summary": "OpenChoreo: Authenticated OS command injection via OpenChoreo Workflow Plane templates enables code execution in privileged pods",
+      "severity": "HIGH",
+      "publishedAt": "2026-09-02T23:45:26Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-2mw5-23gm-pccq"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-73667"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "github.com/openchoreo/openchoreo",
+              "ecosystem": "GO"
+            },
+            "vulnerableVersionRange": ">= 1.2.0-rc.1, < 1.2.0-rc.2"
+          },
+          {
+            "package": {
+              "name": "github.com/openchoreo/openchoreo",
+              "ecosystem": "GO"
+            },
+            "vulnerableVersionRange": ">= 1.1.0, < 1.1.4"
+          },
+          {
+            "package": {
+              "name": "github.com/openchoreo/openchoreo",
+              "ecosystem": "GO"
+            },
+            "vulnerableVersionRange": "< 1.0.4"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-c5f6-2rm9-2w8g",
+      "summary": "OpenChoreo: Unauthenticated build/workflow trigger via git-provider confusion (webhook signature bypass)",
+      "severity": "MODERATE",
+      "publishedAt": "2026-09-02T23:45:14Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-c5f6-2rm9-2w8g"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-73840"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "github.com/openchoreo/openchoreo",
+              "ecosystem": "GO"
+            },
+            "vulnerableVersionRange": ">= 1.2.0-rc.1, < 1.2.0-rc.2"
+          },
+          {
+            "package": {
+              "name": "github.com/openchoreo/openchoreo",
+              "ecosystem": "GO"
+            },
+            "vulnerableVersionRange": ">= 1.1.0, < 1.1.3"
+          },
+          {
+            "package": {
+              "name": "github.com/openchoreo/openchoreo",
+              "ecosystem": "GO"
+            },
+            "vulnerableVersionRange": "< 1.0.3"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-52gf-6rpq-fgmx",
+      "summary": "OpenChoreo: Cross-project command execution and wirelog view access via OpenChoreo openchoreo-api exec and wirelogs endpoints",
+      "severity": "HIGH",
+      "publishedAt": "2026-09-02T23:44:51Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-52gf-6rpq-fgmx"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-73841"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "github.com/openchoreo/openchoreo",
+              "ecosystem": "GO"
+            },
+            "vulnerableVersionRange": "< 1.1.6"
+          },
+          {
+            "package": {
+              "name": "github.com/openchoreo/openchoreo",
+              "ecosystem": "GO"
+            },
+            "vulnerableVersionRange": ">= 1.2.0-m.1, < 1.2.3"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-qh9r-j7rp-4x2m",
+      "summary": "OpenChoreo: Unauthenticated access to data-plane operations via OpenChoreo cluster-gateway management APIs",
+      "severity": "CRITICAL",
+      "publishedAt": "2026-09-02T23:43:55Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-qh9r-j7rp-4x2m"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-73843"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "github.com/openchoreo/openchoreo",
+              "ecosystem": "GO"
+            },
+            "vulnerableVersionRange": ">= 1.1.0, < 1.1.2"
+          },
+          {
+            "package": {
+              "name": "github.com/openchoreo/openchoreo",
+              "ecosystem": "GO"
+            },
+            "vulnerableVersionRange": "< 1.0.2"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-w878-pj84-3j5v",
+      "summary": "Mailpit: SMTP command parser buffers unbounded command lines before syntax rejection",
+      "severity": "HIGH",
+      "publishedAt": "2026-09-02T23:42:25Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-w878-pj84-3j5v"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-67445"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "github.com/axllent/mailpit",
+              "ecosystem": "GO"
+            },
+            "vulnerableVersionRange": "<= 1.30.3"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-gv5w-hfx8-8cwq",
+      "summary": "SeaweedFS: Filer JWT allowed_prefixes literal prefix match allows cross-tenant access to sibling paths",
+      "severity": "HIGH",
+      "publishedAt": "2026-09-02T23:42:05Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-gv5w-hfx8-8cwq"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-72921"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "github.com/seaweedfs/seaweedfs",
+              "ecosystem": "GO"
+            },
+            "vulnerableVersionRange": "< 0.0.0-20260512171048-05ed5c9ae8a2"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-75mr-qw9x-3r39",
+      "summary": "Mailpit: Thumbnail generation decodes unbounded image dimensions before scaling",
+      "severity": "HIGH",
+      "publishedAt": "2026-09-02T23:39:08Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-75mr-qw9x-3r39"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-67446"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "github.com/axllent/mailpit",
+              "ecosystem": "GO"
+            },
+            "vulnerableVersionRange": "<= 1.30.3"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-76g3-c3x4-crvx",
+      "summary": "Scrapy: S3DownloadHandler sends signed S3 requests over plaintext HTTP by default",
+      "severity": "HIGH",
+      "publishedAt": "2026-09-02T22:50:44Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-76g3-c3x4-crvx"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-84366"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "scrapy",
+              "ecosystem": "PIP"
+            },
+            "vulnerableVersionRange": "< 2.17.0"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-gcr2-9v8m-gq45",
+      "summary": "DiceBear: SVG injection via the unescaped rotate option in @dicebear/core (and fontSize/fontWeight in @dicebear/initials)",
+      "severity": "MODERATE",
+      "publishedAt": "2026-09-02T22:44:25Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-gcr2-9v8m-gq45"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-68921"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "@dicebear/initials",
+              "ecosystem": "NPM"
+            },
+            "vulnerableVersionRange": "<= 9.4.2"
+          },
+          {
+            "package": {
+              "name": "@dicebear/core",
+              "ecosystem": "NPM"
+            },
+            "vulnerableVersionRange": "<= 9.4.2"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-7mqg-cx4g-x2rf",
+      "summary": "Omnigent Guardrail policy bypass: shell-command parser fails open in policies/builtins/_shell.py",
+      "severity": "HIGH",
+      "publishedAt": "2026-09-02T22:40:07Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-7mqg-cx4g-x2rf"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-62676"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "omnigent",
+              "ecosystem": "PIP"
+            },
+            "vulnerableVersionRange": "< 0.3.0"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-4q39-2jhr-7qx8",
+      "summary": "Plate: SSRF with response disclosure in DOCX image embedding",
+      "severity": "HIGH",
+      "publishedAt": "2026-09-02T22:14:54Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-4q39-2jhr-7qx8"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-65842"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "@platejs/docx-io",
+              "ecosystem": "NPM"
+            },
+            "vulnerableVersionRange": "< 53.3.2"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-g29j-rwfv-h99w",
+      "summary": "Handlebars.java: Arbitrary file read in `SpringTemplateLoader` via URL-fragment suffix bypass",
+      "severity": "HIGH",
+      "publishedAt": "2026-09-02T22:12:03Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-g29j-rwfv-h99w"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-63490"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "com.github.jknack:handlebars-springmvc",
+              "ecosystem": "MAVEN"
+            },
+            "vulnerableVersionRange": "< 4.5.3"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-7w2g-9mf9-324m",
+      "summary": "Hurl: Cookies in Cookies section leak when redirecting to a different host",
+      "severity": "MODERATE",
+      "publishedAt": "2026-09-02T22:11:11Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-7w2g-9mf9-324m"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-63481"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "hurl",
+              "ecosystem": "RUST"
+            },
+            "vulnerableVersionRange": "<= 8.0.1"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-mvxr-6m87-mv2q",
+      "summary": "Mail: Email address spoofing via malformed RFC 2047 encoded-words",
+      "severity": "MODERATE",
+      "publishedAt": "2026-09-02T22:02:32Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-mvxr-6m87-mv2q"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-63435"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "mail",
+              "ecosystem": "RUBYGEMS"
+            },
+            "vulnerableVersionRange": "< 2.9.1"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-7mgc-c7pq-3rr3",
+      "summary": "Grav: 2FA Bypass via 'login.regenerate2FASecret' - Secret Rotation During Pending Challenge",
+      "severity": "HIGH",
+      "publishedAt": "2026-09-02T22:01:25Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-7mgc-c7pq-3rr3"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-62669"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "getgrav/grav",
+              "ecosystem": "COMPOSER"
+            },
+            "vulnerableVersionRange": "< 2.0.4"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-p8rw-8qj3-hf33",
+      "summary": "Omnigent: Unvalidated os_env.cwd in agent bundle yields arbitrary host filesystem access on runners without OMNIGENT_RUNNER_WORKSPACE",
+      "severity": "HIGH",
+      "publishedAt": "2026-09-02T22:00:54Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-p8rw-8qj3-hf33"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-62677"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "omnigent",
+              "ecosystem": "PIP"
+            },
+            "vulnerableVersionRange": "< 0.3.0"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-jrrm-9hc7-2v3h",
+      "summary": "Omnigent: Shared Agent Bundle Overwrite Leads to Authenticated Runner RCE",
+      "severity": "CRITICAL",
+      "publishedAt": "2026-09-02T21:55:11Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-jrrm-9hc7-2v3h"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-62674"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "omnigent",
+              "ecosystem": "PIP"
+            },
+            "vulnerableVersionRange": "< 0.3.0"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-756x-9hf6-q4h4",
+      "summary": "Omnigent: Uploaded Agent Bundle Allows Authenticated Runner RCE via Python Callable Tools",
+      "severity": "HIGH",
+      "publishedAt": "2026-09-02T21:54:52Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-756x-9hf6-q4h4"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-62675"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "omnigent",
+              "ecosystem": "PIP"
+            },
+            "vulnerableVersionRange": "< 0.3.0"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-mc5q-6hpj-rp7j",
+      "summary": "Grav: Twig sandbox config exfiltration via grav.offsetGet + dump filter (CVE-2026-44738 bypass)",
+      "severity": "MODERATE",
+      "publishedAt": "2026-09-02T21:41:12Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-mc5q-6hpj-rp7j"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-61842"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "getgrav/grav",
+              "ecosystem": "COMPOSER"
+            },
+            "vulnerableVersionRange": "< 2.0.2"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-928x-9mpw-8h56",
+      "summary": "Grav: Decompression Bomb via ZipArchiver - Missing Extraction Limits",
+      "severity": "MODERATE",
+      "publishedAt": "2026-09-02T21:35:43Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-928x-9mpw-8h56"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-61690"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "getgrav/grav",
+              "ecosystem": "COMPOSER"
+            },
+            "vulnerableVersionRange": "< 2.0.1"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-cpjf-6666-r8fx",
+      "summary": "link-preview-js DNS Rebinding SSRF Bypass / Incomplete Fix for CVE-2026-43897",
+      "severity": "HIGH",
+      "publishedAt": "2026-09-02T21:29:57Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-cpjf-6666-r8fx"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-61704"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "link-preview-js",
+              "ecosystem": "NPM"
+            },
+            "vulnerableVersionRange": "<= 4.0.3"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-5jgf-p345-68v8",
+      "summary": "fast-uri vulnerable to host confusion via skipped IDN canonicalization on scheme-relative references",
+      "severity": "HIGH",
+      "publishedAt": "2026-09-02T15:44:30Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-5jgf-p345-68v8"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-75931"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "fast-uri",
+              "ecosystem": "NPM"
+            },
+            "vulnerableVersionRange": ">= 4.0.1, < 4.1.3"
+          },
+          {
+            "package": {
+              "name": "fast-uri",
+              "ecosystem": "NPM"
+            },
+            "vulnerableVersionRange": ">= 3.1.3, < 3.1.6"
+          },
+          {
+            "package": {
+              "name": "fast-uri",
+              "ecosystem": "NPM"
+            },
+            "vulnerableVersionRange": ">= 2.4.2, < 2.4.5"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-f65p-4m7j-42xc",
+      "summary": "fast-uri vulnerable to server-side request forgery via malformed IPv6 normalization",
+      "severity": "HIGH",
+      "publishedAt": "2026-09-02T15:43:30Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-f65p-4m7j-42xc"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-75975"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "fast-uri",
+              "ecosystem": "NPM"
+            },
+            "vulnerableVersionRange": ">= 4.0.0, < 4.1.3"
+          },
+          {
+            "package": {
+              "name": "fast-uri",
+              "ecosystem": "NPM"
+            },
+            "vulnerableVersionRange": ">= 3.0.0, < 3.1.6"
+          },
+          {
+            "package": {
+              "name": "fast-uri",
+              "ecosystem": "NPM"
+            },
+            "vulnerableVersionRange": ">= 2.3.1, < 2.4.5"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-fph4-wmhf-6fwf",
+      "summary": "fast-uri vulnerable to server-side request forgery via repeated hostname percent-decoding",
+      "severity": "HIGH",
+      "publishedAt": "2026-09-02T15:42:39Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-fph4-wmhf-6fwf"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-75899"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "fast-uri",
+              "ecosystem": "NPM"
+            },
+            "vulnerableVersionRange": ">= 4.0.0, < 4.1.3"
+          },
+          {
+            "package": {
+              "name": "fast-uri",
+              "ecosystem": "NPM"
+            },
+            "vulnerableVersionRange": ">= 3.1.2, < 3.1.6"
+          },
+          {
+            "package": {
+              "name": "fast-uri",
+              "ecosystem": "NPM"
+            },
+            "vulnerableVersionRange": ">= 2.4.1, < 2.4.5"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-jqff-g426-hqxp",
+      "summary": "fast-uri vulnerable to host confusion via percent-encoded scheme normalization",
+      "severity": "HIGH",
+      "publishedAt": "2026-09-02T15:41:53Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-jqff-g426-hqxp"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-76172"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "fast-uri",
+              "ecosystem": "NPM"
+            },
+            "vulnerableVersionRange": ">= 4.0.0, < 4.1.3"
+          },
+          {
+            "package": {
+              "name": "fast-uri",
+              "ecosystem": "NPM"
+            },
+            "vulnerableVersionRange": ">= 3.0.0, < 3.1.6"
+          },
+          {
+            "package": {
+              "name": "fast-uri",
+              "ecosystem": "NPM"
+            },
+            "vulnerableVersionRange": ">= 2.3.1, < 2.4.5"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-p3m8-78j2-g5p3",
+      "summary": "NLTK: Default ENFORCE=False Disables All pathsec Security Controls",
+      "severity": "HIGH",
+      "publishedAt": "2026-09-02T15:40:33Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-p3m8-78j2-g5p3"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-62388"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "nltk",
+              "ecosystem": "PIP"
+            },
+            "vulnerableVersionRange": "<= 3.9.4"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-3gqm-fcw5-w839",
+      "summary": "NLTK: SSRF Fail-Open in validate_network_url() via DNS Resolution Failure",
+      "severity": "MODERATE",
+      "publishedAt": "2026-09-02T15:39:39Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-3gqm-fcw5-w839"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-63311"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "nltk",
+              "ecosystem": "PIP"
+            },
+            "vulnerableVersionRange": "<= 3.9.4"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-6gmq-8vp8-gcm6",
+      "summary": "xmldom: XML fragment injection via invalid EntityReference.nodeName during requireWellFormed serialization",
+      "severity": "MODERATE",
+      "publishedAt": "2026-09-02T15:18:20Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-6gmq-8vp8-gcm6"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-83610"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "xmldom",
+              "ecosystem": "NPM"
+            },
+            "vulnerableVersionRange": "<= 0.6.0"
+          },
+          {
+            "package": {
+              "name": "@xmldom/xmldom",
+              "ecosystem": "NPM"
+            },
+            "vulnerableVersionRange": ">= 0.9.0, <= 0.9.11"
+          },
+          {
+            "package": {
+              "name": "@xmldom/xmldom",
+              "ecosystem": "NPM"
+            },
+            "vulnerableVersionRange": ">= 0.7.0, <= 0.8.14"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-6m44-fpc8-c3rq",
+      "summary": "Mistune: Denial of Service \u2014 RecursionError via Excessive Emphasis Markers in Markdown",
+      "severity": "HIGH",
+      "publishedAt": "2026-09-02T15:14:55Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-6m44-fpc8-c3rq"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-76098"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "mistune",
+              "ecosystem": "PIP"
+            },
+            "vulnerableVersionRange": ">= 3.3.0, < 3.3.3"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-3m5p-2c4r-xxw2",
+      "summary": "fastify vulnerable to X-Forwarded-* spoofing under trustProxy hop-count",
+      "severity": "MODERATE",
+      "publishedAt": "2026-09-02T15:14:06Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-3m5p-2c4r-xxw2"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-16732"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "fastify",
+              "ecosystem": "NPM"
+            },
+            "vulnerableVersionRange": ">= 5.8.3, < 5.12.1"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-w2qp-rph6-63g4",
+      "summary": "fastify vulnerable to schema validation bypass via root primitive coercion mismatch",
+      "severity": "MODERATE",
+      "publishedAt": "2026-09-02T15:13:23Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-w2qp-rph6-63g4"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-18504"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "fastify",
+              "ecosystem": "NPM"
+            },
+            "vulnerableVersionRange": "< 5.12.1"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-vmg4-6gfg-83qx",
+      "summary": "ApostropheCMS: 2nd-order prototype pollution via PATCH leading to single-request persistent DoS",
+      "severity": "HIGH",
+      "publishedAt": "2026-09-02T15:12:41Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-vmg4-6gfg-83qx"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-71553"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "apostrophe",
+              "ecosystem": "NPM"
+            },
+            "vulnerableVersionRange": "<= 4.32.0"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-pp4x-ccxq-6r33",
+      "summary": "Sulu: Stored XSS via media download inline-disposition override",
+      "severity": "MODERATE",
+      "publishedAt": "2026-09-02T15:10:19Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-pp4x-ccxq-6r33"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-82396"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "sulu/sulu",
+              "ecosystem": "COMPOSER"
+            },
+            "vulnerableVersionRange": ">= 3.0.0-alpha1, < 3.0.8"
+          },
+          {
+            "package": {
+              "name": "sulu/sulu",
+              "ecosystem": "COMPOSER"
+            },
+            "vulnerableVersionRange": "<= 2.6.24"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-65cv-w493-7vhq",
+      "summary": "Sulu: Fix authorization bypass when creating preview links",
+      "severity": "MODERATE",
+      "publishedAt": "2026-09-02T15:09:33Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-65cv-w493-7vhq"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-82394"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "sulu/sulu",
+              "ecosystem": "COMPOSER"
+            },
+            "vulnerableVersionRange": ">= 3.0.0-alpha1, < 3.0.8"
+          },
+          {
+            "package": {
+              "name": "sulu/sulu",
+              "ecosystem": "COMPOSER"
+            },
+            "vulnerableVersionRange": "<= 2.6.24"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-h6cx-gjxx-v25c",
+      "summary": "Sulu: Media move/update authorization bypass (IDOR)",
+      "severity": "MODERATE",
+      "publishedAt": "2026-09-02T14:57:25Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-h6cx-gjxx-v25c"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-82395"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "sulu/sulu",
+              "ecosystem": "COMPOSER"
+            },
+            "vulnerableVersionRange": ">= 3.0.0-alpha1, < 3.0.8"
+          },
+          {
+            "package": {
+              "name": "sulu/sulu",
+              "ecosystem": "COMPOSER"
+            },
+            "vulnerableVersionRange": "<= 2.6.24"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-79qf-vqgc-7xx3",
+      "summary": "ApostropheCMS: Arbitrary file read via import-export attachment-name path traversal",
+      "severity": "MODERATE",
+      "publishedAt": "2026-09-02T14:55:47Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-79qf-vqgc-7xx3"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-63667"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "@apostrophecms/import-export",
+              "ecosystem": "NPM"
+            },
+            "vulnerableVersionRange": "<= 3.6.1"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-6j4c-mgqr-qv76",
+      "summary": "Kirby: Access to image files outside of the site root via path traversal in the media handling",
+      "severity": "MODERATE",
+      "publishedAt": "2026-09-02T14:55:22Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-6j4c-mgqr-qv76"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-75592"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "getkirby/cms",
+              "ecosystem": "COMPOSER"
+            },
+            "vulnerableVersionRange": ">= 5.0.0, < 5.5.2"
+          },
+          {
+            "package": {
+              "name": "getkirby/cms",
+              "ecosystem": "COMPOSER"
+            },
+            "vulnerableVersionRange": "< 4.9.5"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-cxq5-97v7-87j8",
+      "summary": "Orval: Generation-time SSRF + remote/local file inclusion via unrestricted $ref",
+      "severity": "HIGH",
+      "publishedAt": "2026-09-02T14:54:48Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-cxq5-97v7-87j8"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-62680"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "orval",
+              "ecosystem": "NPM"
+            },
+            "vulnerableVersionRange": "< 8.22.0"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-p4cg-3328-rvfg",
+      "summary": "Orval: Import-time RCE via query-parameter default -> zod module-level template literal",
+      "severity": "CRITICAL",
+      "publishedAt": "2026-09-02T14:53:14Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-p4cg-3328-rvfg"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-72716"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "orval",
+              "ecosystem": "NPM"
+            },
+            "vulnerableVersionRange": "< 8.21.0"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-6mr6-jvcr-2f25",
+      "summary": "Orval: Import-time RCE via schema property name -> computed-property-key injection in the zod client",
+      "severity": "CRITICAL",
+      "publishedAt": "2026-09-02T14:52:56Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-6mr6-jvcr-2f25"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-71866"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "orval",
+              "ecosystem": "NPM"
+            },
+            "vulnerableVersionRange": "< 8.21.0"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-83x6-42hr-jc76",
+      "summary": "CKAN MCP Server: MQA server allowlist bypass via unanchored regex (`isValidMqaServer`)",
+      "severity": "MODERATE",
+      "publishedAt": "2026-09-02T14:52:21Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-83x6-42hr-jc76"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-73845"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "@aborruso/ckan-mcp-server",
+              "ecosystem": "NPM"
+            },
+            "vulnerableVersionRange": "< 0.4.112"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-2v6v-25fm-p4fg",
+      "summary": "SeaweedFS: Unauthenticated filer IAM gRPC service grants S3 administrative control",
+      "severity": "CRITICAL",
+      "publishedAt": "2026-09-02T14:51:58Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-2v6v-25fm-p4fg"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-72920"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "github.com/seaweedfs/seaweedfs",
+              "ecosystem": "GO"
+            },
+            "vulnerableVersionRange": "< 0.0.0-20260512171108-5e8f99f40a8a"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-fj2p-qj2f-74v5",
+      "summary": "Grav: Remote code execution via unrestricted callable in Blueprint::dynamicData()",
+      "severity": "HIGH",
+      "publishedAt": "2026-09-02T14:51:18Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-fj2p-qj2f-74v5"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-64850"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "getgrav/grav",
+              "ecosystem": "COMPOSER"
+            },
+            "vulnerableVersionRange": "< 2.0.7"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-x5fp-wj9c-mxmx",
+      "summary": "qs array-limit bypass via bracket-key comma parsing",
+      "severity": "MODERATE",
+      "publishedAt": "2026-09-02T14:46:57Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-x5fp-wj9c-mxmx"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-82562"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "qs",
+              "ecosystem": "NPM"
+            },
+            "vulnerableVersionRange": ">= 6.14.2, <= 6.15.3"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-4mjr-xmp4-gh2g",
+      "summary": "qs: Denial of Service via Attacker Controlled isBuffer",
+      "severity": "MODERATE",
+      "publishedAt": "2026-09-02T14:45:13Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-4mjr-xmp4-gh2g"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-82417"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "qs",
+              "ecosystem": "NPM"
+            },
+            "vulnerableVersionRange": ">= 2.2.5, < 6.16.0"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-cp6q-959q-f8rh",
+      "summary": "Tiptap: mergeAttributes() turns an own __proto__ key into inherited executable DOM attributes",
+      "severity": "MODERATE",
+      "publishedAt": "2026-09-02T14:44:39Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-cp6q-959q-f8rh"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "@tiptap/core",
+              "ecosystem": "NPM"
+            },
+            "vulnerableVersionRange": ">= 2.0.0-alpha.0, < 3.30.4"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-g2fm-8hr4-j82h",
+      "summary": "EasyAdmin custom-action dispatcher bypasses access_control on other routes",
+      "severity": "HIGH",
+      "publishedAt": "2026-09-02T14:39:11Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-g2fm-8hr4-j82h"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-81892"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "easycorp/easyadmin-bundle",
+              "ecosystem": "COMPOSER"
+            },
+            "vulnerableVersionRange": ">= 5.0.0, < 5.5.1"
+          },
+          {
+            "package": {
+              "name": "easycorp/easyadmin-bundle",
+              "ecosystem": "COMPOSER"
+            },
+            "vulnerableVersionRange": ">= 4.0.0, < 4.29.16"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-g3hc-697w-wm82",
+      "summary": "Livewire DOM-based cross-site scripting during client-side state handling",
+      "severity": "MODERATE",
+      "publishedAt": "2026-09-02T14:38:58Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-g3hc-697w-wm82"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-81887"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "livewire/livewire",
+              "ecosystem": "COMPOSER"
+            },
+            "vulnerableVersionRange": ">= 4.0.0-beta.1, <= 4.3.3"
+          },
+          {
+            "package": {
+              "name": "livewire/livewire",
+              "ecosystem": "COMPOSER"
+            },
+            "vulnerableVersionRange": ">= 3.0.0-beta.1, <= 3.8.2"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-mpf4-983q-p7j4",
+      "summary": " Tornado: Urlencoded body parsing omits max_num_fields, so one request can stall the event loop",
+      "severity": "HIGH",
+      "publishedAt": "2026-09-02T14:38:43Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-mpf4-983q-p7j4"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-82397"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "tornado",
+              "ecosystem": "PIP"
+            },
+            "vulnerableVersionRange": "<= 6.5.7"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-x8wg-4xgc-vr54",
+      "summary": "Banks: Path traversal in `DirectoryPromptRegistry.set()` allows arbitrary file write outside the registry root",
+      "severity": "MODERATE",
+      "publishedAt": "2026-09-02T14:38:24Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-x8wg-4xgc-vr54"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-71492"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "banks",
+              "ecosystem": "PIP"
+            },
+            "vulnerableVersionRange": "< 2.4.5"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-fc8x-2rww-xw9m",
+      "summary": "pypdf: Inefficient handling of non-whitespace inputs in read_until_whitespace",
+      "severity": "MODERATE",
+      "publishedAt": "2026-09-02T14:38:12Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-fc8x-2rww-xw9m"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-82398"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "pypdf",
+              "ecosystem": "PIP"
+            },
+            "vulnerableVersionRange": "< 6.15.0"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-gxmj-r5rf-ggwq",
+      "summary": "elFinder: ZIP extraction bypasses uploadDeny MIME filter allowing PHP file upload (RCE)",
+      "severity": "HIGH",
+      "publishedAt": "2026-09-02T14:37:54Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-gxmj-r5rf-ggwq"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-81891"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "Studio-42/elFinder",
+              "ecosystem": "COMPOSER"
+            },
+            "vulnerableVersionRange": "< 2.1.70"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-9hjf-w35w-6vx2",
+      "summary": "elFinder: CSRF in netmount allows forced FTP mounts and server-side FTP connections",
+      "severity": "MODERATE",
+      "publishedAt": "2026-09-02T14:37:36Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-9hjf-w35w-6vx2"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-81890"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "studio-42/elfinder",
+              "ecosystem": "COMPOSER"
+            },
+            "vulnerableVersionRange": "< 2.1.70"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-c59q-g84q-2gj5",
+      "summary": "pnpm: Virtual store linker path traversal via unvalidated depPath name in lockfileToDepGraph",
+      "severity": "HIGH",
+      "publishedAt": "2026-09-02T14:37:13Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-c59q-g84q-2gj5"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-82392"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "pnpm",
+              "ecosystem": "NPM"
+            },
+            "vulnerableVersionRange": ">= 11.0.0, < 11.11.0"
+          },
+          {
+            "package": {
+              "name": "pnpm",
+              "ecosystem": "NPM"
+            },
+            "vulnerableVersionRange": "< 10.34.5"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-vq4v-j7r6-jq4m",
+      "summary": "pnpm: A tarball dependency's manifest `name` escapes node_modules \u2192 arbitrary file write/overwrite on install",
+      "severity": "HIGH",
+      "publishedAt": "2026-09-02T14:36:59Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-vq4v-j7r6-jq4m"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-82393"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "pnpm",
+              "ecosystem": "NPM"
+            },
+            "vulnerableVersionRange": ">= 11.0.0, < 11.11.0"
+          },
+          {
+            "package": {
+              "name": "pnpm",
+              "ecosystem": "NPM"
+            },
+            "vulnerableVersionRange": "< 10.34.5"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-ww6m-cw3f-q94g",
+      "summary": "NLTK: Quadratic-time DoS in PorterStemmer via long runs of 'y'",
+      "severity": "MODERATE",
+      "publishedAt": "2026-09-02T14:36:15Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-ww6m-cw3f-q94g"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-81722"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "nltk",
+              "ecosystem": "PIP"
+            },
+            "vulnerableVersionRange": "<= 3.10.2"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-f794-5jv7-7672",
+      "summary": "NLTK: Downloader.download follows hardlinks and overwrites outside-root files",
+      "severity": "MODERATE",
+      "publishedAt": "2026-09-02T14:35:41Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-f794-5jv7-7672"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-81727"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "nltk",
+              "ecosystem": "PIP"
+            },
+            "vulnerableVersionRange": "<= 3.10.2"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-8mgp-746c-j5xp",
+      "summary": "NLTK: Model-artifact APIs bypass pathsec and touch files outside allowed roots",
+      "severity": "HIGH",
+      "publishedAt": "2026-09-02T14:35:04Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-8mgp-746c-j5xp"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-81726"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "nltk",
+              "ecosystem": "PIP"
+            },
+            "vulnerableVersionRange": "<= 3.10.3"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-vp2x-qp44-57v7",
+      "summary": "NLTK: Quadratic CPU Exhaustion in `XMLCorpusView._read_xml_fragment()`",
+      "severity": "MODERATE",
+      "publishedAt": "2026-09-02T14:34:11Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-vp2x-qp44-57v7"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-81723"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "nltk",
+              "ecosystem": "PIP"
+            },
+            "vulnerableVersionRange": "<= 3.10.2"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-ff5c-cp5c-9wjf",
+      "summary": "NLTK: Uncontrolled resource consumption in RecursiveDescentParser via ambiguous or left-recursive grammars",
+      "severity": "MODERATE",
+      "publishedAt": "2026-09-02T14:33:38Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-ff5c-cp5c-9wjf"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-12876"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "nltk",
+              "ecosystem": "PIP"
+            },
+            "vulnerableVersionRange": "<= 3.10.2"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-cw6x-m8jw-qmrh",
+      "summary": "NLTK: Uncontrolled recursion in nltk.featstruct.FeatStructReader causes unhandled RecursionError (DoS) via deeply nested feature-structure input",
+      "severity": "MODERATE",
+      "publishedAt": "2026-09-02T14:33:22Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-cw6x-m8jw-qmrh"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-81724"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "nltk",
+              "ecosystem": "PIP"
+            },
+            "vulnerableVersionRange": "<= 3.10.2"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-cvhv-g4rq-3hmw",
+      "summary": "ImageMagick: Memory Leak when providing invalid options to the cli",
+      "severity": "LOW",
+      "publishedAt": "2026-09-02T14:27:49Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-cvhv-g4rq-3hmw"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "Magick.NET-Q16-HDRI-arm64",
+              "ecosystem": "NUGET"
+            },
+            "vulnerableVersionRange": "< 14.15.0"
+          },
+          {
+            "package": {
+              "name": "Magick.NET-Q8-x86",
+              "ecosystem": "NUGET"
+            },
+            "vulnerableVersionRange": "< 14.15.0"
+          },
+          {
+            "package": {
+              "name": "Magick.NET-Q8-x64",
+              "ecosystem": "NUGET"
+            },
+            "vulnerableVersionRange": "< 14.15.0"
+          },
+          {
+            "package": {
+              "name": "Magick.NET-Q8-arm64",
+              "ecosystem": "NUGET"
+            },
+            "vulnerableVersionRange": "< 14.15.0"
+          },
+          {
+            "package": {
+              "name": "Magick.NET-Q8-OpenMP-x64",
+              "ecosystem": "NUGET"
+            },
+            "vulnerableVersionRange": "< 14.15.0"
+          },
+          {
+            "package": {
+              "name": "Magick.NET-Q8-OpenMP-arm64",
+              "ecosystem": "NUGET"
+            },
+            "vulnerableVersionRange": "< 14.15.0"
+          },
+          {
+            "package": {
+              "name": "Magick.NET-Q8-AnyCPU",
+              "ecosystem": "NUGET"
+            },
+            "vulnerableVersionRange": "< 14.15.0"
+          },
+          {
+            "package": {
+              "name": "Magick.NET-Q16-x86",
+              "ecosystem": "NUGET"
+            },
+            "vulnerableVersionRange": "< 14.15.0"
+          },
+          {
+            "package": {
+              "name": "Magick.NET-Q16-x64",
+              "ecosystem": "NUGET"
+            },
+            "vulnerableVersionRange": "< 14.15.0"
+          },
+          {
+            "package": {
+              "name": "Magick.NET-Q16-arm64",
+              "ecosystem": "NUGET"
+            },
+            "vulnerableVersionRange": "< 14.15.0"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-p498-v437-472g",
+      "summary": "humanfs: Recursive copy follows symlinked files and copies data from outside the source tree",
+      "severity": "MODERATE",
+      "publishedAt": "2026-09-02T14:27:16Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-p498-v437-472g"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "@humanfs/node",
+              "ecosystem": "NPM"
+            },
+            "vulnerableVersionRange": "< 0.16.8"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-qxc2-j82w-r537",
+      "summary": "Faker: helpers.fake exploitable into arbritary code execution",
+      "severity": "HIGH",
+      "publishedAt": "2026-09-02T14:20:14Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-qxc2-j82w-r537"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-73231"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "@faker-js/faker",
+              "ecosystem": "NPM"
+            },
+            "vulnerableVersionRange": "<= 10.4.0"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-275h-v5h9-vr82",
+      "summary": "Siyuan: Authenticated path traversal in /snippets/ static handler (serveSnippets) leaks conf/conf.json secrets and siyuan.db",
+      "severity": "HIGH",
+      "publishedAt": "2026-09-02T14:17:44Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-275h-v5h9-vr82"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-59832"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "github.com/siyuan-note/siyuan/kernel",
+              "ecosystem": "GO"
+            },
+            "vulnerableVersionRange": "< 0.0.0-20260704035520-68cc0f537dfa"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-h89q-4j2h-7h88",
+      "summary": "SiYuan: SQL Query in Block Search Exposes Hidden Published Document Content",
+      "severity": "HIGH",
+      "publishedAt": "2026-09-02T14:16:08Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-h89q-4j2h-7h88"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-59834"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "github.com/siyuan-note/siyuan/kernel",
+              "ecosystem": "GO"
+            },
+            "vulnerableVersionRange": "< 0.0.0-20260704035518-d0f0fe146fb0"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-vp52-pcj8-j9qc",
+      "summary": "gRPC-Go: Heap Memory Exhaustion (OOM) via HTTP/2 DATA Frame Fragmentation",
+      "severity": "HIGH",
+      "publishedAt": "2026-09-01T21:32:41Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-vp52-pcj8-j9qc"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-84304"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "google.golang.org/grpc",
+              "ecosystem": "GO"
+            },
+            "vulnerableVersionRange": "<= 1.83.0"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-68jx-f42c-7599",
+      "summary": "TYPO3 CMS - Broken Access Control in Backend and Install Tool",
+      "severity": "HIGH",
+      "publishedAt": "2026-09-01T21:31:42Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-68jx-f42c-7599"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-19418"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "typo3/cms-core",
+              "ecosystem": "COMPOSER"
+            },
+            "vulnerableVersionRange": ">= 14.0.0, < 14.3.6"
+          },
+          {
+            "package": {
+              "name": "typo3/cms-backend",
+              "ecosystem": "COMPOSER"
+            },
+            "vulnerableVersionRange": ">= 13.0.0, < 13.4.34"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-r3j6-gpjw-qfjr",
+      "summary": "Filament: Multi-factor authentication (app) codes can still be used after a newer code has been used",
+      "severity": "MODERATE",
+      "publishedAt": "2026-09-01T21:29:43Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-r3j6-gpjw-qfjr"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-84306"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "filament/filament",
+              "ecosystem": "COMPOSER"
+            },
+            "vulnerableVersionRange": ">= 5.0.0, < 5.7.6"
+          },
+          {
+            "package": {
+              "name": "filament/filament",
+              "ecosystem": "COMPOSER"
+            },
+            "vulnerableVersionRange": ">= 4.0.0, < 4.12.6"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-xwpv-pqxp-5v36",
+      "summary": "Filament: Password validity disclosure for accounts denied panel access on login page",
+      "severity": "LOW",
+      "publishedAt": "2026-09-01T21:29:00Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-xwpv-pqxp-5v36"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-84307"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "filament/filament",
+              "ecosystem": "COMPOSER"
+            },
+            "vulnerableVersionRange": ">= 5.0.0, < 5.7.5"
+          },
+          {
+            "package": {
+              "name": "filament/filament",
+              "ecosystem": "COMPOSER"
+            },
+            "vulnerableVersionRange": ">= 4.0.0, < 4.12.5"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-52xp-w8hr-xv3c",
+      "summary": "Filament: Multi-factor authentication (app) can be bypassed when recovery codes are enabled",
+      "severity": "HIGH",
+      "publishedAt": "2026-09-01T21:28:47Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-52xp-w8hr-xv3c"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-77567"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "filament/filament",
+              "ecosystem": "COMPOSER"
+            },
+            "vulnerableVersionRange": ">= 5.0.0, < 5.7.0"
+          },
+          {
+            "package": {
+              "name": "filament/filament",
+              "ecosystem": "COMPOSER"
+            },
+            "vulnerableVersionRange": ">= 4.0.0, < 4.12.0"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-23w6-3w8w-8484",
+      "summary": "pypdf: Possible long runtimes/large memory usage when retrieving outlines",
+      "severity": "MODERATE",
+      "publishedAt": "2026-09-01T21:28:37Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-23w6-3w8w-8484"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-84310"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "pypdf",
+              "ecosystem": "PIP"
+            },
+            "vulnerableVersionRange": "< 6.16.1"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-763m-79hh-57f2",
+      "summary": "pypdf: Possible long runtimes/large memory usage when extracting XForm objects",
+      "severity": "MODERATE",
+      "publishedAt": "2026-09-01T21:27:22Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-763m-79hh-57f2"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-84311"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "pypdf",
+              "ecosystem": "PIP"
+            },
+            "vulnerableVersionRange": "< 6.16.1"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-jp53-mhqp-8xcg",
+      "summary": "pypdf: Possible infinite loop for TreeObject.insert_child",
+      "severity": "MODERATE",
+      "publishedAt": "2026-09-01T21:20:20Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-jp53-mhqp-8xcg"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-84309"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "pypdf",
+              "ecosystem": "PIP"
+            },
+            "vulnerableVersionRange": "< 6.16.0"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-cfqr-cjx5-5jcm",
+      "summary": "sqlparse: Reindentation of tuple lists causes near-cap quadratic CPU consumption",
+      "severity": "MODERATE",
+      "publishedAt": "2026-09-01T21:20:11Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-cfqr-cjx5-5jcm"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-84305"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "sqlparse",
+              "ecosystem": "PIP"
+            },
+            "vulnerableVersionRange": "<= 0.5.5"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-g8qq-57p8-ggw5",
+      "summary": "ApostropheCMS: Stored XSS via SVG SMIL URI-list scheme-policy bypass",
+      "severity": "MODERATE",
+      "publishedAt": "2026-09-01T21:20:01Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-g8qq-57p8-ggw5"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-84371"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "sanitize-html",
+              "ecosystem": "NPM"
+            },
+            "vulnerableVersionRange": ">= 1.9.0, <= 2.17.6"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-m4rf-3fr8-xwx3",
+      "summary": "NLTK: JVM argument injection bypass via per-call options in the NLTK Stanford wrappers (incomplete fix of CVE-2026-12841)",
+      "severity": "CRITICAL",
+      "publishedAt": "2026-09-01T20:38:22Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-m4rf-3fr8-xwx3"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-79675"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "nltk",
+              "ecosystem": "PIP"
+            },
+            "vulnerableVersionRange": "<= 3.10.2"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-8rr7-cvq3-gmfh",
+      "summary": "league/commonmark: Denial of service via distinctly-named attributes in the Attributes extension",
+      "severity": "HIGH",
+      "publishedAt": "2026-09-01T20:28:40Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-8rr7-cvq3-gmfh"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "league/commonmark",
+              "ecosystem": "COMPOSER"
+            },
+            "vulnerableVersionRange": ">= 1.5.0, < 2.10.0"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-6hwm-xvph-95vm",
+      "summary": "NLTK: Uncontrolled search path when invoking the Graphviz 'dot' binary",
+      "severity": "HIGH",
+      "publishedAt": "2026-09-01T20:27:20Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-6hwm-xvph-95vm"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-78680"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "nltk",
+              "ecosystem": "PIP"
+            },
+            "vulnerableVersionRange": "<= 3.10.2"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-jjv6-8j6v-6j52",
+      "summary": "league/commonmark: Denial of service in the SmartPunct and Attributes extensions",
+      "severity": "HIGH",
+      "publishedAt": "2026-09-01T20:21:45Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-jjv6-8j6v-6j52"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "league/commonmark",
+              "ecosystem": "COMPOSER"
+            },
+            "vulnerableVersionRange": ">= 1.5.0, < 2.9.1"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-f8fg-pg57-v4j8",
+      "summary": "league/commonmark XSS: `on*` event-handler filter in `AttributesExtension` bypassed with a U+000C form feed",
+      "severity": "HIGH",
+      "publishedAt": "2026-09-01T20:18:29Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-f8fg-pg57-v4j8"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "league/commonmark",
+              "ecosystem": "COMPOSER"
+            },
+            "vulnerableVersionRange": ">= 2.7.0, < 2.9.1"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-j8pm-gj4c-rq4x",
+      "summary": "league/commonmark: Denial of service via crafted code fences, reference links, and emphasis delimiters",
+      "severity": "HIGH",
+      "publishedAt": "2026-09-01T20:17:59Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-j8pm-gj4c-rq4x"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "league/commonmark",
+              "ecosystem": "COMPOSER"
+            },
+            "vulnerableVersionRange": ">= 0.6.0, < 2.9.1"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-8423-8fgw-73vq",
+      "summary": "tornado: multipart split() creates huge temp list before max_parts check -> memory amplification DoS (httputil.py:34)",
+      "severity": "MODERATE",
+      "publishedAt": "2026-09-01T20:17:38Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-8423-8fgw-73vq"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "tornado",
+              "ecosystem": "PIP"
+            },
+            "vulnerableVersionRange": "<= 6.5.7"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-wwv5-g3v4-889x",
+      "summary": "Tornado: Incomplete fix for CVE-2026-35536: cookie attribute injection re-opened via the legacy case-insensitive `**kwargs` path in `set_cookie`",
+      "severity": "LOW",
+      "publishedAt": "2026-09-01T20:17:23Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-wwv5-g3v4-889x"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "tornado",
+              "ecosystem": "PIP"
+            },
+            "vulnerableVersionRange": ">= 6.5.5, < 6.5.8"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-2m8g-3cmr-wg3w",
+      "summary": "Django REST framework: Potential bypass of Django `DATA_UPLOAD_MAX_MEMORY_SIZE` when parsing oversized JSON and urlencoded request bodies via DRF `request.data`",
+      "severity": "MODERATE",
+      "publishedAt": "2026-09-01T19:24:51Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-2m8g-3cmr-wg3w"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-73228"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "djangorestframework",
+              "ecosystem": "PIP"
+            },
+            "vulnerableVersionRange": "< 3.17.2"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-g47c-3xmw-q6m2",
+      "summary": "Django REST framework: AdminRenderer may disclose GET-protected data when rendering invalid write requests",
+      "severity": "MODERATE",
+      "publishedAt": "2026-09-01T19:24:29Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-g47c-3xmw-q6m2"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-73229"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "djangorestframework",
+              "ecosystem": "PIP"
+            },
+            "vulnerableVersionRange": "<= 3.17.1"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-xwg4-73v4-xw9w",
+      "summary": "nanoid: Integer Overflow or Wraparound",
+      "severity": "HIGH",
+      "publishedAt": "2026-09-01T19:23:45Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-xwg4-73v4-xw9w"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-73086"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "nanoid",
+              "ecosystem": "NPM"
+            },
+            "vulnerableVersionRange": ">= 4.0.0, < 5.1.11"
+          },
+          {
+            "package": {
+              "name": "nanoid",
+              "ecosystem": "NPM"
+            },
+            "vulnerableVersionRange": "< 3.3.12"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-vx52-2968-3vc6",
+      "summary": "pnpm: Environment secrets exfiltrated via env-placeholder expansion in proxy settings read from an untrusted pnpm-workspace.yaml",
+      "severity": "HIGH",
+      "publishedAt": "2026-09-01T19:22:42Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-vx52-2968-3vc6"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "pnpm",
+              "ecosystem": "NPM"
+            },
+            "vulnerableVersionRange": ">= 10.7.0, < 10.34.5"
+          },
+          {
+            "package": {
+              "name": "pnpm",
+              "ecosystem": "NPM"
+            },
+            "vulnerableVersionRange": ">= 11.0.0, < 11.11.0"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-2rx9-3g3h-c2jv",
+      "summary": "pnpm: pacquet trust-lockfile install can create dependency symlinks outside the project",
+      "severity": "HIGH",
+      "publishedAt": "2026-09-01T18:59:22Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-2rx9-3g3h-c2jv"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "pnpm",
+              "ecosystem": "NPM"
+            },
+            "vulnerableVersionRange": ">= 12.0.0-alpha.0, < 12.0.0-alpha.5"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-3wgp-x9p5-c7cc",
+      "summary": "Appium: Reflected XSS / arbitrary JS in @appium/base-driver /test/guinea-pig* routes",
+      "severity": "MODERATE",
+      "publishedAt": "2026-09-01T18:54:53Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-3wgp-x9p5-c7cc"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-58191"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "@appium/base-driver",
+              "ecosystem": "NPM"
+            },
+            "vulnerableVersionRange": "<= 10.6.0"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-gqvg-gmmx-x4hm",
+      "summary": "MLFLOW_ALLOW_PICKLE_DESERIALIZATION=False safety control bypassed by mlflow.statsmodels flavor \u2014 RCE via crafted model artifact",
+      "severity": "HIGH",
+      "publishedAt": "2026-09-01T17:04:30Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-gqvg-gmmx-x4hm"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "mlflow",
+              "ecosystem": "PIP"
+            },
+            "vulnerableVersionRange": ">= 2.1.0, < 3.15.0"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-c83g-rgw3-j3cx",
+      "summary": "Browserslist: Unbounded memory growth (no cache eviction) via distinct query results, leading to eventual OOM",
+      "severity": "HIGH",
+      "publishedAt": "2026-09-01T16:42:13Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-c83g-rgw3-j3cx"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-73089"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "browserslist",
+              "ecosystem": "NPM"
+            },
+            "vulnerableVersionRange": "<= 4.28.6"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-73wf-gq98-2v4g",
+      "summary": "Browserslist: Uncaught crash / prototype write via untrusted browserslist-stats.json custom stats (normalizeStats)",
+      "severity": "HIGH",
+      "publishedAt": "2026-09-01T16:41:54Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-73wf-gq98-2v4g"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-73088"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "browserslist",
+              "ecosystem": "NPM"
+            },
+            "vulnerableVersionRange": "<= 4.28.6"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-3f6p-5ww8-9rcr",
+      "summary": "MySQL2: Auth Plugin Downgrade to mysql_clear_password Leaks Plaintext Credentials",
+      "severity": "HIGH",
+      "publishedAt": "2026-09-01T16:40:34Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-3f6p-5ww8-9rcr"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "mysql2",
+              "ecosystem": "NPM"
+            },
+            "vulnerableVersionRange": "< 3.22.0"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-cq55-c7wv-pxmq",
+      "summary": "Smarty: SSRF via redirect bypass of trusted_uri using {fetch}",
+      "severity": "MODERATE",
+      "publishedAt": "2026-09-01T16:38:22Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-cq55-c7wv-pxmq"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-62993"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "smarty/smarty",
+              "ecosystem": "COMPOSER"
+            },
+            "vulnerableVersionRange": "< 4.5.7"
+          },
+          {
+            "package": {
+              "name": "smarty/smarty",
+              "ecosystem": "COMPOSER"
+            },
+            "vulnerableVersionRange": ">= 5.0.0, < 5.8.2"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-rf2p-vh74-7vvh",
+      "summary": "Kirby: System path exposure from error messages in the REST API",
+      "severity": "MODERATE",
+      "publishedAt": "2026-09-01T16:37:47Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-rf2p-vh74-7vvh"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-69127"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "getkirby/cms",
+              "ecosystem": "COMPOSER"
+            },
+            "vulnerableVersionRange": ">= 5.0.0, < 5.5.2"
+          },
+          {
+            "package": {
+              "name": "getkirby/cms",
+              "ecosystem": "COMPOSER"
+            },
+            "vulnerableVersionRange": "<= 4.9.4"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-rgwj-5xj2-c3m3",
+      "summary": "MySQL2: Unbounded zlib inflate in compressed MySQL protocol handler allows decompression-bomb DoS",
+      "severity": "MODERATE",
+      "publishedAt": "2026-08-31T22:36:20Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-rgwj-5xj2-c3m3"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "mysql2",
+              "ecosystem": "NPM"
+            },
+            "vulnerableVersionRange": "<= 3.23.0"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-67mx-6wf2-92xp",
+      "summary": "Kirby: File upload permissions are not checked during processing of chunk data",
+      "severity": "HIGH",
+      "publishedAt": "2026-08-31T22:14:05Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-67mx-6wf2-92xp"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-71415"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "getkirby/cms",
+              "ecosystem": "COMPOSER"
+            },
+            "vulnerableVersionRange": ">= 5.0.0, < 5.5.2"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-9vx2-j98c-p72w",
+      "summary": "Kirby: Access to image files and limited access to JSON files outside of the site root via path traversal in the media handling",
+      "severity": "HIGH",
+      "publishedAt": "2026-08-31T22:12:45Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-9vx2-j98c-p72w"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-75594"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "getkirby/cms",
+              "ecosystem": "COMPOSER"
+            },
+            "vulnerableVersionRange": ">= 5.0.0, < 5.5.2"
+          },
+          {
+            "package": {
+              "name": "getkirby/cms",
+              "ecosystem": "COMPOSER"
+            },
+            "vulnerableVersionRange": "<= 4.9.4"
+          }
+        ]
+      }
+    },
+    {
+      "ghsaId": "GHSA-vcc3-ghjq-m6fr",
+      "summary": "decode-uri-component: Denial of service via exponential decoding of malformed percent-encoded input",
+      "severity": "MODERATE",
+      "publishedAt": "2026-08-31T22:10:20Z",
+      "identifiers": [
+        {
+          "type": "GHSA",
+          "value": "GHSA-vcc3-ghjq-m6fr"
+        },
+        {
+          "type": "CVE",
+          "value": "CVE-2026-45822"
+        }
+      ],
+      "vulnerabilities": {
+        "nodes": [
+          {
+            "package": {
+              "name": "decode-uri-component",
+              "ecosystem": "NPM"
+            },
+            "vulnerableVersionRange": "<= 0.4.2"
+          }
+        ]
+      }
+    }
+  ]
+}

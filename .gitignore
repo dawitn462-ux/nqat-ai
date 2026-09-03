@@ -1,0 +1,48 @@
+# Python environment & cache
+.venv/
+venv/
+ENV/
+env/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Environment configuration (secrets, local config)
+.env
+node_modules/
+frontend/node_modules/
+*.exe
+*.db
+*.sqlite
+*.zip
+
+# Local Juice Shop test target server
+juice-shop/
+juice-shop-dist/
+juice-shop.zip
+juice-shop-node22/
+juice-shop-node22.zip
+
+
+
+# Local TLS/SSL Certificates (secrets)
+certs/
+*.pem
+*.key
+
+# Data & Logs
+
+data/*
+!data/.gitkeep
+logs/
+*.log
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

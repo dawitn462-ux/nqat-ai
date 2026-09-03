@@ -1,0 +1,19 @@
+{
+  "scan_id": "scan_1788006931",
+  "target_url": "http://localhost:3000",
+  "timestamp": "2026-08-29T12:35:31.793726+00:00",
+  "summary": {
+    "total_endpoints_scanned": 0,
+    "total_vulnerabilities": 0,
+    "severity_counts": {
+      "CRITICAL": 0,
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 0,
+      "INFO": 0
+    },
+    "scan_duration_seconds": 135.4
+  },
+  "findings": [],
+  "structured_findings": []
+}

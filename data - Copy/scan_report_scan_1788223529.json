@@ -1,0 +1,116 @@
+{
+  "scan_id": "scan_1788223529",
+  "target_url": "http://localhost:3000",
+  "timestamp": "2026-09-01T00:45:29.324054+00:00",
+  "summary": {
+    "total_endpoints_scanned": 3,
+    "total_vulnerabilities": 5,
+    "severity_counts": {
+      "CRITICAL": 0,
+      "HIGH": 0,
+      "MEDIUM": 2,
+      "LOW": 2,
+      "INFO": 1
+    },
+    "scan_duration_seconds": 395.35
+  },
+  "findings": [
+    {
+      "id": "SEC_HDR_001_STRICT_TRANSPORT_SECURITY",
+      "title": "Missing Security Header: Strict-Transport-Security",
+      "severity": "LOW",
+      "description": "Missing Strict-Transport-Security (HSTS) header. (Target: http://localhost:3000)",
+      "endpoint": "http://localhost:3000",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP/200 response headers missing &#x27;strict-transport-security&#x27;.",
+      "cwe": "CWE-523",
+      "remediation": "Enable HSTS in web server response headers (e.g. Strict-Transport-Security: max-age=31536000; includeSubDomains)."
+    },
+    {
+      "id": "SEC_HDR_001_CONTENT_SECURITY_POLICY",
+      "title": "Missing Security Header: Content-Security-Policy",
+      "severity": "MEDIUM",
+      "description": "Missing Content-Security-Policy (CSP) header. (Target: http://localhost:3000)",
+      "endpoint": "http://localhost:3000",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP/200 response headers missing &#x27;content-security-policy&#x27;.",
+      "cwe": "CWE-1021",
+      "remediation": "Define a restrictive Content-Security-Policy header to prevent XSS and data injection attacks."
+    },
+    {
+      "id": "SEC_HDR_001_X_FRAME_OPTIONS",
+      "title": "Missing Security Header: X-Frame-Options",
+      "severity": "MEDIUM",
+      "description": "Missing X-Frame-Options header (Clickjacking Risk). (Target: http://localhost:3000)",
+      "endpoint": "http://localhost:3000",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP/200 response headers missing &#x27;x-frame-options&#x27;.",
+      "cwe": "CWE-1021",
+      "remediation": "Configure X-Frame-Options: DENY or SAMEORIGIN to protect against clickjacking attacks."
+    },
+    {
+      "id": "SEC_HDR_001_X_CONTENT_TYPE_OPTIONS",
+      "title": "Missing Security Header: X-Content-Type-Options",
+      "severity": "LOW",
+      "description": "Missing X-Content-Type-Options header. (Target: http://localhost:3000)",
+      "endpoint": "http://localhost:3000",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP/200 response headers missing &#x27;x-content-type-options&#x27;.",
+      "cwe": "CWE-693",
+      "remediation": "Set X-Content-Type-Options: nosniff to prevent MIME-type sniffing."
+    },
+    {
+      "id": "SEC_HDR_001_REFERRER_POLICY",
+      "title": "Missing Security Header: Referrer-Policy",
+      "severity": "INFO",
+      "description": "Missing Referrer-Policy header. (Target: http://localhost:3000)",
+      "endpoint": "http://localhost:3000",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP/200 response headers missing &#x27;referrer-policy&#x27;.",
+      "cwe": "CWE-200",
+      "remediation": "Set Referrer-Policy: strict-origin-when-cross-origin to limit referrer leakage."
+    }
+  ],
+  "structured_findings": [
+    {
+      "target": "http://localhost:3000",
+      "check_name": "Missing Security Header: Strict-Transport-Security",
+      "severity": "LOW",
+      "evidence": "HTTP/200 response headers missing &#x27;strict-transport-security&#x27;.",
+      "timestamp": "2026-09-01T00:45:29.324054+00:00"
+    },
+    {
+      "target": "http://localhost:3000",
+      "check_name": "Missing Security Header: Content-Security-Policy",
+      "severity": "MEDIUM",
+      "evidence": "HTTP/200 response headers missing &#x27;content-security-policy&#x27;.",
+      "timestamp": "2026-09-01T00:45:29.324054+00:00"
+    },
+    {
+      "target": "http://localhost:3000",
+      "check_name": "Missing Security Header: X-Frame-Options",
+      "severity": "MEDIUM",
+      "evidence": "HTTP/200 response headers missing &#x27;x-frame-options&#x27;.",
+      "timestamp": "2026-09-01T00:45:29.324054+00:00"
+    },
+    {
+      "target": "http://localhost:3000",
+      "check_name": "Missing Security Header: X-Content-Type-Options",
+      "severity": "LOW",
+      "evidence": "HTTP/200 response headers missing &#x27;x-content-type-options&#x27;.",
+      "timestamp": "2026-09-01T00:45:29.324054+00:00"
+    },
+    {
+      "target": "http://localhost:3000",
+      "check_name": "Missing Security Header: Referrer-Policy",
+      "severity": "INFO",
+      "evidence": "HTTP/200 response headers missing &#x27;referrer-policy&#x27;.",
+      "timestamp": "2026-09-01T00:45:29.324054+00:00"
+    }
+  ]
+}

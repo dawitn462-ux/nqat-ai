@@ -1,0 +1,2111 @@
+{
+  "scan_id": "scan_1788432107",
+  "target_url": "http://localhost:3000",
+  "timestamp": "2026-09-03T10:41:47.184356+00:00",
+  "summary": {
+    "total_endpoints_scanned": 3,
+    "total_vulnerabilities": 110,
+    "severity_counts": {
+      "CRITICAL": 0,
+      "HIGH": 12,
+      "MEDIUM": 91,
+      "LOW": 4,
+      "INFO": 3
+    },
+    "scan_duration_seconds": 96.94
+  },
+  "findings": [
+    {
+      "id": "SEC_HDR_001_STRICT_TRANSPORT_SECURITY",
+      "title": "Missing Security Header: Strict-Transport-Security",
+      "severity": "LOW",
+      "description": "Missing Strict-Transport-Security (HSTS) header. (Target: http://localhost:3000)",
+      "endpoint": "http://localhost:3000",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP/200 response headers missing &#x27;strict-transport-security&#x27;.",
+      "cwe": "CWE-523",
+      "remediation": "Enable HSTS in web server response headers (e.g. Strict-Transport-Security: max-age=31536000; includeSubDomains)."
+    },
+    {
+      "id": "SEC_HDR_001_CONTENT_SECURITY_POLICY",
+      "title": "Missing Security Header: Content-Security-Policy",
+      "severity": "MEDIUM",
+      "description": "Missing Content-Security-Policy (CSP) header. (Target: http://localhost:3000)",
+      "endpoint": "http://localhost:3000",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP/200 response headers missing &#x27;content-security-policy&#x27;.",
+      "cwe": "CWE-1021",
+      "remediation": "Define a restrictive Content-Security-Policy header to prevent XSS and data injection attacks."
+    },
+    {
+      "id": "SEC_HDR_001_X_FRAME_OPTIONS",
+      "title": "Missing Security Header: X-Frame-Options",
+      "severity": "MEDIUM",
+      "description": "Missing X-Frame-Options header (Clickjacking Risk). (Target: http://localhost:3000)",
+      "endpoint": "http://localhost:3000",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP/200 response headers missing &#x27;x-frame-options&#x27;.",
+      "cwe": "CWE-1021",
+      "remediation": "Configure X-Frame-Options: DENY or SAMEORIGIN to protect against clickjacking attacks."
+    },
+    {
+      "id": "SEC_HDR_001_X_CONTENT_TYPE_OPTIONS",
+      "title": "Missing Security Header: X-Content-Type-Options",
+      "severity": "LOW",
+      "description": "Missing X-Content-Type-Options header. (Target: http://localhost:3000)",
+      "endpoint": "http://localhost:3000",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP/200 response headers missing &#x27;x-content-type-options&#x27;.",
+      "cwe": "CWE-693",
+      "remediation": "Set X-Content-Type-Options: nosniff to prevent MIME-type sniffing."
+    },
+    {
+      "id": "SEC_HDR_001_REFERRER_POLICY",
+      "title": "Missing Security Header: Referrer-Policy",
+      "severity": "INFO",
+      "description": "Missing Referrer-Policy header. (Target: http://localhost:3000)",
+      "endpoint": "http://localhost:3000",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP/200 response headers missing &#x27;referrer-policy&#x27;.",
+      "cwe": "CWE-200",
+      "remediation": "Set Referrer-Policy: strict-origin-when-cross-origin to limit referrer leakage."
+    },
+    {
+      "id": "INFO_LEAK_001__API-DOCS",
+      "title": "Exposed API Documentation",
+      "severity": "INFO",
+      "description": "Publicly accessible OpenAPI / Swagger documentation. Found at http://localhost:3000/api-docs",
+      "endpoint": "http://localhost:3000/api-docs",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK (Response size: 33 bytes)",
+      "cwe": "CWE-200",
+      "remediation": "Restrict unauthenticated access to '/api-docs' endpoint if not intended for public access."
+    },
+    {
+      "id": "INFO_LEAK_001__SWAGGER-UI",
+      "title": "Exposed Swagger UI",
+      "severity": "INFO",
+      "description": "Public Swagger UI endpoint. Found at http://localhost:3000/swagger-ui",
+      "endpoint": "http://localhost:3000/swagger-ui",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK (Response size: 33 bytes)",
+      "cwe": "CWE-200",
+      "remediation": "Restrict unauthenticated access to '/swagger-ui' endpoint if not intended for public access."
+    },
+    {
+      "id": "INFO_LEAK_001__FTP",
+      "title": "Exposed FTP Directory",
+      "severity": "LOW",
+      "description": "Publicly accessible FTP directory/file browser. Found at http://localhost:3000/ftp",
+      "endpoint": "http://localhost:3000/ftp",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK (Response size: 33 bytes)",
+      "cwe": "CWE-200",
+      "remediation": "Restrict unauthenticated access to '/ftp' endpoint if not intended for public access."
+    },
+    {
+      "id": "INFO_LEAK_001__GIT_HEAD",
+      "title": "Exposed Git Repository",
+      "severity": "HIGH",
+      "description": "Exposed .git directory allows source code download. Found at http://localhost:3000/.git/HEAD",
+      "endpoint": "http://localhost:3000/.git/HEAD",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK (Response size: 33 bytes)",
+      "cwe": "CWE-200",
+      "remediation": "Restrict unauthenticated access to '/.git/HEAD' endpoint if not intended for public access."
+    },
+    {
+      "id": "INFO_LEAK_001__METRICS",
+      "title": "Exposed Metrics Endpoint",
+      "severity": "LOW",
+      "description": "Exposed Prometheus/application metrics endpoint. Found at http://localhost:3000/metrics",
+      "endpoint": "http://localhost:3000/metrics",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK (Response size: 33 bytes)",
+      "cwe": "CWE-200",
+      "remediation": "Restrict unauthenticated access to '/metrics' endpoint if not intended for public access."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__CONFIG_BAK",
+      "title": "Exposed Backup or Sensitive File Discovered (/config.bak)",
+      "severity": "HIGH",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/config.bak' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/config.bak",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /config.bak",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/config.bak' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__BACKUP_ZIP",
+      "title": "Exposed Backup or Sensitive File Discovered (/backup.zip)",
+      "severity": "HIGH",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/backup.zip' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/backup.zip",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /backup.zip",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/backup.zip' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__APP_BAK",
+      "title": "Exposed Backup or Sensitive File Discovered (/app.bak)",
+      "severity": "HIGH",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/app.bak' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/app.bak",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /app.bak",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/app.bak' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001___GIT_CONFIG",
+      "title": "Exposed Backup or Sensitive File Discovered (/.git/config)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/.git/config' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/.git/config",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /.git/config",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/.git/config' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__SERVER_LOG",
+      "title": "Exposed Backup or Sensitive File Discovered (/server.log)",
+      "severity": "HIGH",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/server.log' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/server.log",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /server.log",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/server.log' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__INDEX_PHP_BAK",
+      "title": "Exposed Backup or Sensitive File Discovered (/index.php.bak)",
+      "severity": "HIGH",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/index.php.bak' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/index.php.bak",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /index.php.bak",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/index.php.bak' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__DUMP_SQL",
+      "title": "Exposed Backup or Sensitive File Discovered (/dump.sql)",
+      "severity": "HIGH",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/dump.sql' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/dump.sql",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /dump.sql",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/dump.sql' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__DATABASE_SQL",
+      "title": "Exposed Backup or Sensitive File Discovered (/database.sql)",
+      "severity": "HIGH",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/database.sql' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/database.sql",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /database.sql",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/database.sql' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001___ENV",
+      "title": "Exposed Backup or Sensitive File Discovered (/.env)",
+      "severity": "HIGH",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/.env' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/.env",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /.env",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/.env' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__CREDENTIALS_TXT",
+      "title": "Exposed Backup or Sensitive File Discovered (/credentials.txt)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/credentials.txt' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/credentials.txt",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /credentials.txt",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/credentials.txt' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__MISC_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/misc.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/misc.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/misc.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /misc.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/misc.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__CONTACT_TXT",
+      "title": "Exposed Backup or Sensitive File Discovered (/Contact.txt)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/Contact.txt' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/Contact.txt",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /Contact.txt",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/Contact.txt' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__IMAGE_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/image.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/image.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/image.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /image.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/image.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__RSS_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/rss.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/rss.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/rss.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /rss.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/rss.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__SEARCH_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/search.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/search.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/search.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /search.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/search.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__CRON_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/cron.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/cron.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/cron.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /cron.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/cron.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__PRIVMSG_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/privmsg.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/privmsg.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/privmsg.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /privmsg.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/privmsg.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__CREDENTIAL_XML",
+      "title": "Exposed Backup or Sensitive File Discovered (/credential.xml)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/credential.xml' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/credential.xml",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /credential.xml",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/credential.xml' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__PRIVATE_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/private.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/private.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/private.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /private.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/private.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__CHANGELOG_TXT",
+      "title": "Exposed Backup or Sensitive File Discovered (/CHANGELOG.txt)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/CHANGELOG.txt' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/CHANGELOG.txt",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /CHANGELOG.txt",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/CHANGELOG.txt' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__MODERATOR_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/moderator.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/moderator.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/moderator.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /moderator.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/moderator.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__PROFILE_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/profile.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/profile.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/profile.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /profile.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/profile.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__ONLINE_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/online.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/online.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/online.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /online.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/online.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__CONFIG_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/config.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/config.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/config.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /config.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/config.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__SHOWPOST_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/showpost.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/showpost.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/showpost.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /showpost.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/showpost.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__CREDENTIAL_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/credential.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/credential.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/credential.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /credential.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/credential.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__STATISTICS_HTML",
+      "title": "Exposed Backup or Sensitive File Discovered (/statistics.html)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/statistics.html' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/statistics.html",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /statistics.html",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/statistics.html' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__AJAX_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/ajax.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/ajax.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/ajax.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /ajax.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/ajax.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__SHOPS_BUYACTION_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/shops_buyaction.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/shops_buyaction.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/shops_buyaction.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /shops_buyaction.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/shops_buyaction.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__POSTTOCAR_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/posttocar.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/posttocar.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/posttocar.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /posttocar.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/posttocar.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__SUBSCRIPTION_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/subscription.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/subscription.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/subscription.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /subscription.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/subscription.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__ADMIN_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/admin.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/admin.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/admin.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /admin.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/admin.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__GLOBAL_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/global.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/global.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/global.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /global.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/global.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__INSTALL_MYSQL_TXT",
+      "title": "Exposed Backup or Sensitive File Discovered (/INSTALL.mysql.txt)",
+      "severity": "HIGH",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/INSTALL.mysql.txt' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/INSTALL.mysql.txt",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /INSTALL.mysql.txt",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/INSTALL.mysql.txt' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__LOGOFF_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/logoff.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/logoff.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/logoff.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /logoff.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/logoff.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__GO_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/go.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/go.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/go.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /go.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/go.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__DOWNLOAD_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/download.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/download.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/download.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /download.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/download.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__MEMBERLIST_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/memberlist.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/memberlist.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/memberlist.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /memberlist.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/memberlist.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__NEWTHREAD_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/newthread.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/newthread.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/newthread.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /newthread.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/newthread.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__REPORT_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/report.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/report.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/report.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /report.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/report.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__CREDENTIAL_TXT",
+      "title": "Exposed Backup or Sensitive File Discovered (/credential.txt)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/credential.txt' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/credential.txt",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /credential.txt",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/credential.txt' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__POPUP_IMAGE_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/popup_image.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/popup_image.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/popup_image.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /popup_image.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/popup_image.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__COUNT_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/count.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/count.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/count.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /count.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/count.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__MAINTAINERS_TXT",
+      "title": "Exposed Backup or Sensitive File Discovered (/MAINTAINERS.txt)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/MAINTAINERS.txt' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/MAINTAINERS.txt",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /MAINTAINERS.txt",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/MAINTAINERS.txt' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__MEMBER_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/member.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/member.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/member.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /member.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/member.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__FAQ_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/faq.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/faq.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/faq.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /faq.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/faq.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__STOW_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/stow.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/stow.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/stow.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /stow.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/stow.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__SHOPPING_CART_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/shopping_cart.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/shopping_cart.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/shopping_cart.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /shopping_cart.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/shopping_cart.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__REDIRECT_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/redirect.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/redirect.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/redirect.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /redirect.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/redirect.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__INSTALL_MD",
+      "title": "Exposed Backup or Sensitive File Discovered (/INSTALL.md)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/INSTALL.md' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/INSTALL.md",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /INSTALL.md",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/INSTALL.md' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__CREATE_ACCOUNT_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/create_account.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/create_account.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/create_account.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /create_account.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/create_account.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__UPGRADE_TXT",
+      "title": "Exposed Backup or Sensitive File Discovered (/UPGRADE.txt)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/UPGRADE.txt' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/UPGRADE.txt",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /UPGRADE.txt",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/UPGRADE.txt' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__INLINEMOD_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/inlinemod.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/inlinemod.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/inlinemod.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /inlinemod.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/inlinemod.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__ACCOUNT_HISTORY_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/account_history.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/account_history.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/account_history.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /account_history.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/account_history.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__CART_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/cart.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/cart.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/cart.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /cart.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/cart.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__SHOWGROUPS_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/showgroups.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/showgroups.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/showgroups.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /showgroups.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/showgroups.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__INSTALL_PGSQL_TXT",
+      "title": "Exposed Backup or Sensitive File Discovered (/INSTALL.pgsql.txt)",
+      "severity": "HIGH",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/INSTALL.pgsql.txt' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/INSTALL.pgsql.txt",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /INSTALL.pgsql.txt",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/INSTALL.pgsql.txt' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__PRIVACY_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/privacy.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/privacy.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/privacy.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /privacy.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/privacy.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__MODCP_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/modcp.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/modcp.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/modcp.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /modcp.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/modcp.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__ATTACHMENT_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/attachment.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/attachment.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/attachment.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /attachment.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/attachment.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__DB_SQLITE",
+      "title": "Exposed Backup or Sensitive File Discovered (/db.sqlite)",
+      "severity": "HIGH",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/db.sqlite' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/db.sqlite",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /db.sqlite",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/db.sqlite' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__CONTACT_TXT",
+      "title": "Exposed Backup or Sensitive File Discovered (/contact.txt)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/contact.txt' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/contact.txt",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /contact.txt",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/contact.txt' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__USERNOTE_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/usernote.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/usernote.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/usernote.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /usernote.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/usernote.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__CAR_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/car.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/car.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/car.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /car.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/car.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__INSTALL_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/install.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/install.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/install.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /install.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/install.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__POSTING_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/posting.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/posting.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/posting.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /posting.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/posting.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__WP-REGISTER_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/wp-register.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/wp-register.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/wp-register.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /wp-register.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/wp-register.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__AD_JS_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/ad_js.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/ad_js.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/ad_js.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /ad_js.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/ad_js.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__VIEWTOPIC_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/viewtopic.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/viewtopic.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/viewtopic.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /viewtopic.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/viewtopic.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__CARBUYACTION_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/carbuyaction.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/carbuyaction.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/carbuyaction.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /carbuyaction.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/carbuyaction.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__POSTINGS_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/postings.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/postings.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/postings.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /postings.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/postings.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__NEWATTACHMENT_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/newattachment.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/newattachment.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/newattachment.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /newattachment.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/newattachment.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__ACCOUNT_EDIT_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/account_edit.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/account_edit.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/account_edit.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /account_edit.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/account_edit.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__JOINREQUESTS_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/joinrequests.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/joinrequests.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/joinrequests.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /joinrequests.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/joinrequests.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__ERRADDSAVE_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/erraddsave.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/erraddsave.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/erraddsave.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /erraddsave.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/erraddsave.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__REGISTER_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/register.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/register.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/register.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /register.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/register.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__RECOMMEND_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/recommend.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/recommend.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/recommend.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /recommend.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/recommend.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__PRINTTHREAD_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/printthread.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/printthread.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/printthread.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /printthread.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/printthread.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__NEWREPLY_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/newreply.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/newreply.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/newreply.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /newreply.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/newreply.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__MYTAG_JS_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/mytag_js.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/mytag_js.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/mytag_js.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /mytag_js.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/mytag_js.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__SHIPPING_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/shipping.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/shipping.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/shipping.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /shipping.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/shipping.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__CONTACT_US_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/contact_us.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/contact_us.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/contact_us.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /contact_us.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/contact_us.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__CONTACTS_TXT",
+      "title": "Exposed Backup or Sensitive File Discovered (/contacts.txt)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/contacts.txt' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/contacts.txt",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /contacts.txt",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/contacts.txt' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__REPUTATION_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/reputation.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/reputation.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/reputation.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /reputation.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/reputation.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__THREADRATE_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/threadrate.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/threadrate.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/threadrate.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /threadrate.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/threadrate.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__DISDLS_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/disdls.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/disdls.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/disdls.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /disdls.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/disdls.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__LOGIN_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/login.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/login.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/login.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /login.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/login.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__SENDMESSAGE_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/sendmessage.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/sendmessage.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/sendmessage.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /sendmessage.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/sendmessage.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__FEEDBACK_JS_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/feedback_js.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/feedback_js.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/feedback_js.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /feedback_js.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/feedback_js.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__UPDATE_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/update.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/update.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/update.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /update.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/update.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__COOKIE_USAGE_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/cookie_usage.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/cookie_usage.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/cookie_usage.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /cookie_usage.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/cookie_usage.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__POLL_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/poll.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/poll.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/poll.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /poll.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/poll.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__ADVANCED_SEARCH_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/advanced_search.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/advanced_search.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/advanced_search.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /advanced_search.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/advanced_search.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__LICENSE_TXT",
+      "title": "Exposed Backup or Sensitive File Discovered (/LICENSE.txt)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/LICENSE.txt' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/LICENSE.txt",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /LICENSE.txt",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/LICENSE.txt' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__VIEWONLINE_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/viewonline.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/viewonline.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/viewonline.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /viewonline.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/viewonline.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__REVIEWS_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/reviews.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/reviews.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/reviews.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /reviews.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/reviews.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__CALENDAR_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/calendar.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/calendar.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/calendar.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /calendar.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/calendar.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__XMLRPC_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/xmlrpc.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/xmlrpc.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/xmlrpc.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /xmlrpc.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/xmlrpc.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__USERCP_PHP",
+      "title": "Exposed Backup or Sensitive File Discovered (/usercp.php)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/usercp.php' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/usercp.php",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /usercp.php",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/usercp.php' on production web server."
+    },
+    {
+      "id": "BACKUP_DISCOVERY_001__INSTALL_TXT",
+      "title": "Exposed Backup or Sensitive File Discovered (/INSTALL.txt)",
+      "severity": "MEDIUM",
+      "description": "Wordlist discovery revealed an exposed file at 'http://localhost:3000/INSTALL.txt' using SecLists web-content dictionaries.",
+      "endpoint": "http://localhost:3000/INSTALL.txt",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /INSTALL.txt",
+      "cwe": "CWE-530",
+      "remediation": "Remove or restrict access to exposed file '/INSTALL.txt' on production web server."
+    }
+  ],
+  "structured_findings": [
+    {
+      "target": "http://localhost:3000",
+      "check_name": "Missing Security Header: Strict-Transport-Security",
+      "severity": "LOW",
+      "evidence": "HTTP/200 response headers missing &#x27;strict-transport-security&#x27;.",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000",
+      "check_name": "Missing Security Header: Content-Security-Policy",
+      "severity": "MEDIUM",
+      "evidence": "HTTP/200 response headers missing &#x27;content-security-policy&#x27;.",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000",
+      "check_name": "Missing Security Header: X-Frame-Options",
+      "severity": "MEDIUM",
+      "evidence": "HTTP/200 response headers missing &#x27;x-frame-options&#x27;.",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000",
+      "check_name": "Missing Security Header: X-Content-Type-Options",
+      "severity": "LOW",
+      "evidence": "HTTP/200 response headers missing &#x27;x-content-type-options&#x27;.",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000",
+      "check_name": "Missing Security Header: Referrer-Policy",
+      "severity": "INFO",
+      "evidence": "HTTP/200 response headers missing &#x27;referrer-policy&#x27;.",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/api-docs",
+      "check_name": "Exposed API Documentation",
+      "severity": "INFO",
+      "evidence": "HTTP 200 OK (Response size: 33 bytes)",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/swagger-ui",
+      "check_name": "Exposed Swagger UI",
+      "severity": "INFO",
+      "evidence": "HTTP 200 OK (Response size: 33 bytes)",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/ftp",
+      "check_name": "Exposed FTP Directory",
+      "severity": "LOW",
+      "evidence": "HTTP 200 OK (Response size: 33 bytes)",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/.git/HEAD",
+      "check_name": "Exposed Git Repository",
+      "severity": "HIGH",
+      "evidence": "HTTP 200 OK (Response size: 33 bytes)",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/metrics",
+      "check_name": "Exposed Metrics Endpoint",
+      "severity": "LOW",
+      "evidence": "HTTP 200 OK (Response size: 33 bytes)",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/config.bak",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/config.bak)",
+      "severity": "HIGH",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /config.bak",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/backup.zip",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/backup.zip)",
+      "severity": "HIGH",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /backup.zip",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/app.bak",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/app.bak)",
+      "severity": "HIGH",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /app.bak",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/.git/config",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/.git/config)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /.git/config",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/server.log",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/server.log)",
+      "severity": "HIGH",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /server.log",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/index.php.bak",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/index.php.bak)",
+      "severity": "HIGH",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /index.php.bak",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/dump.sql",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/dump.sql)",
+      "severity": "HIGH",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /dump.sql",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/database.sql",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/database.sql)",
+      "severity": "HIGH",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /database.sql",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/.env",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/.env)",
+      "severity": "HIGH",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /.env",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/credentials.txt",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/credentials.txt)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /credentials.txt",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/misc.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/misc.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /misc.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/Contact.txt",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/Contact.txt)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /Contact.txt",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/image.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/image.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /image.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/rss.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/rss.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /rss.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/search.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/search.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /search.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/cron.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/cron.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /cron.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/privmsg.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/privmsg.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /privmsg.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/credential.xml",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/credential.xml)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /credential.xml",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/private.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/private.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /private.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/CHANGELOG.txt",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/CHANGELOG.txt)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /CHANGELOG.txt",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/moderator.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/moderator.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /moderator.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/profile.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/profile.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /profile.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/online.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/online.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /online.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/config.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/config.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /config.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/showpost.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/showpost.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /showpost.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/credential.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/credential.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /credential.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/statistics.html",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/statistics.html)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /statistics.html",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/ajax.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/ajax.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /ajax.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/shops_buyaction.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/shops_buyaction.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /shops_buyaction.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/posttocar.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/posttocar.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /posttocar.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/subscription.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/subscription.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /subscription.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/admin.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/admin.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /admin.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/global.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/global.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /global.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/INSTALL.mysql.txt",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/INSTALL.mysql.txt)",
+      "severity": "HIGH",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /INSTALL.mysql.txt",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/logoff.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/logoff.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /logoff.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/go.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/go.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /go.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/download.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/download.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /download.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/memberlist.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/memberlist.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /memberlist.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/newthread.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/newthread.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /newthread.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/report.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/report.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /report.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/credential.txt",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/credential.txt)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /credential.txt",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/popup_image.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/popup_image.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /popup_image.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/count.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/count.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /count.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/MAINTAINERS.txt",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/MAINTAINERS.txt)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /MAINTAINERS.txt",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/member.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/member.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /member.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/faq.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/faq.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /faq.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/stow.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/stow.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /stow.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/shopping_cart.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/shopping_cart.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /shopping_cart.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/redirect.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/redirect.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /redirect.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/INSTALL.md",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/INSTALL.md)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /INSTALL.md",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/create_account.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/create_account.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /create_account.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/UPGRADE.txt",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/UPGRADE.txt)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /UPGRADE.txt",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/inlinemod.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/inlinemod.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /inlinemod.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/account_history.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/account_history.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /account_history.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/cart.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/cart.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /cart.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/showgroups.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/showgroups.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /showgroups.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/INSTALL.pgsql.txt",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/INSTALL.pgsql.txt)",
+      "severity": "HIGH",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /INSTALL.pgsql.txt",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/privacy.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/privacy.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /privacy.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/modcp.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/modcp.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /modcp.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/attachment.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/attachment.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /attachment.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/db.sqlite",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/db.sqlite)",
+      "severity": "HIGH",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /db.sqlite",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/contact.txt",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/contact.txt)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /contact.txt",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/usernote.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/usernote.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /usernote.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/car.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/car.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /car.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/install.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/install.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /install.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/posting.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/posting.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /posting.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/wp-register.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/wp-register.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /wp-register.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/ad_js.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/ad_js.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /ad_js.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/viewtopic.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/viewtopic.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /viewtopic.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/carbuyaction.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/carbuyaction.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /carbuyaction.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/postings.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/postings.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /postings.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/newattachment.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/newattachment.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /newattachment.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/account_edit.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/account_edit.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /account_edit.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/joinrequests.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/joinrequests.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /joinrequests.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/erraddsave.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/erraddsave.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /erraddsave.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/register.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/register.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /register.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/recommend.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/recommend.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /recommend.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/printthread.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/printthread.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /printthread.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/newreply.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/newreply.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /newreply.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/mytag_js.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/mytag_js.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /mytag_js.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/shipping.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/shipping.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /shipping.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/contact_us.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/contact_us.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /contact_us.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/contacts.txt",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/contacts.txt)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /contacts.txt",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/reputation.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/reputation.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /reputation.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/threadrate.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/threadrate.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /threadrate.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/disdls.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/disdls.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /disdls.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/login.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/login.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /login.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/sendmessage.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/sendmessage.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /sendmessage.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/feedback_js.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/feedback_js.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /feedback_js.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/update.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/update.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /update.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/cookie_usage.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/cookie_usage.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /cookie_usage.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/poll.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/poll.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /poll.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/advanced_search.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/advanced_search.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /advanced_search.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/LICENSE.txt",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/LICENSE.txt)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /LICENSE.txt",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/viewonline.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/viewonline.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /viewonline.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/reviews.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/reviews.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /reviews.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/calendar.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/calendar.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /calendar.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/xmlrpc.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/xmlrpc.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /xmlrpc.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/usercp.php",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/usercp.php)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /usercp.php",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    },
+    {
+      "target": "http://localhost:3000/INSTALL.txt",
+      "check_name": "Exposed Backup or Sensitive File Discovered (/INSTALL.txt)",
+      "severity": "MEDIUM",
+      "evidence": "HTTP 200 OK | Size: 33 bytes | Path: /INSTALL.txt",
+      "timestamp": "2026-09-03T10:41:47.184356+00:00"
+    }
+  ]
+}

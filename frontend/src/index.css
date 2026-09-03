@@ -1,0 +1,349 @@
+:root {
+  --bg-primary: #000000;
+  --bg-surface: rgba(12, 12, 12, 0.85);
+  --bg-card: rgba(18, 18, 18, 0.8);
+  --bg-card-hover: rgba(28, 28, 28, 0.9);
+  --bg-glass: rgba(255, 255, 255, 0.03);
+
+  --accent-cyan: #ef4444;
+  --accent-blue: #ffffff;
+  --accent-purple: #ef4444;
+  --accent-emerald: #10b981;
+  --accent-red: #ef4444;
+  --accent-glow: transparent;
+
+  --text-primary: #ffffff;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+
+  --border-glass: #000000;
+  --border-hover: #000000;
+  --border-cyan: #000000;
+
+  --font-brand: 'Syne', 'Outfit', sans-serif;
+  --font-heading: 'Outfit', 'Inter', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'Fira Code', monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: #000000;
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-image: none;
+  background-attachment: fixed;
+}
+
+/* App Master Container */
+.app-container {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: #000000;
+}
+
+/* Typography Utility Classes */
+.mono-text {
+  font-family: var(--font-mono);
+}
+
+.brand-font {
+  font-family: var(--font-brand);
+}
+
+.heading-font {
+  font-family: var(--font-heading);
+}
+
+/* Aegis-style Pill Badges */
+.aegis-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 2px solid #000000;
+  padding: 0.45rem 1.1rem;
+  border-radius: 9999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: #e2e8f0;
+  backdrop-filter: blur(12px);
+  transition: all 0.3s ease;
+}
+
+.aegis-badge-pill:hover {
+  border-color: #000000;
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.aegis-badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--accent-emerald);
+  box-shadow: 0 0 8px var(--accent-emerald);
+}
+
+/* Aegis Button Styles */
+.btn-aegis-primary {
+  background: #ffffff;
+  color: #050609;
+  font-weight: 700;
+  font-family: var(--font-heading);
+  padding: 0.85rem 2.2rem;
+  border-radius: 9999px;
+  border: 2px solid #000000;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  text-decoration: none;
+}
+
+.btn-aegis-primary:hover {
+  transform: translateY(-2px);
+  background: #f1f5f9;
+  border-color: #000000;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+}
+
+.btn-aegis-secondary {
+  background: rgba(255, 255, 255, 0.05);
+  color: #f8fafc;
+  font-weight: 600;
+  font-family: var(--font-heading);
+  padding: 0.85rem 2.2rem;
+  border-radius: 9999px;
+  border: 2px solid #000000;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(8px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  text-decoration: none;
+}
+
+.btn-aegis-secondary:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: #000000;
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+/* Aegis Glass Cards */
+.aegis-glass-card {
+  background: var(--bg-surface);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 2px solid #000000;
+  border-radius: 20px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.8);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.aegis-glass-card:hover {
+  border-color: #000000;
+  background: var(--bg-card-hover);
+  transform: translateY(-3px);
+  box-shadow: 0 16px 45px rgba(0, 0, 0, 0.9);
+}
+
+/* Header Text Section Layout (Location and gap matching Aegis image) */
+.aegis-section-header {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 3.5rem auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.1rem;
+}
+
+.aegis-section-title {
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.15;
+  letter-spacing: -0.8px;
+}
+
+.aegis-section-subtitle {
+  font-size: 1.08rem;
+  color: #94a3b8;
+  line-height: 1.6;
+  max-width: 680px;
+  font-weight: 400;
+}
+
+/* Stat Grid Row */
+.aegis-stat-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  max-width: 1150px;
+  margin: 4rem auto;
+  padding: 2.2rem 1.5rem;
+  background: rgba(12, 12, 12, 0.8);
+  border-top: 2px solid #000000;
+  border-bottom: 2px solid #000000;
+  border-left: 2px solid #000000;
+  border-right: 2px solid #000000;
+  border-radius: 16px;
+}
+
+.aegis-stat-item {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  border-right: 2px solid #000000;
+  padding: 0 1rem;
+}
+
+.aegis-stat-item:last-child {
+  border-right: none;
+}
+
+.aegis-stat-number {
+  font-size: 2.6rem;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: -1px;
+  font-family: var(--font-heading);
+}
+
+.aegis-stat-label {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+/* Quote Card Spotlight */
+.aegis-quote-card {
+  max-width: 1150px;
+  margin: 0 auto 5rem;
+  padding: 3rem;
+  background: radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.04) 0%, rgba(10, 10, 10, 0.95) 70%);
+  border: 2px solid #000000;
+  border-radius: 24px;
+  position: relative;
+}
+
+/* Accordion FAQ Styling */
+.aegis-faq-item {
+  border: 2px solid #000000;
+  border-radius: 14px;
+  background: rgba(12, 12, 12, 0.7);
+  overflow: hidden;
+  transition: all 0.25s ease;
+  margin-bottom: 1rem;
+}
+
+.aegis-faq-item:hover {
+  border-color: #000000;
+}
+
+.aegis-faq-question {
+  width: 100%;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-size: 1.05rem;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+  font-family: var(--font-heading);
+}
+
+.aegis-faq-answer {
+  padding: 0 1.5rem 1.25rem 1.5rem;
+  color: #94a3b8;
+  font-size: 0.95rem;
+  line-height: 1.65;
+  border-top: 2px solid #000000;
+}
+
+/* Auth Modal Styling */
+.auth-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.92);
+  backdrop-filter: blur(18px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.auth-modal-box {
+  background: rgba(10, 10, 10, 0.98);
+  color: #f8fafc;
+  width: 100%;
+  max-width: 440px;
+  border-radius: 24px;
+  padding: 2.5rem;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.9);
+  border: 2px solid #000000;
+  position: relative;
+  animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+  .aegis-stat-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .aegis-stat-item {
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 1rem;
+  }
+  .aegis-section-title {
+    font-size: 2.2rem;
+  }
+}
+

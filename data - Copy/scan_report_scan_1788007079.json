@@ -1,0 +1,59 @@
+{
+  "scan_id": "scan_1788007079",
+  "target_url": "https://localhost:8443",
+  "timestamp": "2026-08-29T12:37:59.852167+00:00",
+  "summary": {
+    "total_endpoints_scanned": 1,
+    "total_vulnerabilities": 2,
+    "severity_counts": {
+      "CRITICAL": 0,
+      "HIGH": 0,
+      "MEDIUM": 0,
+      "LOW": 1,
+      "INFO": 1
+    },
+    "scan_duration_seconds": 3.59
+  },
+  "findings": [
+    {
+      "id": "SEC_HDR_001_REFERRER_POLICY",
+      "title": "Missing Security Header: Referrer-Policy",
+      "severity": "INFO",
+      "description": "Missing Referrer-Policy header. (Endpoint: https://localhost:8443)",
+      "endpoint": "https://localhost:8443",
+      "parameter": null,
+      "payload": null,
+      "evidence": "HTTP/200 response headers missing &#x27;referrer-policy&#x27;.",
+      "cwe": "CWE-200",
+      "remediation": "Set Referrer-Policy: strict-origin-when-cross-origin to limit referrer leakage."
+    },
+    {
+      "id": "INFO_LEAK_001_SERVER_BANNER",
+      "title": "Server Banner Version Disclosure",
+      "severity": "LOW",
+      "description": "Server header discloses software version: BaseHTTP/0.6 Python/3.14.6",
+      "endpoint": "https://localhost:8443",
+      "parameter": null,
+      "payload": null,
+      "evidence": "Server: BaseHTTP/0.6 Python/3.14.6",
+      "cwe": "CWE-200",
+      "remediation": "Disable detailed server banner disclosure in web server configuration."
+    }
+  ],
+  "structured_findings": [
+    {
+      "target": "https://localhost:8443",
+      "check_name": "Missing Security Header: Referrer-Policy",
+      "severity": "INFO",
+      "evidence": "HTTP/200 response headers missing &#x27;referrer-policy&#x27;.",
+      "timestamp": "2026-08-29T12:37:59.852167+00:00"
+    },
+    {
+      "target": "https://localhost:8443",
+      "check_name": "Server Banner Version Disclosure",
+      "severity": "LOW",
+      "evidence": "Server: BaseHTTP/0.6 Python/3.14.6",
+      "timestamp": "2026-08-29T12:37:59.852167+00:00"
+    }
+  ]
+}

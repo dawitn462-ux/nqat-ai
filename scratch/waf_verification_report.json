@@ -1,0 +1,118 @@
+{
+  "total": 12,
+  "true_positives": 6,
+  "true_negatives": 5,
+  "false_positives": 1,
+  "false_negatives": 0,
+  "accuracy_percent": 91.7,
+  "results": [
+    {
+      "name": "Juice Shop Homepage",
+      "type": "Legitimate",
+      "status_code": 200,
+      "waf_action": "ALLOWED",
+      "classification": "Legitimate Traffic",
+      "confidence": "99.6%",
+      "eval": "TRUE NEGATIVE (Correctly Allowed)"
+    },
+    {
+      "name": "Public News Posts List",
+      "type": "Legitimate",
+      "status_code": 200,
+      "waf_action": "ALLOWED",
+      "classification": "Legitimate Traffic",
+      "confidence": "99.6%",
+      "eval": "TRUE NEGATIVE (Correctly Allowed)"
+    },
+    {
+      "name": "Legitimate Search Term",
+      "type": "Legitimate",
+      "status_code": 200,
+      "waf_action": "ALLOWED",
+      "classification": "Legitimate Traffic",
+      "confidence": "99.6%",
+      "eval": "TRUE NEGATIVE (Correctly Allowed)"
+    },
+    {
+      "name": "Threat Feed Status Query",
+      "type": "Legitimate",
+      "status_code": 200,
+      "waf_action": "ALLOWED",
+      "classification": "Legitimate Traffic",
+      "confidence": "99.6%",
+      "eval": "TRUE NEGATIVE (Correctly Allowed)"
+    },
+    {
+      "name": "User Authentication Health",
+      "type": "Legitimate",
+      "status_code": 404,
+      "waf_action": "ALLOWED",
+      "classification": "Legitimate Traffic",
+      "confidence": "99.6%",
+      "eval": "TRUE NEGATIVE (Correctly Allowed)"
+    },
+    {
+      "name": "SQL Injection Tautology",
+      "type": "Malicious",
+      "status_code": 403,
+      "waf_action": "BLOCKED",
+      "classification": "SQL Injection Attack",
+      "confidence": "98.5%",
+      "eval": "TRUE POSITIVE (Correctly Blocked)"
+    },
+    {
+      "name": "SQL Injection UNION SELECT",
+      "type": "Malicious",
+      "status_code": 403,
+      "waf_action": "BLOCKED",
+      "classification": "SQL Injection Attack",
+      "confidence": "98.5%",
+      "eval": "TRUE POSITIVE (Correctly Blocked)"
+    },
+    {
+      "name": "XSS Script Tag Injection",
+      "type": "Malicious",
+      "status_code": 403,
+      "waf_action": "BLOCKED",
+      "classification": "Cross-Site Scripting (XSS)",
+      "confidence": "97.6%",
+      "eval": "TRUE POSITIVE (Correctly Blocked)"
+    },
+    {
+      "name": "Path Traversal / LFI",
+      "type": "Malicious",
+      "status_code": 403,
+      "waf_action": "BLOCKED",
+      "classification": "Path Traversal / LFI",
+      "confidence": "99.2%",
+      "eval": "TRUE POSITIVE (Correctly Blocked)"
+    },
+    {
+      "name": "OS Command Injection",
+      "type": "Malicious",
+      "status_code": 403,
+      "waf_action": "BLOCKED",
+      "classification": "Path Traversal / LFI",
+      "confidence": "99.2%",
+      "eval": "TRUE POSITIVE (Correctly Blocked)"
+    },
+    {
+      "name": "Complex SQL-like Search Query",
+      "type": "Legitimate Edge Case",
+      "status_code": 403,
+      "waf_action": "BLOCKED",
+      "classification": "SQL Injection Attack",
+      "confidence": "98.5%",
+      "eval": "FALSE POSITIVE (Legitimate Traffic Blocked)"
+    },
+    {
+      "name": "Obfuscated SQLi Hex Payload",
+      "type": "Malicious Obfuscated",
+      "status_code": 403,
+      "waf_action": "BLOCKED",
+      "classification": "SQL Injection Attack",
+      "confidence": "98.5%",
+      "eval": "TRUE POSITIVE (Correctly Blocked)"
+    }
+  ]
+}
