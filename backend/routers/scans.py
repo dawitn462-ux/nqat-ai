@@ -102,37 +102,24 @@ def list_scans(
     request: Request,
     skip: int = 0,
     limit: int = 100,
+    auth_context: dict = Depends(verify_api_key),
     db: Session = Depends(get_db)
 ):
     """
     Lists scan records. Scoped strictly by organization_id for non-admin users.
     Admins can view all scans across the platform.
+    Requires verified email account or valid API key.
     """
-    auth_header = request.headers.get("Authorization") if request else None
-    api_key = request.headers.get("X-API-Key") if request else None
-    
-    org_id = None
-    role = None
-    
-    if auth_header and auth_header.startswith("Bearer "):
-        try:
-            from backend.auth import decode_access_token
-            token_str = auth_header.split(" ")[1]
-            payload = decode_access_token(token_str)
-            org_id = payload.get("organization_id")
-            role = payload.get("role")
-        except Exception as exc:
-            print(f"[!] Decode token error in list_scans: {exc}")
+    org_id = auth_context.get("organization_id", 1)
+    role = auth_context.get("role", "analyst")
 
     if role == "admin":
         scans = db.query(Scan).order_by(Scan.created_at.desc()).offset(skip).limit(limit).all()
-    elif org_id is not None:
-        scans = db.query(Scan).filter(Scan.organization_id == org_id).order_by(Scan.created_at.desc()).offset(skip).limit(limit).all()
     else:
-        # Default fallback for unauthenticated calls: return empty or default scans
-        scans = db.query(Scan).filter(Scan.organization_id == 1).order_by(Scan.created_at.desc()).offset(skip).limit(limit).all()
+        scans = db.query(Scan).filter(Scan.organization_id == org_id).order_by(Scan.created_at.desc()).offset(skip).limit(limit).all()
 
     return scans
+
 
 
 @router.patch("/scans/{scan_id}/status", response_model=ScanResponse, dependencies=[Depends(verify_api_key)])

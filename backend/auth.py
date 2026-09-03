@@ -58,17 +58,29 @@ def verify_api_key(
     """
     FastAPI dependency validating authentication via Bearer JWT token or X-API-Key header.
     Rejects missing or invalid credentials with HTTP 401 Unauthorized.
+    Enforces email verification for user JWT tokens.
     """
     # 1. Check for Bearer JWT token first
     if authorization and authorization.startswith("Bearer "):
         token = authorization.split(" ")[1]
         payload = decode_access_token(token)
+
+        # Enforce email verification check for user JWT tokens
+        is_verified = payload.get("is_email_verified", False)
+        role = payload.get("role", "analyst")
+        if not is_verified and role != "admin":
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Email verification required. Please verify your email address to access platform dashboard functionality."
+            )
+
         return {
             "auth_type": "jwt",
             "user_id": payload.get("user_id"),
             "username": payload.get("username"),
-            "role": payload.get("role", "analyst"),
+            "role": role,
             "organization_id": payload.get("organization_id", 1),
+            "is_email_verified": is_verified
         }
 
     # 2. Check X-API-Key fallback header
@@ -79,6 +91,7 @@ def verify_api_key(
             "username": "api_key_user",
             "role": "admin",
             "organization_id": 1,
+            "is_email_verified": True
         }
 
     # 3. Reject if neither is valid
@@ -86,6 +99,7 @@ def verify_api_key(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Invalid or missing authentication. Provide a valid Bearer JWT token or X-API-Key header."
     )
+
 
 
 verify_user_or_api_key = verify_api_key

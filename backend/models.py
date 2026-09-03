@@ -67,12 +67,15 @@ class User(Base):
     email_verification_token = Column(String(255), nullable=True, index=True)
     email_verification_code = Column(String(10), nullable=True, index=True)
     email_verification_sent_at = Column(DateTime(timezone=True), nullable=True)
+    email_verification_expires_at = Column(DateTime(timezone=True), nullable=True)
+    auth_provider = Column(String(50), nullable=False, default="local", index=True)
+    google_sub = Column(String(255), nullable=True, unique=True, index=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 
     organization = relationship("Organization", back_populates="users")
 
     def __repr__(self):
-        return f"<User(id={self.id}, username='{self.username}', role='{self.role}', verified={self.is_email_verified})>"
+        return f"<User(id={self.id}, username='{self.username}', role='{self.role}', verified={self.is_email_verified}, provider='{self.auth_provider}')>"
 
 
 class Scan(Base):

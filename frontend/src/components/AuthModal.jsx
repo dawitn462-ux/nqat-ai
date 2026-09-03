@@ -7,6 +7,7 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
   const [username, setUsername] = useState('analyst');
   const [email, setEmail] = useState('analyst@nkat.ai');
   const [password, setPassword] = useState('admin_secret_2026');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [orgName, setOrgName] = useState('');
   
   // Verification states
@@ -24,10 +25,17 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
     e.preventDefault();
     setError('');
     setInfoMsg('');
+
+    if (tab === 'register' && confirmPassword && password !== confirmPassword) {
+      setError('Passwords do not match. Please re-enter passwords.');
+      return;
+    }
+
     setLoading(true);
 
     try {
       if (tab === 'verify') {
+
         // Handle Email Verification Step
         const res = await fetch('/api/v1/auth/verify-email', {
           method: 'POST',
@@ -601,7 +609,7 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
                 </>
               )}
 
-              <div style={{ marginBottom: tab === 'register' ? '1.1rem' : '1.5rem' }}>
+              <div style={{ marginBottom: '1.1rem' }}>
                 <label style={{ fontSize: '0.78rem', color: '#94a3b8', fontWeight: 700, display: 'block', marginBottom: '6px', letterSpacing: '0.5px' }}>
                   PASSWORD
                 </label>
@@ -626,6 +634,35 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
                   <Lock size={16} style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: '#64748b' }} />
                 </div>
               </div>
+
+              {tab === 'register' && (
+                <div style={{ marginBottom: '1.1rem' }}>
+                  <label style={{ fontSize: '0.78rem', color: '#94a3b8', fontWeight: 700, display: 'block', marginBottom: '6px', letterSpacing: '0.5px' }}>
+                    CONFIRM PASSWORD
+                  </label>
+                  <div style={{ position: 'relative' }}>
+                    <input
+                      type="password"
+                      required
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      placeholder="••••••••••••"
+                      style={{
+                        width: '100%',
+                        padding: '12px 14px 12px 40px',
+                        borderRadius: '12px',
+                        border: '1px solid rgba(255, 255, 255, 0.15)',
+                        background: 'rgba(4, 6, 10, 0.8)',
+                        color: '#ffffff',
+                        fontSize: '0.92rem',
+                        outline: 'none'
+                      }}
+                    />
+                    <Lock size={16} style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: '#64748b' }} />
+                  </div>
+                </div>
+              )}
+
 
               {tab === 'register' && (
                 <div style={{ marginBottom: '1.5rem' }}>

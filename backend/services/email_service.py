@@ -21,16 +21,19 @@ def get_smtp_config():
     smtp_host = os.getenv("SMTP_HOST", "smtp.gmail.com")
     smtp_port = int(os.getenv("SMTP_PORT", "587"))
     smtp_user = os.getenv("SMTP_USER", "").strip()
-    smtp_pass = os.getenv("SMTP_PASS", "").strip()
+    raw_pass = os.getenv("SMTP_PASS", "").strip()
+    smtp_pass = raw_pass.replace(" ", "")  # Clean Google App Password spaces if present
     smtp_from = os.getenv("SMTP_FROM", "").strip() or smtp_user or "security-verify@nkat.ai"
     return smtp_host, smtp_port, smtp_user, smtp_pass, smtp_from
+
 
 
 def send_verification_email(
     recipient_email: str,
     username: str,
     verification_code: str,
-    verification_token: str
+    verification_token: str,
+    expires_in_minutes: int = 20
 ) -> dict:
     """
     Dispatches a real email verification message containing BOTH a direct clickable verification link
@@ -38,7 +41,7 @@ def send_verification_email(
     """
     smtp_host, smtp_port, smtp_user, smtp_pass, smtp_from = get_smtp_config()
     clean_email = recipient_email.strip().lower()
-    subject = f" [NKAT Security] Confirm Your Registered Email Address ({verification_code})"
+    subject = f"🔐 [NKAT Security] Confirm Your Registered Email Address ({verification_code})"
     
     dashboard_verify_url = f"https://127.0.0.1:8443/?verify_token={verification_token}&email={clean_email}"
     backend_verify_url = f"http://127.0.0.1:8000/api/v1/auth/verify-link?token={verification_token}&email={clean_email}"
@@ -52,6 +55,8 @@ Hello {username},
 
 Thank you for registering your account on NKAT AI Threat Sentinel Console.
 Please verify your registered email address ({clean_email}) to unlock your security dashboard.
+
+Notice: This verification request will expire in {expires_in_minutes} minutes.
 
 Option 1: Click the direct verification link below to verify automatically:
 {dashboard_verify_url}
@@ -87,18 +92,22 @@ If you did not request this registration, please ignore this email.
     <body>
       <div class="container">
         <div class="header">
-          <div class="brand"> NKAT AI SECURITY PLATFORM</div>
+          <div class="brand">🛡️ NKAT AI SECURITY PLATFORM</div>
           <div class="subbrand">Mandatory Registered Email Verification</div>
         </div>
         
         <p style="font-size: 15px; margin-top: 20px;">Hello <strong>{username}</strong>,</p>
         <p style="color: #cbd5e1; font-size: 14px; line-height: 1.6;">
-          Welcome to NKAT AI Security Sentinel. To complete your registration and access your isolated website dashboard, please confirm ownership of your email address <strong>({clean_email})</strong>:
+          Welcome to NKAT AI Security Sentinel. To complete your registration and access your security dashboard, please confirm ownership of your email address <strong>({clean_email})</strong>:
+        </p>
+
+        <p style="color: #fbbf24; font-size: 13px; font-weight: 600;">
+          ⏳ <em>This verification link and OTP code expire in {expires_in_minutes} minutes.</em>
         </p>
 
         <div class="link-box">
           <p style="color: #38bdf8; font-weight: 700; margin-top: 0; font-size: 14px;">CLICK BELOW TO VERIFY EMAIL & LOGIN INSTANTLY:</p>
-          <a href="{dashboard_verify_url}" class="btn" target="_blank"> Verify Email Address Now</a>
+          <a href="{dashboard_verify_url}" class="btn" target="_blank">Verify Email Address Now</a>
           <p style="font-size: 11px; color: #64748b; margin-bottom: 0; margin-top: 12px;">
             Link URL: <a href="{dashboard_verify_url}" style="color: #00f0ff;">{dashboard_verify_url}</a>
           </p>
@@ -125,7 +134,7 @@ If you did not request this registration, please ignore this email.
 
     if smtp_user and smtp_pass and len(smtp_pass.strip()) > 3:
         try:
-            with smtplib.SMTP(smtp_host, smtp_port, timeout=4) as server:
+            with smtplib.SMTP(smtp_host, smtp_port, timeout=10) as server:
                 server.ehlo()
                 server.starttls()
                 server.login(smtp_user, smtp_pass)
@@ -133,12 +142,13 @@ If you did not request this registration, please ignore this email.
             logger.info(f"[+] [Real Email Dispatch SUCCESS] Real verification email delivered via Gmail SMTP ({smtp_host}:{smtp_port}) to '{clean_email}'")
             return {"status": "sent", "method": "smtp", "recipient": clean_email}
         except Exception as exc:
-            logger.error(f"[!] [Gmail SMTP Auth Notice] Failed to send email via SMTP ({exc})")
-            print(f"[!] [Gmail SMTP Auth Notice] {exc}")
+            logger.error(f"[!] [Gmail SMTP Auth Error] Failed to send email via SMTP ({exc})")
+            print(f"[!] [Gmail SMTP Auth Error] {exc}")
             print(text_content)
             return {"status": "logged", "method": "console", "error": str(exc), "verify_url": dashboard_verify_url}
     else:
         logger.info(f"[+] [Email Verification Link Generated] Verify URL: '{dashboard_verify_url}' | Code: '{verification_code}'")
         print(text_content)
         return {"status": "logged", "method": "console", "verify_url": dashboard_verify_url}
+
 

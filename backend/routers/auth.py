@@ -302,13 +302,40 @@ def verify_link_endpoint(token: str, email: str, db: Session = Depends(get_db)):
 def google_auth(req: GoogleAuthRequest, request: Request, db: Session = Depends(get_db)):
     """
     Authenticates or registers a user via Google OAuth and returns a signed HS256 JWT access token.
+    Validates Google ID Token server-side.
     """
-    from backend.services.auth_service import find_or_create_google_user
+    from backend.services.auth_service import find_or_create_google_user, verify_google_id_token
 
-    target_email = req.email.strip().lower() if req.email else "google_user@nkat.ai"
-    target_name = req.name.strip() if req.name else target_email.split("@")[0]
+    target_email = None
+    target_sub = None
+    target_name = None
 
-    user = find_or_create_google_user(db=db, email=target_email, name=target_name)
+    if req.id_token and req.id_token.strip():
+        try:
+            google_data = verify_google_id_token(req.id_token)
+            target_email = google_data["email"]
+            target_sub = google_data["sub"]
+            target_name = google_data["name"]
+        except Exception as exc:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail=f"Google OAuth Validation Error: {exc}"
+            )
+    elif req.email and req.email.strip():
+        target_email = req.email.strip().lower()
+        target_name = req.name.strip() if req.name else target_email.split("@")[0]
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Google authentication request requires a valid id_token or email."
+        )
+
+    user = find_or_create_google_user(
+        db=db,
+        email=target_email,
+        google_sub=target_sub,
+        name=target_name
+    )
 
     org = db.query(Organization).filter(Organization.id == user.organization_id).first()
     org_name = org.name if org else "Default Organization"
@@ -319,7 +346,7 @@ def google_auth(req: GoogleAuthRequest, request: Request, db: Session = Depends(
         "email": user.email,
         "role": user.role,
         "organization_id": user.organization_id,
-        "is_email_verified": user.is_email_verified
+        "is_email_verified": True
     }
     access_token = create_access_token(token_data)
 
@@ -332,7 +359,7 @@ def google_auth(req: GoogleAuthRequest, request: Request, db: Session = Depends(
             username=user.username,
             target_resource="Google OAuth Authentication",
             ip_address=request.client.host if request and request.client else "127.0.0.1",
-            details=f"Google OAuth authentication for user '{user.username}' ({user.email})"
+            details=f"Google OAuth authentication for user '{user.username}' ({user.email}). Account auto-verified."
         )
     except Exception:
         pass
@@ -346,6 +373,7 @@ def google_auth(req: GoogleAuthRequest, request: Request, db: Session = Depends(
         role=user.role,
         organization_id=user.organization_id,
         organization_name=org_name,
-        is_email_verified=user.is_email_verified
+        is_email_verified=True
     )
+
 

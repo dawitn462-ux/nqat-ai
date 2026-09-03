@@ -53,11 +53,23 @@ Base = declarative_base()
 
 # Register models onto Base.metadata and ensure DB tables exist
 import backend.models
+from sqlalchemy import inspect, text
 
 try:
     Base.metadata.create_all(bind=engine)
+    # Check and add new columns to users table if missing in existing DB
+    inspector = inspect(engine)
+    if "users" in inspector.get_table_names():
+        existing_cols = {col["name"] for col in inspector.get_columns("users")}
+        with engine.begin() as conn:
+            if "email_verification_expires_at" not in existing_cols:
+                conn.execute(text("ALTER TABLE users ADD COLUMN email_verification_expires_at DATETIME"))
+            if "auth_provider" not in existing_cols:
+                conn.execute(text("ALTER TABLE users ADD COLUMN auth_provider VARCHAR(50) DEFAULT 'local'"))
+            if "google_sub" not in existing_cols:
+                conn.execute(text("ALTER TABLE users ADD COLUMN google_sub VARCHAR(255)"))
 except Exception as exc:
-    sys.stderr.write(f"[!] Notice creating DB tables: {exc}\n")
+    sys.stderr.write(f"[!] Notice creating or updating DB tables: {exc}\n")
 
 
 def get_db():
