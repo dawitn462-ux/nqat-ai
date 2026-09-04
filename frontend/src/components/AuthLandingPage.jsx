@@ -22,7 +22,7 @@ export default function AuthLandingPage({ onAuthSuccess }) {
     { name: 'Dawit Nigus', email: 'dawitn462@gmail.com', avatar: 'D', bg: '#3b82f6' },
     { name: 'Dawit Nigus', email: 'dawitnigus156@gmail.com', avatar: 'D', bg: '#ef4444' },
     { name: 'Zeki Teshome', email: 'zekiteshome03@gmail.com', avatar: 'Z', bg: '#06b6d4' },
-    { name: 'Alemu Abebe', email: 'devemymhret21@gmail.com', avatar: 'A', bg: '#10b981' }
+    { name: 'Alemu Abebe', email: 'devemymhret21@gmail.com', avatar: 'A', bg: '#0284c7' }
   ];
 
   const handleSubmit = async (e) => {
@@ -334,7 +334,7 @@ export default function AuthLandingPage({ onAuthSuccess }) {
           <span className="mono-text" style={{ fontSize: '0.75rem', background: 'rgba(255, 255, 255, 0.08)', color: '#e2e8f0', border: '1px solid rgba(255,255,255,0.2)', padding: '3px 10px', borderRadius: '12px' }}>
             Enterprise Multi-Tenant
           </span>
-          <span className="mono-text" style={{ fontSize: '0.75rem', background: 'rgba(34, 197, 94, 0.15)', color: '#34d399', border: '1px solid #34d399', padding: '3px 10px', borderRadius: '12px' }}>
+          <span className="mono-text" style={{ fontSize: '0.75rem', background: 'rgba(56, 189, 248, 0.15)', color: '#38bdf8', border: '1px solid #38bdf8', padding: '3px 10px', borderRadius: '12px' }}>
             NIST / CISA KEV Sync
           </span>
         </div>

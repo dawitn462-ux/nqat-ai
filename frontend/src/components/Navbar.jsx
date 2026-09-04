@@ -86,7 +86,7 @@ export default function Navbar({ user, onOpenAuth, onLogout }) {
           borderRadius: '9999px',
           border: '2px solid #000000'
         }}>
-          <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 8px #10b981' }}></span>
+          <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#38bdf8', boxShadow: '0 0 8px #38bdf8' }}></span>
           <span>Engine Online</span>
         </div>
 
@@ -129,7 +129,7 @@ export default function Navbar({ user, onOpenAuth, onLogout }) {
         {user ? (
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px', textTransform: 'uppercase', fontSize: '0.8rem', fontWeight: 700, color: '#ffffff', background: 'rgba(255, 255, 255, 0.08)', padding: '6px 14px', borderRadius: '9999px', border: '2px solid #000000' }}>
-              <User size={14} /> {user.username} <span style={{ color: '#10b981', fontSize: '0.72rem' }}>({user.role})</span>
+              <User size={14} /> {user.username} <span style={{ color: '#38bdf8', fontSize: '0.72rem' }}>({user.role})</span>
             </div>
             <button onClick={onLogout} style={{
               background: 'transparent',

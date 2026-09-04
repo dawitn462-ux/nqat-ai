@@ -283,7 +283,7 @@ export default function CrowdStrikeHomepage({ user, onOpenAuth }) {
           </form>
 
           {message && (
-            <div className="mono-text" style={{ marginTop: '1rem', color: '#10b981', fontSize: '0.85rem' }}>
+            <div className="mono-text" style={{ marginTop: '1rem', color: '#38bdf8', fontSize: '0.85rem' }}>
               {message}
             </div>
           )}
@@ -295,14 +295,14 @@ export default function CrowdStrikeHomepage({ user, onOpenAuth }) {
         background: 'linear-gradient(135deg, rgba(12, 12, 12, 0.95) 0%, rgba(20, 20, 20, 0.95) 100%)',
         padding: '1.75rem 2rem',
         borderRadius: '16px',
-        border: '1.5px solid rgba(16, 185, 129, 0.4)',
-        boxShadow: '0 12px 35px rgba(0, 0, 0, 0.5), 0 0 25px rgba(16, 185, 129, 0.15)',
+        border: '1.5px solid rgba(56, 189, 248, 0.4)',
+        boxShadow: '0 12px 35px rgba(0, 0, 0, 0.5), 0 0 25px rgba(56, 189, 248, 0.15)',
         marginBottom: '2rem'
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', marginBottom: '1.25rem', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '1rem' }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '4px' }}>
-              <span style={{ background: 'rgba(16, 185, 129, 0.2)', color: '#34d399', border: '1px solid #10b981', padding: '3px 10px', borderRadius: '10px', fontWeight: 800, fontSize: '0.72rem' }}>
+              <span style={{ background: 'rgba(56, 189, 248, 0.2)', color: '#38bdf8', border: '1px solid #38bdf8', padding: '3px 10px', borderRadius: '10px', fontWeight: 800, fontSize: '0.72rem' }}>
                 ACTIVE WAF ENFORCEMENT
               </span>
               <span className="mono-text" style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
@@ -318,7 +318,7 @@ export default function CrowdStrikeHomepage({ user, onOpenAuth }) {
           </div>
 
           <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-            <span style={{ fontSize: '0.85rem', color: '#34d399', fontWeight: 800, background: 'rgba(16, 185, 129, 0.15)', padding: '8px 14px', borderRadius: '10px', border: '1px solid #10b981' }}>
+            <span style={{ fontSize: '0.85rem', color: '#38bdf8', fontWeight: 800, background: 'rgba(56, 189, 248, 0.15)', padding: '8px 14px', borderRadius: '10px', border: '1px solid #38bdf8' }}>
               {userWafData?.blocked_attacks_count || 0} Attacks Blocked on Your Website
             </span>
           </div>
@@ -334,7 +334,7 @@ export default function CrowdStrikeHomepage({ user, onOpenAuth }) {
           ]).map(rule => (
             <div key={rule.id} style={{ background: '#000000', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '10px', padding: '10px 14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <span style={{ fontSize: '0.78rem', color: '#e2e8f0', fontWeight: 700 }}>{rule.name}</span>
-              <span style={{ fontSize: '0.68rem', background: 'rgba(16, 185, 129, 0.2)', color: '#34d399', padding: '2px 6px', borderRadius: '6px', fontWeight: 800 }}>{rule.status}</span>
+              <span style={{ fontSize: '0.68rem', background: 'rgba(56, 189, 248, 0.2)', color: '#38bdf8', padding: '2px 6px', borderRadius: '6px', fontWeight: 800 }}>{rule.status}</span>
             </div>
           ))}
         </div>
@@ -430,7 +430,7 @@ export default function CrowdStrikeHomepage({ user, onOpenAuth }) {
                   background: 'rgba(10, 10, 10, 0.9)',
                   padding: '1.2rem',
                   borderRadius: '12px',
-                  border: isVerified ? '1px solid rgba(16, 185, 129, 0.4)' : '1px solid rgba(168, 85, 247, 0.4)',
+                  border: isVerified ? '1px solid rgba(56, 189, 248, 0.4)' : '1px solid rgba(168, 85, 247, 0.4)',
                   display: 'flex',
                   flexDirection: 'column',
                   justify: 'space-between',
@@ -444,9 +444,9 @@ export default function CrowdStrikeHomepage({ user, onOpenAuth }) {
                         fontWeight: 800,
                         padding: '3px 9px',
                         borderRadius: '12px',
-                        background: isVerified ? 'rgba(16, 185, 129, 0.2)' : 'rgba(251, 191, 36, 0.2)',
-                        color: isVerified ? '#10b981' : '#fbbf24',
-                        border: isVerified ? '1px solid #10b981' : '1px solid #fbbf24'
+                        background: isVerified ? 'rgba(56, 189, 248, 0.2)' : 'rgba(251, 191, 36, 0.2)',
+                        color: isVerified ? '#38bdf8' : '#fbbf24',
+                        border: isVerified ? '1px solid #38bdf8' : '1px solid #fbbf24'
                       }}>
                         {dom.status}
                       </span>
@@ -511,8 +511,8 @@ export default function CrowdStrikeHomepage({ user, onOpenAuth }) {
       <section style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.25rem', marginBottom: '2.5rem' }}>
         <div style={{ background: 'rgba(14, 14, 14, 0.95)', padding: '1.4rem 1.6rem', borderRadius: '14px', border: '1px solid rgba(255, 255, 255, 0.12)' }}>
           <div style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: 600, textTransform: 'uppercase' }}>Security Posture</div>
-          <div style={{ fontSize: '2.2rem', fontWeight: 800, color: '#ffffff', marginTop: '4px' }}>92 <span style={{ fontSize: '1.1rem', color: '#10b981' }}>/ 100</span></div>
-          <div style={{ fontSize: '0.78rem', color: '#10b981', fontWeight: 700, marginTop: '4px' }}>GRADE: A- (GOOD)</div>
+          <div style={{ fontSize: '2.2rem', fontWeight: 800, color: '#ffffff', marginTop: '4px' }}>92 <span style={{ fontSize: '1.1rem', color: '#38bdf8' }}>/ 100</span></div>
+          <div style={{ fontSize: '0.78rem', color: '#38bdf8', fontWeight: 700, marginTop: '4px' }}>GRADE: A- (GOOD)</div>
         </div>
 
         <div style={{ background: 'rgba(14, 14, 14, 0.95)', padding: '1.4rem 1.6rem', borderRadius: '14px', border: '1px solid rgba(255, 255, 255, 0.12)' }}>
@@ -530,7 +530,7 @@ export default function CrowdStrikeHomepage({ user, onOpenAuth }) {
         <div style={{ background: 'rgba(14, 14, 14, 0.95)', padding: '1.4rem 1.6rem', borderRadius: '14px', border: '1px solid rgba(255, 255, 255, 0.12)' }}>
           <div style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: 600, textTransform: 'uppercase' }}>Active User Session</div>
           <div style={{ fontSize: '1.2rem', fontWeight: 800, color: '#ffffff', marginTop: '8px' }}>{user ? user.username : 'Guest / Viewer'}</div>
-          <div style={{ fontSize: '0.78rem', color: '#10b981', marginTop: '4px' }}>{user ? user.organization_name : 'Single-Machine Local Mode'}</div>
+          <div style={{ fontSize: '0.78rem', color: '#38bdf8', marginTop: '4px' }}>{user ? user.organization_name : 'Single-Machine Local Mode'}</div>
         </div>
       </section>
 
@@ -644,9 +644,9 @@ export default function CrowdStrikeHomepage({ user, onOpenAuth }) {
                     {isAutoApproved ? (
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <span className="mono-text" style={{
-                          background: 'rgba(16, 185, 129, 0.2)',
-                          color: '#10b981',
-                          border: '1px solid #10b981',
+                          background: 'rgba(56, 189, 248, 0.2)',
+                          color: '#38bdf8',
+                          border: '1px solid #38bdf8',
                           padding: '4px 12px',
                           borderRadius: '12px',
                           fontWeight: 800,
@@ -662,9 +662,9 @@ export default function CrowdStrikeHomepage({ user, onOpenAuth }) {
                         fontWeight: 800,
                         padding: '4px 12px',
                         borderRadius: '12px',
-                        background: isApproved ? 'rgba(16, 185, 129, 0.2)' : isRejected ? 'rgba(239, 68, 68, 0.2)' : 'rgba(255,255,255,0.05)',
-                        color: isApproved ? '#10b981' : isRejected ? '#ef4444' : '#94a3b8',
-                        border: `1px solid ${isApproved ? '#10b981' : isRejected ? '#ef4444' : '#000000'}`
+                        background: isApproved ? 'rgba(56, 189, 248, 0.2)' : isRejected ? 'rgba(239, 68, 68, 0.2)' : 'rgba(255,255,255,0.05)',
+                        color: isApproved ? '#38bdf8' : isRejected ? '#ef4444' : '#94a3b8',
+                        border: `1px solid ${isApproved ? '#38bdf8' : isRejected ? '#ef4444' : '#000000'}`
                       }}>
                         STATUS: {f.status || 'OPEN'}
                       </span>
@@ -694,7 +694,7 @@ export default function CrowdStrikeHomepage({ user, onOpenAuth }) {
                     gap: '1rem'
                   }}>
                     <div>
-                      <div style={{ fontWeight: 700, fontSize: '0.9rem', color: '#10b981', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <div style={{ fontWeight: 700, fontSize: '0.9rem', color: '#38bdf8', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '6px' }}>
                         Actionable Fix Recommendation:
                       </div>
                       <p style={{ fontSize: '0.88rem', color: '#e2e8f0', lineHeight: 1.5, margin: 0 }}>
@@ -792,8 +792,8 @@ export default function CrowdStrikeHomepage({ user, onOpenAuth }) {
                         onClick={() => handleAction(findingId, 'approve')}
                         disabled={isApproved}
                         style={{
-                          background: isApproved ? 'rgba(34, 197, 94, 0.2)' : '#ffffff',
-                          color: isApproved ? '#22c55e' : '#000000',
+                          background: isApproved ? 'rgba(56, 189, 248, 0.2)' : '#ffffff',
+                          color: isApproved ? '#38bdf8' : '#000000',
                           border: '1px solid #ffffff',
                           fontWeight: 800,
                           padding: '8px 16px',

@@ -232,7 +232,7 @@ export default function DomainVerificationModal({ isOpen, onClose, onVerifiedDom
         )}
 
         {successMsg && (
-          <div style={{ background: 'rgba(16, 185, 129, 0.15)', border: '1px solid #10b981', color: '#6ee7b7', padding: '12px 16px', borderRadius: '8px', marginBottom: '1.25rem', fontSize: '0.9rem' }}>
+          <div style={{ background: 'rgba(56, 189, 248, 0.15)', border: '1px solid #38bdf8', color: '#38bdf8', padding: '12px 16px', borderRadius: '8px', marginBottom: '1.25rem', fontSize: '0.9rem' }}>
             {successMsg}
           </div>
         )}
@@ -342,9 +342,9 @@ export default function DomainVerificationModal({ isOpen, onClose, onVerifiedDom
                             fontWeight: 800,
                             padding: '2px 8px',
                             borderRadius: '12px',
-                            background: isVerified ? 'rgba(16, 185, 129, 0.2)' : isFailed ? 'rgba(239, 68, 68, 0.2)' : 'rgba(251, 191, 36, 0.2)',
-                            color: isVerified ? '#10b981' : isFailed ? '#ef4444' : '#fbbf24',
-                            border: `1px solid ${isVerified ? '#10b981' : isFailed ? '#ef4444' : '#fbbf24'}`
+                            background: isVerified ? 'rgba(56, 189, 248, 0.2)' : isFailed ? 'rgba(239, 68, 68, 0.2)' : 'rgba(251, 191, 36, 0.2)',
+                            color: isVerified ? '#38bdf8' : isFailed ? '#ef4444' : '#fbbf24',
+                            border: `1px solid ${isVerified ? '#38bdf8' : isFailed ? '#ef4444' : '#fbbf24'}`
                           }}>
                             {d.status}
                           </span>
@@ -450,7 +450,7 @@ export default function DomainVerificationModal({ isOpen, onClose, onVerifiedDom
                     {loading ? ' Checking Ownership...' : ' Verify Ownership Now'}
                   </button>
 
-                  <span style={{ fontSize: '0.85rem', color: selectedDomain.status === 'VERIFIED' ? '#34d399' : '#94a3b8' }}>
+                  <span style={{ fontSize: '0.85rem', color: selectedDomain.status === 'VERIFIED' ? '#38bdf8' : '#94a3b8' }}>
                     Current Status: <strong>{selectedDomain.status}</strong>
                   </span>
                 </div>
@@ -503,9 +503,9 @@ export default function DomainVerificationModal({ isOpen, onClose, onVerifiedDom
                               fontWeight: 800,
                               padding: '2px 8px',
                               borderRadius: '12px',
-                              background: isPass ? 'rgba(16, 185, 129, 0.2)' : isRateLim ? 'rgba(251, 191, 36, 0.2)' : 'rgba(239, 68, 68, 0.2)',
-                              color: isPass ? '#10b981' : isRateLim ? '#fbbf24' : '#ef4444',
-                              border: `1px solid ${isPass ? '#10b981' : isRateLim ? '#fbbf24' : '#ef4444'}`
+                              background: isPass ? 'rgba(56, 189, 248, 0.2)' : isRateLim ? 'rgba(251, 191, 36, 0.2)' : 'rgba(239, 68, 68, 0.2)',
+                              color: isPass ? '#38bdf8' : isRateLim ? '#fbbf24' : '#ef4444',
+                              border: `1px solid ${isPass ? '#38bdf8' : isRateLim ? '#fbbf24' : '#ef4444'}`
                             }}>
                               {log.result}
                             </span>

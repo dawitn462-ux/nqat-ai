@@ -126,7 +126,7 @@ export default function NotificationPanel({ isOpen, onClose }) {
             style={{
               background: 'transparent',
               border: 'none',
-              color: '#10b981',
+              color: '#38bdf8',
               fontSize: '0.8rem',
               fontWeight: 700,
               cursor: 'pointer'
@@ -190,7 +190,7 @@ export default function NotificationPanel({ isOpen, onClose }) {
                   {!n.is_read && (
                     <button
                       onClick={() => handleMarkRead(n.id)}
-                      style={{ background: 'transparent', border: 'none', color: '#34d399', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer' }}
+                      style={{ background: 'transparent', border: 'none', color: '#38bdf8', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer' }}
                     >
                       Mark Read
                     </button>

@@ -273,7 +273,7 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
             width: '44px',
             height: '44px',
             borderRadius: '12px',
-            background: tab === 'verify' ? 'linear-gradient(135deg, #10b981 0%, #059669 100%)' : 'linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.04) 100%)',
+            background: tab === 'verify' ? 'linear-gradient(135deg, #0284c7 0%, #0369a1 100%)' : 'linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.04) 100%)',
             margin: '0 auto 0.75rem',
             border: '1px solid #222222',
             boxShadow: '0 0 20px rgba(0, 0, 0, 0.5)',

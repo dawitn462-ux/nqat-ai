@@ -43,7 +43,7 @@ export default function SecureWebTicker({ variant = 'hero' }) {
       <div className="secure-web-ribbon-container">
         <div className="secure-web-ribbon-track">
           <div className="secure-web-ribbon-content">
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#10b981' }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#38bdf8' }}>
               <Shield size={14} /> SECURE YOUR WEB,
             </span>
             <span className="dot-separator">•</span>
@@ -53,7 +53,7 @@ export default function SecureWebTicker({ variant = 'hero' }) {
               <Activity size={14} /> REAL-TIME THREAT CORRELATION
             </span>
             <span className="dot-separator">•</span>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#10b981' }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#38bdf8' }}>
               <Lock size={14} /> SECURE YOUR WEB,
             </span>
             <span className="dot-separator">•</span>
@@ -65,7 +65,7 @@ export default function SecureWebTicker({ variant = 'hero' }) {
             <span className="dot-separator">•</span>
           </div>
           <div className="secure-web-ribbon-content" aria-hidden="true">
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#10b981' }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#38bdf8' }}>
               <Shield size={14} /> SECURE YOUR WEB,
             </span>
             <span className="dot-separator">•</span>
@@ -75,7 +75,7 @@ export default function SecureWebTicker({ variant = 'hero' }) {
               <Activity size={14} /> REAL-TIME THREAT CORRELATION
             </span>
             <span className="dot-separator">•</span>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#10b981' }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#38bdf8' }}>
               <Lock size={14} /> SECURE YOUR WEB,
             </span>
             <span className="dot-separator">•</span>
@@ -95,7 +95,7 @@ export default function SecureWebTicker({ variant = 'hero' }) {
     <div className="secure-web-hero-badge">
       <div className="secure-web-pulse-ring" />
       <div className="secure-web-badge-inner">
-        <Shield size={16} style={{ color: '#10b981' }} />
+        <Shield size={16} style={{ color: '#38bdf8' }} />
         <span className="secure-web-typewriter">
           {displayText}
           <span className="typewriter-cursor">|</span>

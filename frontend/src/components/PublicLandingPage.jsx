@@ -72,7 +72,7 @@ export default function PublicLandingPage({ user, onAuthSuccess, onLogout }) {
     {
       id: 2,
       tag: "TARGET VERIFICATION",
-      tagColor: "#10b981",
+      tagColor: "#38bdf8",
       date: "Aug 30, 2026",
       readTime: "4 min read",
       title: "Enforcing Target Ownership: Why DNS TXT & HTTP Checks are Mandatory",
@@ -94,7 +94,7 @@ export default function PublicLandingPage({ user, onAuthSuccess, onLogout }) {
     {
       id: 4,
       tag: "EXECUTIVE REPORTING",
-      tagColor: "#10b981",
+      tagColor: "#38bdf8",
       date: "Aug 25, 2026",
       readTime: "3 min read",
       title: "Automating OWASP Top 10 & CWE Mapping for Instant PDF Audits",
@@ -404,21 +404,21 @@ export default function PublicLandingPage({ user, onAuthSuccess, onLogout }) {
               </h3>
               <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
                 <li style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
-                  <CheckCircle2 size={22} style={{ color: '#10b981', flexShrink: 0, marginTop: '2px' }} />
+                  <CheckCircle2 size={22} style={{ color: '#38bdf8', flexShrink: 0, marginTop: '2px' }} />
                   <div>
                     <strong style={{ color: '#ffffff', fontSize: '1.05rem' }}>ML Exploit Classifier:</strong>
                     <p style={{ fontSize: '0.9rem', color: '#94a3b8', marginTop: '3px', lineHeight: 1.5 }}>Predictive ML models trained on real CVE vulnerability datasets to calculate risk confidence.</p>
                   </div>
                 </li>
                 <li style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
-                  <CheckCircle2 size={22} style={{ color: '#10b981', flexShrink: 0, marginTop: '2px' }} />
+                  <CheckCircle2 size={22} style={{ color: '#38bdf8', flexShrink: 0, marginTop: '2px' }} />
                   <div>
                     <strong style={{ color: '#ffffff', fontSize: '1.05rem' }}>Human-in-the-Loop Governance:</strong>
                     <p style={{ fontSize: '0.9rem', color: '#94a3b8', marginTop: '3px', lineHeight: 1.5 }}>Enforces explicit approval, rejection, and state rollback policies for total control.</p>
                   </div>
                 </li>
                 <li style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
-                  <CheckCircle2 size={22} style={{ color: '#10b981', flexShrink: 0, marginTop: '2px' }} />
+                  <CheckCircle2 size={22} style={{ color: '#38bdf8', flexShrink: 0, marginTop: '2px' }} />
                   <div>
                     <strong style={{ color: '#ffffff', fontSize: '1.05rem' }}>Executive PDF Security Reporting:</strong>
                     <p style={{ fontSize: '0.9rem', color: '#94a3b8', marginTop: '3px', lineHeight: 1.5 }}>Generates executive-ready PDF audit reports with remediation guides and standards mapping.</p>
@@ -429,7 +429,7 @@ export default function PublicLandingPage({ user, onAuthSuccess, onLogout }) {
 
             {/* Specifications Matrix Card */}
             <div className="aegis-glass-card" style={{ padding: '2.5rem' }}>
-              <div className="mono-text" style={{ fontSize: '0.78rem', fontWeight: 700, letterSpacing: '1px', color: '#10b981' }}>PLATFORM SPECIFICATIONS</div>
+              <div className="mono-text" style={{ fontSize: '0.78rem', fontWeight: 700, letterSpacing: '1px', color: '#38bdf8' }}>PLATFORM SPECIFICATIONS</div>
               <h4 className="heading-font" style={{ fontSize: '1.4rem', fontWeight: 800, color: '#ffffff', marginTop: '6px', marginBottom: '1.5rem' }}>
                 Enterprise Security Matrix
               </h4>
@@ -478,7 +478,7 @@ export default function PublicLandingPage({ user, onAuthSuccess, onLogout }) {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(270px, 1fr))', gap: '1.75rem' }}>
           {(dynamicPosts.length > 0 ? dynamicPosts : cyberNewsPosts).map((post) => {
             const rawColor = post.tag_color || post.tagColor;
-            const color = (rawColor === '#00f0ff' || rawColor === '#38bdf8' || rawColor === '#eab308' || rawColor === '#f97316') ? '#10b981' : (rawColor || '#10b981');
+            const color = (rawColor === '#00f0ff' || rawColor === '#38bdf8' || rawColor === '#eab308' || rawColor === '#f97316') ? '#38bdf8' : (rawColor || '#38bdf8');
             const readTime = post.read_time || post.readTime || '3 min read';
             const pubDate = post.created_at || post.date || 'Today';
             return (
@@ -575,9 +575,9 @@ export default function PublicLandingPage({ user, onAuthSuccess, onLogout }) {
             alignItems: 'center',
             justifyContent: 'center',
             gap: '8px',
-            background: 'rgba(16, 185, 129, 0.15)',
-            color: '#6ee7b7',
-            border: '1px solid rgba(16, 185, 129, 0.4)',
+            background: 'rgba(56, 189, 248, 0.15)',
+            color: '#38bdf8',
+            border: '1px solid rgba(56, 189, 248, 0.4)',
             padding: '14px 18px',
             borderRadius: '14px',
             fontSize: '0.9rem',
