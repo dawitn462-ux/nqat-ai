@@ -368,54 +368,54 @@ export default function AdminPanelModal({ isOpen, onClose }) {
         {activeTab === 'users' && (
           <div>
             <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#ffffff', marginBottom: '1rem' }}>
-              User Account Governance & Role Scoping
+              User Account Governance & <span style={{ color: '#ef4444' }}>Role Scoping</span>
             </h3>
 
             <div style={{ overflowX: 'auto', background: '#000000', borderRadius: '12px', border: '2px solid #000000' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.88rem' }}>
                 <thead>
-                  <tr style={{ background: 'rgba(255,255,255,0.05)', color: '#94a3b8', borderBottom: '2px solid #000000' }}>
-                    <th style={{ padding: '12px 16px' }}>User ID</th>
-                    <th style={{ padding: '12px 16px' }}>Username</th>
-                    <th style={{ padding: '12px 16px' }}>Email</th>
-                    <th style={{ padding: '12px 16px' }}>Current Role</th>
-                    <th style={{ padding: '12px 16px' }}>Organization</th>
-                    <th style={{ padding: '12px 16px', textAlign: 'right' }}>Actions</th>
+                  <tr style={{ background: '#000000', color: '#ffffff', borderBottom: '2px solid #ef4444' }}>
+                    <th style={{ padding: '12px 16px', fontWeight: 800, color: '#ffffff' }}>User ID</th>
+                    <th style={{ padding: '12px 16px', fontWeight: 800, color: '#ffffff' }}>Username</th>
+                    <th style={{ padding: '12px 16px', fontWeight: 800, color: '#ffffff' }}>Email</th>
+                    <th style={{ padding: '12px 16px', fontWeight: 800, color: '#ffffff' }}>Current Role</th>
+                    <th style={{ padding: '12px 16px', fontWeight: 800, color: '#ffffff' }}>Organization</th>
+                    <th style={{ padding: '12px 16px', textAlign: 'right', fontWeight: 800, color: '#ffffff' }}>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {usersList.map(u => (
-                    <tr key={u.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                      <td style={{ padding: '12px 16px', color: '#94a3b8' }}>#{u.id}</td>
-                      <td style={{ padding: '12px 16px', fontWeight: 700, color: '#ffffff' }}>{u.username}</td>
-                      <td style={{ padding: '12px 16px', color: '#cbd5e1' }}>{u.email || '-'}</td>
+                    <tr key={u.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+                      <td style={{ padding: '12px 16px', color: '#ef4444', fontWeight: 800 }}>#{u.id}</td>
+                      <td style={{ padding: '12px 16px', fontWeight: 800, color: '#ffffff' }}>{u.username}</td>
+                      <td style={{ padding: '12px 16px', color: '#ffffff' }}>{u.email || '-'}</td>
                       <td style={{ padding: '12px 16px' }}>
                         <span style={{
                           padding: '3px 10px',
                           borderRadius: '12px',
                           fontWeight: 800,
                           fontSize: '0.75rem',
-                          background: u.role === 'admin' ? 'rgba(239, 68, 68, 0.2)' : 'rgba(255, 255, 255, 0.1)',
+                          background: u.role === 'admin' ? 'rgba(239, 68, 68, 0.2)' : 'rgba(255, 255, 255, 0.15)',
                           color: u.role === 'admin' ? '#ef4444' : '#ffffff',
-                          border: `1px solid ${u.role === 'admin' ? '#ef4444' : 'rgba(255,255,255,0.2)'}`
+                          border: `1px solid ${u.role === 'admin' ? '#ef4444' : '#ffffff'}`
                         }}>
                           {u.role.toUpperCase()}
                         </span>
                       </td>
-                      <td style={{ padding: '12px 16px', color: '#94a3b8' }}>{u.organization_name}</td>
+                      <td style={{ padding: '12px 16px', color: '#ffffff' }}>{u.organization_name}</td>
                       <td style={{ padding: '12px 16px', textAlign: 'right' }}>
                         <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
                           {u.role === 'analyst' ? (
                             <button
                               onClick={() => handleRoleChange(u.id, 'admin')}
-                              style={{ background: 'rgba(239, 68, 68, 0.2)', border: '1px solid #ef4444', color: '#ef4444', borderRadius: '6px', padding: '4px 10px', fontSize: '0.78rem', cursor: 'pointer', fontWeight: 700 }}
+                              style={{ background: 'rgba(239, 68, 68, 0.2)', border: '1px solid #ef4444', color: '#ef4444', borderRadius: '6px', padding: '4px 10px', fontSize: '0.78rem', cursor: 'pointer', fontWeight: 800 }}
                             >
                               Promote Admin
                             </button>
                           ) : (
                             <button
                               onClick={() => handleRoleChange(u.id, 'analyst')}
-                              style={{ background: 'rgba(255, 255, 255, 0.1)', border: '1px solid rgba(255,255,255,0.2)', color: '#ffffff', borderRadius: '6px', padding: '4px 10px', fontSize: '0.78rem', cursor: 'pointer', fontWeight: 700 }}
+                              style={{ background: 'rgba(255, 255, 255, 0.1)', border: '1px solid #ffffff', color: '#ffffff', borderRadius: '6px', padding: '4px 10px', fontSize: '0.78rem', cursor: 'pointer', fontWeight: 800 }}
                             >
                               Set Analyst
                             </button>
@@ -423,7 +423,7 @@ export default function AdminPanelModal({ isOpen, onClose }) {
                           {u.username !== 'admin' && (
                             <button
                               onClick={() => handleDeleteUser(u.id, u.username)}
-                              style={{ background: 'rgba(239, 68, 68, 0.15)', border: '1px solid #ef4444', color: '#fca5a5', borderRadius: '6px', padding: '4px 10px', fontSize: '0.78rem', cursor: 'pointer', fontWeight: 700 }}
+                              style={{ background: '#ef4444', border: '1px solid #ef4444', color: '#ffffff', borderRadius: '6px', padding: '4px 10px', fontSize: '0.78rem', cursor: 'pointer', fontWeight: 800 }}
                             >
                               <Trash2 size={13} style={{ display: 'inline', verticalAlign: 'middle' }} /> Delete
                             </button>

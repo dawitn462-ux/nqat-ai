@@ -240,8 +240,14 @@ export default function AdminDashboardPage({ user, onLogout }) {
           setStatusMsg(`Uploaded video '${file.name}' successfully!`);
         }
       } else {
-        const errData = await res.json();
-        setErrMsg(errData.detail || 'Failed to upload media file.');
+        let errDetail = 'Failed to upload media file.';
+        try {
+          const errData = await res.json();
+          errDetail = typeof errData.detail === 'string' ? errData.detail : (errData.message || errDetail);
+        } catch {
+          errDetail = `Server returned status ${res.status} (${res.statusText || 'Non-JSON Response'})`;
+        }
+        setErrMsg(errDetail);
       }
     } catch (err) {
       setErrMsg('Media upload error: ' + err.message);
@@ -251,28 +257,53 @@ export default function AdminDashboardPage({ user, onLogout }) {
   };
 
   const handleCreateOrUpdatePost = async (e) => {
-    e.preventDefault();
-    if (!postForm.title.trim() || !postForm.snippet.trim()) {
-      setErrMsg('Post Title and Snippet are required.');
+    if (e && e.preventDefault) e.preventDefault();
+
+    setErrMsg('');
+    setStatusMsg('');
+
+    const title = postForm.title ? postForm.title.trim() : '';
+    const snippet = postForm.snippet ? postForm.snippet.trim() : title;
+
+    if (!title) {
+      setErrMsg('Post Title is required.');
       return;
     }
 
     setLoading(true);
-    setErrMsg('');
-    setStatusMsg('');
 
     try {
-      const url = editingPostId ? `/api/v1/posts/${editingPostId}` : '/api/v1/posts';
-      const method = editingPostId ? 'PUT' : 'POST';
+      const payload = {
+        ...postForm,
+        title,
+        snippet: snippet || title,
+        tag: postForm.tag || 'ZERO-DAY ALERT',
+        tag_color: postForm.tag_color || '#ef4444',
+        author: postForm.author || 'NKAT Security Intelligence Labs',
+        read_time: postForm.read_time || '4 min read'
+      };
 
-      const res = await fetch(url, {
-        method,
+      const url = editingPostId ? `/api/v1/posts/${editingPostId}` : '/api/v1/posts';
+
+      let res = await fetch(url, {
+        method: editingPostId ? 'PUT' : 'POST',
         headers: getHeaders(),
-        body: JSON.stringify(postForm)
+        body: JSON.stringify(payload)
       });
 
+      // Automatic fallback for environments/proxies returning HTTP 501 Not Implemented on PUT
+      if (!res.ok && res.status === 501 && editingPostId) {
+        res = await fetch(url, {
+          method: 'POST',
+          headers: getHeaders(),
+          body: JSON.stringify(payload)
+        });
+      }
+
       if (res.ok) {
-        setStatusMsg(editingPostId ? 'Threat Post updated successfully!' : ' New Threat Advisory / News Post published to platform homepage!');
+        const savedPost = await res.json();
+        const msg = editingPostId ? `Threat Advisory Post #${editingPostId} updated successfully!` : 'New Threat Advisory published successfully!';
+        setStatusMsg(msg);
         setEditingPostId(null);
         setPostForm({
           title: '',
@@ -285,10 +316,27 @@ export default function AdminDashboardPage({ user, onLogout }) {
           snippet: '',
           content: ''
         });
+        if (editingPostId) {
+          setPostsList(prev => prev.map(p => (p.id === savedPost.id ? savedPost : p)));
+        } else {
+          setPostsList(prev => [savedPost, ...prev]);
+        }
         fetchPosts();
       } else {
-        const data = await res.json();
-        setErrMsg(data.detail || 'Failed to save post.');
+        let errDetail = `Server error (${res.status} ${res.statusText})`;
+        try {
+          const data = await res.json();
+          if (typeof data.detail === 'string') {
+            errDetail = data.detail;
+          } else if (Array.isArray(data.detail)) {
+            errDetail = data.detail.map(d => `${d.loc ? d.loc.join('.') : ''}: ${d.msg}`).join(', ');
+          } else if (data.message) {
+            errDetail = data.message;
+          }
+        } catch {
+          errDetail = `HTTP ${res.status}: Backend returned non-JSON error. Ensure backend is running at http://127.0.0.1:8000`;
+        }
+        setErrMsg(errDetail);
       }
     } catch (err) {
       setErrMsg('Error saving post: ' + err.message);
@@ -745,17 +793,27 @@ export default function AdminDashboardPage({ user, onLogout }) {
               {editingPostId ? `Edit Threat Advisory Post #${editingPostId}` : 'Publish New Cyber Security Advisory / News Post'}
             </h3>
 
+            {statusMsg && (
+              <div style={{ background: 'rgba(16, 185, 129, 0.15)', border: '1px solid #10b981', color: '#10b981', padding: '12px 16px', borderRadius: '8px', marginBottom: '1.25rem', fontSize: '0.9rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <CheckCircle size={18} /> {statusMsg}
+              </div>
+            )}
+            {errMsg && (
+              <div style={{ background: 'rgba(239, 68, 68, 0.15)', border: '1px solid #ef4444', color: '#ef4444', padding: '12px 16px', borderRadius: '8px', marginBottom: '1.25rem', fontSize: '0.9rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <XCircle size={18} /> {errMsg}
+              </div>
+            )}
+
             <form onSubmit={handleCreateOrUpdatePost} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.25rem' }}>
                 <div>
                   <label style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: 700, display: 'block', marginBottom: '6px' }}>POST TITLE</label>
                   <input
                     type="text"
-                    required
                     value={postForm.title}
                     onChange={e => setPostForm({ ...postForm, title: e.target.value })}
                     placeholder="e.g. CISA KEV Sync: New Zero-Day Web Vulnerability Advisory"
-                    style={{ width: '100%', padding: '12px 14px', borderRadius: '8px', background: '#080c14', border: '1px solid rgba(255,255,255,0.15)', color: '#ffffff', outline: 'none' }}
+                    style={{ width: '100%', padding: '12px 14px', borderRadius: '8px', background: '#000000', border: '2px solid #000000', color: '#ffffff', outline: 'none' }}
                   />
                 </div>
 
@@ -834,7 +892,7 @@ export default function AdminDashboardPage({ user, onLogout }) {
               </div>
 
               {/* Video Attachment Section */}
-              <div style={{ background: '#080c14', padding: '1rem 1.25rem', borderRadius: '10px', border: '2px solid #000000' }}>
+              <div style={{ background: '#000000', padding: '1rem 1.25rem', borderRadius: '10px', border: '2px solid #000000' }}>
                 <label style={{ fontSize: '0.82rem', color: '#ffffff', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
                   <Video size={16} /> ATTACH THREAT DEMO VIDEO
                 </label>
@@ -844,7 +902,7 @@ export default function AdminDashboardPage({ user, onLogout }) {
                     value={postForm.video_url}
                     onChange={e => setPostForm({ ...postForm, video_url: e.target.value })}
                     placeholder="Video MP4 URL or upload video file (e.g. /uploads/demo.mp4 or https://...)"
-                    style={{ flex: 1, minWidth: '260px', padding: '10px 12px', borderRadius: '6px', background: '#04060a', border: '2px solid #000000', color: '#ffffff', fontSize: '0.88rem' }}
+                    style={{ flex: 1, minWidth: '260px', padding: '10px 12px', borderRadius: '6px', background: '#000000', border: '2px solid #000000', color: '#ffffff', fontSize: '0.88rem' }}
                   />
                   <label style={{ background: 'rgba(255, 255, 255, 0.1)', border: '2px solid #000000', color: '#ffffff', borderRadius: '6px', padding: '9px 14px', fontSize: '0.82rem', fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
                     <Upload size={14} /> Upload Video
@@ -862,12 +920,11 @@ export default function AdminDashboardPage({ user, onLogout }) {
               <div>
                 <label style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: 700, display: 'block', marginBottom: '6px' }}>POST SUMMARY / SNIPPET (Visible on Homepage)</label>
                 <textarea
-                  required
                   rows={3}
                   value={postForm.snippet}
                   onChange={e => setPostForm({ ...postForm, snippet: e.target.value })}
                   placeholder="Provide a concise summary of the security advisory or platform release update..."
-                  style={{ width: '100%', padding: '12px 14px', borderRadius: '8px', background: '#080c14', border: '1px solid rgba(255,255,255,0.15)', color: '#ffffff', outline: 'none', fontFamily: 'inherit' }}
+                  style={{ width: '100%', padding: '12px 14px', borderRadius: '8px', background: '#000000', border: '2px solid #000000', color: '#ffffff', outline: 'none', fontFamily: 'inherit' }}
                 />
               </div>
 
@@ -878,13 +935,14 @@ export default function AdminDashboardPage({ user, onLogout }) {
                   value={postForm.content}
                   onChange={e => setPostForm({ ...postForm, content: e.target.value })}
                   placeholder="Full technical analysis, CVE references, or detailed deployment guide..."
-                  style={{ width: '100%', padding: '12px 14px', borderRadius: '8px', background: '#080c14', border: '1px solid rgba(255,255,255,0.15)', color: '#ffffff', outline: 'none', fontFamily: 'inherit' }}
+                  style={{ width: '100%', padding: '12px 14px', borderRadius: '8px', background: '#000000', border: '2px solid #000000', color: '#ffffff', outline: 'none', fontFamily: 'inherit' }}
                 />
               </div>
 
               <div style={{ display: 'flex', gap: '1rem' }}>
                 <button
                   type="submit"
+                  onClick={handleCreateOrUpdatePost}
                   disabled={loading}
                   className="btn-aegis-primary"
                   style={{ padding: '0.8rem 2rem', fontSize: '0.92rem' }}
@@ -916,8 +974,8 @@ export default function AdminDashboardPage({ user, onLogout }) {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem' }}>
             {postsList.map(p => (
               <div key={p.id} style={{
-                background: '#090d16',
-                border: '1px solid rgba(255, 255, 255, 0.12)',
+                background: '#000000',
+                border: '2px solid #000000',
                 borderRadius: '14px',
                 padding: '1.5rem',
                 display: 'flex',
@@ -978,56 +1036,56 @@ export default function AdminDashboardPage({ user, onLogout }) {
 
       {/* TAB 2: User Account & Role Controls */}
       {activeTab === 'users' && (
-        <div style={{ background: '#090d16', border: '1px solid rgba(255,255,255,0.12)', borderRadius: '16px', padding: '1.75rem' }}>
+        <div style={{ background: '#000000', border: '2px solid #000000', borderRadius: '16px', padding: '1.75rem' }}>
           <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#ffffff', marginBottom: '1.25rem' }}>
-            User Account Governance & Role Scoping
+            User Account Governance & <span style={{ color: '#ef4444' }}>Role Scoping</span>
           </h3>
 
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.9rem' }}>
               <thead>
-                <tr style={{ background: 'rgba(255,255,255,0.05)', color: '#94a3b8', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-                  <th style={{ padding: '12px 16px' }}>User ID</th>
-                  <th style={{ padding: '12px 16px' }}>Username</th>
-                  <th style={{ padding: '12px 16px' }}>Email Address</th>
-                  <th style={{ padding: '12px 16px' }}>Role</th>
-                  <th style={{ padding: '12px 16px' }}>Organization</th>
-                  <th style={{ padding: '12px 16px', textAlign: 'right' }}>Actions</th>
+                <tr style={{ background: '#000000', color: '#ffffff', borderBottom: '2px solid #ef4444' }}>
+                  <th style={{ padding: '12px 16px', fontWeight: 800, color: '#ffffff' }}>User ID</th>
+                  <th style={{ padding: '12px 16px', fontWeight: 800, color: '#ffffff' }}>Username</th>
+                  <th style={{ padding: '12px 16px', fontWeight: 800, color: '#ffffff' }}>Email Address</th>
+                  <th style={{ padding: '12px 16px', fontWeight: 800, color: '#ffffff' }}>Role</th>
+                  <th style={{ padding: '12px 16px', fontWeight: 800, color: '#ffffff' }}>Organization</th>
+                  <th style={{ padding: '12px 16px', textAlign: 'right', fontWeight: 800, color: '#ffffff' }}>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {usersList.map(u => (
-                  <tr key={u.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                    <td style={{ padding: '12px 16px', color: '#94a3b8' }}>#{u.id}</td>
+                  <tr key={u.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+                    <td style={{ padding: '12px 16px', color: '#ef4444', fontWeight: 800 }}>#{u.id}</td>
                     <td style={{ padding: '12px 16px', fontWeight: 800, color: '#ffffff' }}>{u.username}</td>
-                    <td style={{ padding: '12px 16px', color: '#cbd5e1' }}>{u.email || '-'}</td>
+                    <td style={{ padding: '12px 16px', color: '#ffffff' }}>{u.email || '-'}</td>
                     <td style={{ padding: '12px 16px' }}>
                       <span style={{
                         padding: '4px 12px',
                         borderRadius: '12px',
                         fontWeight: 800,
                         fontSize: '0.75rem',
-                        background: u.role === 'admin' ? 'rgba(251, 191, 36, 0.2)' : 'rgba(56, 189, 248, 0.2)',
-                        color: u.role === 'admin' ? '#fbbf24' : '#38bdf8',
-                        border: `1px solid ${u.role === 'admin' ? '#fbbf24' : '#38bdf8'}`
+                        background: u.role === 'admin' ? 'rgba(239, 68, 68, 0.2)' : 'rgba(255, 255, 255, 0.15)',
+                        color: u.role === 'admin' ? '#ef4444' : '#ffffff',
+                        border: `1px solid ${u.role === 'admin' ? '#ef4444' : '#ffffff'}`
                       }}>
                         {u.role.toUpperCase()}
                       </span>
                     </td>
-                    <td style={{ padding: '12px 16px', color: '#94a3b8' }}>{u.organization_name}</td>
+                    <td style={{ padding: '12px 16px', color: '#ffffff' }}>{u.organization_name}</td>
                     <td style={{ padding: '12px 16px', textAlign: 'right' }}>
                       <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
                         {u.role === 'analyst' ? (
                           <button
                             onClick={() => handleRoleChange(u.id, 'admin')}
-                            style={{ background: 'rgba(251, 191, 36, 0.15)', border: '1px solid #fbbf24', color: '#fbbf24', borderRadius: '6px', padding: '6px 12px', fontSize: '0.8rem', cursor: 'pointer', fontWeight: 800 }}
+                            style={{ background: 'rgba(239, 68, 68, 0.2)', border: '1px solid #ef4444', color: '#ef4444', borderRadius: '6px', padding: '6px 12px', fontSize: '0.8rem', cursor: 'pointer', fontWeight: 800 }}
                           >
                             Promote Admin
                           </button>
                         ) : (
                           <button
                             onClick={() => handleRoleChange(u.id, 'analyst')}
-                            style={{ background: 'rgba(255, 255, 255, 0.1)', border: '1px solid rgba(255,255,255,0.2)', color: '#ffffff', borderRadius: '6px', padding: '6px 12px', fontSize: '0.8rem', cursor: 'pointer', fontWeight: 800 }}
+                            style={{ background: 'rgba(255, 255, 255, 0.1)', border: '1px solid #ffffff', color: '#ffffff', borderRadius: '6px', padding: '6px 12px', fontSize: '0.8rem', cursor: 'pointer', fontWeight: 800 }}
                           >
                             Set Analyst
                           </button>
@@ -1035,7 +1093,7 @@ export default function AdminDashboardPage({ user, onLogout }) {
                         {u.username !== 'admin' && (
                           <button
                             onClick={() => handleDeleteUser(u.id, u.username)}
-                            style={{ background: 'rgba(239, 68, 68, 0.15)', border: '1px solid #ef4444', color: '#fca5a5', borderRadius: '6px', padding: '6px 12px', fontSize: '0.8rem', cursor: 'pointer', fontWeight: 800 }}
+                            style={{ background: '#ef4444', border: '1px solid #ef4444', color: '#ffffff', borderRadius: '6px', padding: '6px 12px', fontSize: '0.8rem', cursor: 'pointer', fontWeight: 800 }}
                           >
                             Delete
                           </button>

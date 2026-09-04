@@ -204,9 +204,6 @@ export default function CrowdStrikeHomepage({ user, onOpenAuth }) {
         }} />
 
         <div style={{ position: 'relative', zIndex: 2, maxWidth: '820px' }}>
-          {/* Animated Movement Badge for SECURE YOUR WEB */}
-          <SecureWebTicker variant="hero" />
-
           <h1 className="heading-font" style={{
             fontSize: '3rem',
             fontWeight: 900,
@@ -218,6 +215,11 @@ export default function CrowdStrikeHomepage({ user, onOpenAuth }) {
             Nqat AI <br />
             <span className="platform-title-gradient">WEBSITE VULNERABILITY ASSISTANT</span>
           </h1>
+
+          {/* Secure Web Animated Ticker Badge */}
+          <div style={{ marginBottom: '1.25rem' }}>
+            <SecureWebTicker variant="hero" />
+          </div>
 
           <p style={{
             fontSize: '1.1rem',

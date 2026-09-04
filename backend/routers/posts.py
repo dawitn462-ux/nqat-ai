@@ -195,11 +195,14 @@ def create_post(post_in: PostCreate, db: Session = Depends(get_db)):
     )
 
 
+@router.post("/{post_id}", response_model=PostResponse)
 @router.put("/{post_id}", response_model=PostResponse)
 def update_post(post_id: int, post_in: PostCreate, db: Session = Depends(get_db)):
     """
     Updates an existing platform news post including photos and video URLs.
+    Supports both POST and PUT HTTP methods for universal compatibility across web proxies.
     """
+    seed_default_posts_if_empty(db)
     db_post = db.query(Post).filter(Post.id == post_id).first()
     if not db_post:
         raise HTTPException(status_code=404, detail=f"Post with ID {post_id} not found")
@@ -211,7 +214,7 @@ def update_post(post_id: int, post_in: PostCreate, db: Session = Depends(get_db)
     if post_in.read_time: db_post.read_time = post_in.read_time.strip()
     db_post.image_url = post_in.image_url.strip() if post_in.image_url else None
     db_post.video_url = post_in.video_url.strip() if post_in.video_url else None
-    db_post.snippet = post_in.snippet.strip()
+    db_post.snippet = post_in.snippet.strip() if post_in.snippet else post_in.title.strip()
     if post_in.content: db_post.content = post_in.content.strip()
 
     db.commit()
@@ -236,6 +239,7 @@ def delete_post(post_id: int, db: Session = Depends(get_db)):
     """
     Deletes a news post or security advisory.
     """
+    seed_default_posts_if_empty(db)
     db_post = db.query(Post).filter(Post.id == post_id).first()
     if not db_post:
         raise HTTPException(status_code=404, detail=f"Post with ID {post_id} not found")

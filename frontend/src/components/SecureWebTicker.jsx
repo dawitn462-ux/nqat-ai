@@ -95,40 +95,46 @@ export default function SecureWebTicker({ variant = 'hero' }) {
     <div className="secure-web-hero-badge" style={{
       display: 'inline-flex',
       alignItems: 'center',
-      gap: '10px',
-      background: 'rgba(239, 68, 68, 0.12)',
+      gap: '12px',
+      background: 'rgba(8, 4, 4, 0.9)',
       border: '1.5px solid #ef4444',
-      padding: '8px 20px',
+      padding: '7px 18px',
       borderRadius: '9999px',
       backdropFilter: 'blur(12px)',
-      boxShadow: '0 0 20px rgba(239, 68, 68, 0.3)'
+      boxShadow: '0 0 20px rgba(239, 68, 68, 0.35)',
+      margin: '0.75rem 0'
     }}>
-      <div className="secure-web-pulse-ring" style={{ borderColor: '#ef4444' }} />
-      <div className="secure-web-badge-inner" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+      <div style={{ display: 'inline-flex', alignItems: 'center', gap: '10px' }}>
         <Shield size={18} style={{ color: '#ef4444', flexShrink: 0 }} />
         <span className="secure-web-typewriter" style={{
           color: '#ef4444',
           fontWeight: 900,
-          fontSize: '1rem',
-          letterSpacing: '0.8px',
-          fontFamily: 'var(--font-mono)',
-          textShadow: '0 0 12px rgba(239, 68, 68, 0.5)'
+          fontSize: '0.95rem',
+          letterSpacing: '1px',
+          fontFamily: 'var(--font-mono, monospace)',
+          textShadow: '0 0 10px rgba(239, 68, 68, 0.6)'
         }}>
           {displayText}
           <span className="typewriter-cursor" style={{ color: '#ef4444', fontWeight: 900 }}>|</span>
         </span>
-        <span className="secure-sub-tag" style={{
-          fontSize: '0.72rem',
-          fontWeight: 800,
-          color: '#000000',
-          background: '#ffffff',
-          padding: '2px 8px',
-          borderRadius: '10px',
-          letterSpacing: '0.5px'
-        }}>
-          NEXT-GEN CYBER DEFENSE
-        </span>
       </div>
+
+      <div style={{ width: '1.5px', height: '18px', background: 'rgba(239, 68, 68, 0.6)', flexShrink: 0 }} />
+
+      <span className="secure-sub-tag" style={{
+        fontSize: '0.72rem',
+        fontWeight: 900,
+        color: '#000000',
+        background: '#ffffff',
+        padding: '4px 14px',
+        borderRadius: '9999px',
+        letterSpacing: '0.8px',
+        textTransform: 'uppercase',
+        boxShadow: '0 0 10px rgba(255, 255, 255, 0.25)',
+        whiteSpace: 'nowrap'
+      }}>
+        NEXT-GEN CYBER DEFENSE
+      </span>
     </div>
   );
 }

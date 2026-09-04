@@ -171,7 +171,13 @@ async def custom_http_exception_handler(request: Request, exc: HTTPException):
 @app.middleware("http")
 async def waf_traffic_middleware(request: Request, call_next):
     path_and_query = str(request.url)
-    if not (request.url.path.startswith("/uploads") or request.url.path.startswith("/assets") or request.url.path.startswith("/favicon")):
+    if not (
+        request.url.path.startswith("/uploads") or 
+        request.url.path.startswith("/assets") or 
+        request.url.path.startswith("/favicon") or
+        request.url.path.startswith("/api/v1/posts") or
+        request.url.path.startswith("/api/v1/admin")
+    ):
         client_ip = request.client.host if request.client else "127.0.0.1"
         try:
             from backend.services.waf_service import analyze_request_payload, trigger_waf_blocked_attack_alerts

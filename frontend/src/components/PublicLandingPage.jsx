@@ -24,6 +24,41 @@ export default function PublicLandingPage({ user, onAuthSuccess, onLogout }) {
       .catch(err => console.error('Error fetching posts:', err));
   }, []);
 
+  // Scrollspy effect to dynamically highlight active navbar menu item on scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = ['home', 'about', 'news', 'contact'];
+      const scrollPosition = window.scrollY;
+      const windowHeight = window.innerHeight;
+      const fullHeight = document.documentElement.scrollHeight;
+
+      // If near the bottom of the page, activate contact section
+      if (scrollPosition + windowHeight >= fullHeight - 60) {
+        setActiveSection('contact');
+        return;
+      }
+
+      const navbarOffset = 180;
+
+      for (let i = sections.length - 1; i >= 0; i--) {
+        const sectionId = sections[i];
+        const el = document.getElementById(sectionId);
+        if (el) {
+          const top = el.offsetTop - navbarOffset;
+          if (scrollPosition >= top) {
+            setActiveSection(sectionId);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const handleContactSubmit = (e) => {
     e.preventDefault();
     setContactMsg('Thank you for contacting NKAT AI Assistant Team. We will reach out shortly.');
@@ -171,7 +206,7 @@ export default function PublicLandingPage({ user, onAuthSuccess, onLogout }) {
           >
             Home
             {activeSection === 'home' && (
-              <span style={{ position: 'absolute', bottom: '-6px', left: 0, right: 0, height: '2px', backgroundColor: '#ef4444', borderRadius: '2px' }} />
+              <span style={{ position: 'absolute', bottom: '-6px', left: 0, right: 0, height: '2px', backgroundColor: '#ef4444', borderRadius: '2px', boxShadow: '0 0 8px #ef4444' }} />
             )}
           </button>
 
@@ -193,7 +228,7 @@ export default function PublicLandingPage({ user, onAuthSuccess, onLogout }) {
           >
             About Us
             {activeSection === 'about' && (
-              <span style={{ position: 'absolute', bottom: '-6px', left: 0, right: 0, height: '2px', backgroundColor: '#ef4444', borderRadius: '2px' }} />
+              <span style={{ position: 'absolute', bottom: '-6px', left: 0, right: 0, height: '2px', backgroundColor: '#ef4444', borderRadius: '2px', boxShadow: '0 0 8px #ef4444' }} />
             )}
           </button>
 
@@ -215,7 +250,7 @@ export default function PublicLandingPage({ user, onAuthSuccess, onLogout }) {
           >
             Cyber News
             {activeSection === 'news' && (
-              <span style={{ position: 'absolute', bottom: '-6px', left: 0, right: 0, height: '2px', backgroundColor: '#ef4444', borderRadius: '2px' }} />
+              <span style={{ position: 'absolute', bottom: '-6px', left: 0, right: 0, height: '2px', backgroundColor: '#ef4444', borderRadius: '2px', boxShadow: '0 0 8px #ef4444' }} />
             )}
           </button>
 
@@ -237,7 +272,7 @@ export default function PublicLandingPage({ user, onAuthSuccess, onLogout }) {
           >
             Contact Us
             {activeSection === 'contact' && (
-              <span style={{ position: 'absolute', bottom: '-6px', left: 0, right: 0, height: '2px', backgroundColor: '#ffffff', borderRadius: '2px' }} />
+              <span style={{ position: 'absolute', bottom: '-6px', left: 0, right: 0, height: '2px', backgroundColor: '#ef4444', borderRadius: '2px', boxShadow: '0 0 8px #ef4444' }} />
             )}
           </button>
 
@@ -258,9 +293,6 @@ export default function PublicLandingPage({ user, onAuthSuccess, onLogout }) {
       {/* ---------------------------------------------------- */}
       <section id="home" style={{ padding: '5.5rem 2rem 4rem', maxWidth: '1200px', margin: '0 auto', textAlign: 'center' }}>
         
-        {/* Animated Badge Typewriter */}
-        <SecureWebTicker variant="hero" />
-
         {/* Hero Headline */}
         <h1 className="heading-font" style={{
           fontSize: '4rem',
@@ -268,7 +300,8 @@ export default function PublicLandingPage({ user, onAuthSuccess, onLogout }) {
           color: '#ffffff',
           lineHeight: 1.12,
           letterSpacing: '-1.5px',
-          marginTop: '1.25rem'
+          marginTop: '1.25rem',
+          marginBottom: '1rem'
         }}>
           Nqat AI <br />
           <span style={{
@@ -279,6 +312,11 @@ export default function PublicLandingPage({ user, onAuthSuccess, onLogout }) {
             WEBSITE VULNERABILITY ASSISTANT
           </span>
         </h1>
+
+        {/* Secure Web Animated Ticker Badge */}
+        <div style={{ margin: '1rem 0 1.5rem', display: 'flex', justifyContent: 'center' }}>
+          <SecureWebTicker variant="hero" />
+        </div>
 
         {/* Hero Subtitle */}
         <p style={{
