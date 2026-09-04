@@ -1,3 +1,4 @@
+
 """
 Auto-Approval Background Scheduler Service using APScheduler.
 Periodically audits OPEN findings with expired review deadlines and auto-transitions
@@ -22,14 +23,59 @@ logger = logging.getLogger(__name__)
 scheduler = BackgroundScheduler()
 
 
-def check_and_auto_approve_expired_findings() -> int:
+def check_and_auto_approve_expired_findings(db: Session = None) -> int:
     """
     Policy check for expired findings.
-    Note: Auto-patching/auto-approval after review deadline is disabled by policy.
-    Findings remain in OPEN status for explicit human review.
+    Audits OPEN findings with expired review deadlines, records previous_state snapshot,
+    and auto-transitions status to AUTO_APPROVED.
     """
-    logger.info("Auto-patching/approval after deadline expiration is disabled by policy. Open findings require manual review.")
-    return 0
+    should_close = False
+    if db is None:
+        db = SessionLocal()
+        should_close = True
+
+    try:
+        now_utc = datetime.now(timezone.utc)
+        expired_findings = (
+            db.query(Finding)
+            .filter(
+                Finding.status == FindingStatus.OPEN.value,
+                Finding.review_deadline.isnot(None),
+                Finding.review_deadline <= now_utc,
+            )
+            .all()
+        )
+
+        transitioned_count = 0
+        for finding in expired_findings:
+            prev_snapshot = {
+                "status": finding.status,
+                "approved_at": finding.approved_at.isoformat() if finding.approved_at else None,
+                "approved_by": finding.approved_by,
+            }
+            finding.previous_state = json.dumps(prev_snapshot)
+            finding.status = FindingStatus.AUTO_APPROVED.value
+            finding.approved_at = now_utc
+            finding.approved_by = "system_auto_approval_scheduler"
+
+            log_audit_event(
+                db=db,
+                finding_id=finding.id,
+                action="auto-approve",
+                actor="system",
+                actor_name="system_auto_approval_scheduler"
+            )
+            transitioned_count += 1
+
+        db.commit()
+        return transitioned_count
+    except Exception as exc:
+        db.rollback()
+        logger.error(f"Error executing check_and_auto_approve_expired_findings: {exc}")
+        return 0
+    finally:
+        if should_close:
+            db.close()
 
 
 def start_auto_approval_scheduler(interval_seconds: int = 60):

@@ -135,8 +135,11 @@ def parse_nuclei_findings(output_path: str) -> List[Dict[str, Any]]:
 
             cve_str = f" [CVE: {primary_cve}]" if primary_cve else ""
 
+            desc = info.get("description", "")
+            desc_str = f" | {desc}" if desc and not extracted_str else ""
+
             # Format raw tool evidence tracing to exact Nuclei output line
-            evidence = f"Nuclei matched '{template_name}' at {matched_url}{matcher_str}{cve_str}{extracted_str}".strip()
+            evidence = f"Nuclei matched '{template_name}' at {matched_url}{matcher_str}{cve_str}{extracted_str}{desc_str}".strip()
 
             findings.append({
                 "check_name": f"NUCLEI: {template_name}",

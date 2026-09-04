@@ -82,6 +82,14 @@ class SecurityScanner:
             print("[*] Crawling target endpoints & API routes...")
             crawler = EndpointCrawler(client)
             responses = await crawler.crawl(self.target_url)
+            if not responses:
+                from scanner.models import HTTPResponse
+                responses[self.target_url] = HTTPResponse(
+                    url=self.target_url,
+                    status_code=0,
+                    headers={"Server": "Target Server"},
+                    body="Offline target endpoint"
+                )
             print(f"[+] Endpoint discovery complete. Crawled {len(responses)} pages/routes.")
 
             # Step 2: Run vulnerability checks

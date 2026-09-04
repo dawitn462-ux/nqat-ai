@@ -253,8 +253,8 @@ def legacy_scan(payload: ScanCreate = Body(...), db: Session = Depends(get_db)):
 from backend.schemas import ScanCreate, ScanResponse
 
 @app.get("/api/scan/{scan_id}", response_model=ScanResponse, tags=["Legacy Compatibility"])
-def legacy_get_scan(scan_id: int, db: Session = Depends(get_db)):
-    return scans.get_scan(scan_id, db)
+def legacy_get_scan(scan_id: int, request: Request, db: Session = Depends(get_db)):
+    return scans.get_scan(scan_id, request=request, db=db)
 
 
 @app.post("/api/classify", tags=["Legacy Compatibility"])

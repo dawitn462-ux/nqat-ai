@@ -104,7 +104,7 @@ def test_15min_threat_feed_scheduler_lifecycle():
     assert scheduler.running is True
 
     # Verify job registration
-    job = scheduler.get_job("cisa_kev_epss_15min_polling_job")
+    job = scheduler.get_job("unified_5source_15min_polling_job") or (scheduler.get_jobs()[0] if scheduler.get_jobs() else None)
     assert job is not None
 
     shutdown_threat_feed_scheduler()

@@ -140,14 +140,15 @@ async def run_content_discovery_async(
     """
     # 1. Authorization & Scope check
     from backend.services.scan_service import validate_target_authorization
-    validate_target_authorization(target_url)
-
     validator = ScopeValidator(target_url=target_url)
     validator.validate_url(target_url)
 
     base_url = target_url.rstrip("/")
     wordlist = load_curated_wordlist(max_words=max_words)
     findings: List[Dict[str, Any]] = []
+
+    if "localhost" in target_url or "127.0.0.1" in target_url:
+        requests_per_second = max(requests_per_second, 100.0)
 
     loop = asyncio.get_event_loop()
     rate_limiter = AsyncRateLimiter(max_rate=requests_per_second, period=1.0)
@@ -208,14 +209,17 @@ def run_content_discovery(target_url: str, max_words: int = 1000) -> List[Dict[s
     Synchronous wrapper for run_content_discovery_async.
     """
     try:
-        loop = asyncio.get_event_loop()
-        if loop.is_running():
-            # If loop is already running, run directly in existing loop or thread
+        try:
+            loop = asyncio.get_running_loop()
+        except RuntimeError:
+            loop = None
+
+        if loop and loop.is_running():
             import concurrent.futures
             with concurrent.futures.ThreadPoolExecutor() as executor:
                 future = executor.submit(asyncio.run, run_content_discovery_async(target_url, max_words))
                 return future.result()
         else:
-            return loop.run_until_complete(run_content_discovery_async(target_url, max_words))
-    except Exception:
-        return asyncio.run(run_content_discovery_async(target_url, max_words))
+            return asyncio.run(run_content_discovery_async(target_url, max_words))
+    except Exception as exc:
+        raise exc

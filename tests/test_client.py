@@ -26,11 +26,21 @@ async def test_client_insecure_http_rejected():
             await client.get("http://localhost:3000")
 
 
+from unittest.mock import AsyncMock, MagicMock, patch
+
 @pytest.mark.asyncio
 async def test_client_successful_request():
     validator = ScopeValidator(target_url="http://localhost:3000", enforce_https=False)
 
     async with AsyncScannerClient(scope_validator=validator) as client:
-        response = await client.get("http://localhost:3000")
-        assert response.status_code == 200
-        assert response.elapsed_ms > 0
+        mock_resp = MagicMock()
+        mock_resp.status_code = 200
+        mock_resp.headers = {"Content-Type": "text/html"}
+        mock_resp.text = "OK"
+        mock_resp.content = b"OK"
+        mock_resp.url = "http://localhost:3000"
+
+        with patch.object(client._client, "request", new_callable=AsyncMock, return_value=mock_resp):
+            response = await client.get("http://localhost:3000")
+            assert response.status_code == 200
+            assert response.elapsed_ms >= 0

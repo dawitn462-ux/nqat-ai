@@ -54,7 +54,7 @@ def fingerprint_endpoint(url: str, response_headers: Dict[str, str] = None, resp
     # Fallback live fetch if headers/body were not provided
     if response_headers is None and response_body is None and url_lower.startswith(("http://", "https://")):
         try:
-            with httpx.Client(timeout=3.0, verify=False, follow_redirects=True) as client:
+            with httpx.Client(timeout=0.5, verify=False, follow_redirects=True) as client:
                 resp = client.get(url)
                 ct = resp.headers.get("content-type", "").lower()
                 if "application/json" in ct or ct.startswith("application/"):

@@ -72,42 +72,40 @@ class BackupDiscoveryCheck(BaseCheck):
     async def run(
         self, target_url: str, responses: Dict[str, HTTPResponse]
     ) -> List[VulnerabilityFinding]:
+        import asyncio
         findings: List[VulnerabilityFinding] = []
         base_url = target_url.rstrip("/")
-        candidates = load_wordlist_candidates(max_entries=100)
+        candidates = load_wordlist_candidates(max_entries=50)
 
-        for rel_path in candidates:
+        async def probe_candidate(rel_path: str):
             probe_url = urljoin(base_url, rel_path)
-
             if not self.client.scope_validator.is_in_scope(probe_url):
-                continue
-
+                return None
             try:
                 res = await self.client.get(probe_url)
-
-                # Detection criteria: HTTP 200 OK, non-empty response, non-html error page for raw backups
                 if res.status_code == 200 and len(res.body) > 15:
                     body_lower = res.body.lower()
-                    # Skip generic soft 404 HTML error pages
                     if "<html" in body_lower and ("page not found" in body_lower or "404" in body_lower or "error" in body_lower):
-                        continue
-
+                        return None
                     ext = os.path.splitext(rel_path.lower())[1]
                     severity = Severity.HIGH if (ext in HIGH_RISK_EXTENSIONS or "env" in rel_path.lower() or "sql" in rel_path.lower()) else Severity.MEDIUM
-
-                    findings.append(
-                        VulnerabilityFinding(
-                            id=f"{self.check_id}_{rel_path.upper().replace('/', '_').replace('.', '_')}",
-                            title=f"Exposed Backup or Sensitive File Discovered ({rel_path})",
-                            severity=severity,
-                            description=f"Wordlist discovery revealed an exposed file at '{probe_url}' using SecLists web-content dictionaries.",
-                            endpoint=probe_url,
-                            evidence=f"HTTP 200 OK | Size: {len(res.body)} bytes | Path: {rel_path}",
-                            cwe="CWE-530",
-                            remediation=f"Remove or restrict access to exposed file '{rel_path}' on production web server.",
-                        )
+                    return VulnerabilityFinding(
+                        id=f"{self.check_id}_{rel_path.upper().replace('/', '_').replace('.', '_')}",
+                        title=f"Exposed Backup or Sensitive File Discovered ({rel_path})",
+                        severity=severity,
+                        description=f"Wordlist discovery revealed an exposed file at '{probe_url}' using SecLists web-content dictionaries.",
+                        endpoint=probe_url,
+                        evidence=f"HTTP 200 OK | Size: {len(res.body)} bytes | Path: {rel_path}",
+                        cwe="CWE-530",
+                        remediation=f"Remove or restrict access to exposed file '{rel_path}' on production web server.",
                     )
-            except (RequestEngineError, ScopeViolationError):
-                continue
+            except Exception:
+                return None
+            return None
+
+        results = await asyncio.gather(*[probe_candidate(p) for p in candidates], return_exceptions=True)
+        for r in results:
+            if isinstance(r, VulnerabilityFinding):
+                findings.append(r)
 
         return findings

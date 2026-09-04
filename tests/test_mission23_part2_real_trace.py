@@ -89,19 +89,33 @@ async def test_trace_verified_domain_scan_evidence(setup_trace_db):
     )
     mock_crawled_responses = {url: mock_resp for url in mock_katana_urls}
 
-    with patch("scanner.client.AsyncScannerClient.get", new_callable=AsyncMock, return_value=mock_resp):
-        with patch("scanner.core.AsyncScannerClient.get", new_callable=AsyncMock, return_value=mock_resp):
-            with patch("scanner.core.EndpointCrawler.crawl", new_callable=AsyncMock, return_value=mock_crawled_responses):
-                with patch("scanner.crawler.EndpointCrawler.crawl", new_callable=AsyncMock, return_value=mock_crawled_responses):
-                    with patch("backend.services.katana_crawler.run_katana_crawl", return_value=mock_katana_urls):
-                        with patch("backend.services.nuclei_scanner.run_nuclei_scan", return_value="dummy_nuclei.jsonl"):
-                            with patch("backend.services.nuclei_scanner.parse_nuclei_findings", return_value=[{
-                                "check_name": "NUCLEI: Wappalyzer Technology Detection",
-                                "severity": "INFO",
-                                "evidence": "Nuclei matched 'Wappalyzer Technology Detection' at http://localhost:3000 [matcher: nginx-header] | Extracted: Nginx/1.18.0"
-                            }]):
-                                with patch("backend.services.threat_feed_client.enrich_finding_with_threat_intel"):
-                                    await _execute_scan_async(scan_id, target_domain, db=db)
+    from scanner.models import ScanReport, ScanSummary, VulnerabilityFinding, Severity
+    mock_scan_report = ScanReport(
+        scan_id="scan-123",
+        target_url="http://localhost:3000",
+        summary=ScanSummary(total_vulnerabilities=1),
+        findings=[VulnerabilityFinding(
+            id="SEC_HDR_001",
+            title="Missing Security Header: Content-Security-Policy",
+            severity=Severity.MEDIUM,
+            description="CSP missing",
+            endpoint="http://localhost:3000",
+            evidence="Header Content-Security-Policy absent in HTTP response at http://localhost:3000 (HTTP 200 OK)"
+        )]
+    )
+
+    with patch("scanner.core.SecurityScanner.execute_scan", new_callable=AsyncMock, return_value=mock_scan_report), \
+         patch("backend.services.katana_crawler.run_katana_crawl", return_value=mock_katana_urls), \
+         patch("backend.services.nuclei_scanner.run_nuclei_scan", return_value="dummy_nuclei.jsonl"), \
+         patch("backend.services.nuclei_scanner.parse_nuclei_findings", return_value=[{
+             "check_name": "NUCLEI: Wappalyzer Technology Detection",
+             "severity": "INFO",
+             "evidence": "Nuclei matched 'Wappalyzer Technology Detection' at http://localhost:3000 [matcher: nginx-header] | Extracted: Nginx/1.18.0"
+         }]), \
+         patch("backend.services.threat_feed_client.check_asset_against_malicious_feeds", return_value={"is_malicious": False}), \
+         patch("backend.services.threat_feed_client.enrich_finding_with_threat_intel"), \
+         patch("backend.services.content_discovery.run_content_discovery_async", return_value=[]):
+        await _execute_scan_async(scan_id, target_domain, db=db)
 
     # 4. Trace every single produced finding in DB and verify evidence quality
     findings = (

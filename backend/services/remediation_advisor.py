@@ -46,7 +46,7 @@ def generate_recommendation(finding: Dict[str, Any]) -> Dict[str, Any]:
         rec_data = _recommend_backup(finding_id, check_name, target_url)
 
     # Sensitive Environment & Credential Files
-    elif ".env" in check_name_lower or "sensitive" in check_name_lower or "secret" in check_name_lower or "config" in check_name_lower or "credential" in check_name_lower:
+    elif ".env" in check_name_lower or "sensitive file" in check_name_lower or "exposed secret" in check_name_lower or "secret file" in check_name_lower or "config file" in check_name_lower or "credential" in check_name_lower:
         rec_data = _recommend_sensitive_file(finding_id, check_name, target_url)
 
     # Directory Listing / Information Leak

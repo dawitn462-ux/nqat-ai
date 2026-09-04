@@ -114,13 +114,15 @@ def test_continuous_monitoring_rescan_and_new_finding_detection(setup_monitoring
     db = TestingSessionLocal()
 
     # 1. Add VERIFIED DomainTarget
+    from datetime import datetime, timezone
     domain_rec = DomainTarget(
         organization_id=org_id,
         domain="monitor-test.org",
         target_url="http://monitor-test.org",
         verification_token="nkat-verify-12345",
         verification_method="dns_txt",
-        status=DomainVerificationStatus.VERIFIED.value
+        status=DomainVerificationStatus.VERIFIED.value,
+        verified_at=datetime.now(timezone.utc)
     )
     db.add(domain_rec)
     db.commit()
@@ -146,9 +148,10 @@ def test_continuous_monitoring_rescan_and_new_finding_detection(setup_monitoring
         d.commit()
 
     with patch("backend.services.continuous_monitoring_scheduler.SessionLocal", return_value=db):
-        with patch("backend.services.scan_service._execute_scan_async", side_effect=mock_execute_scan):
-            notif_count = run_continuous_monitoring_cycle()
-            assert notif_count >= 1
+        with patch("backend.services.domain_verification_service.reverify_domain_target", return_value=(True, "OK")):
+            with patch("backend.services.scan_service._execute_scan_async", side_effect=mock_execute_scan):
+                notif_count = run_continuous_monitoring_cycle()
+                assert notif_count >= 1
 
     # Check notification persisted
     notifs = db.query(InAppNotification).filter(InAppNotification.organization_id == org_id).all()

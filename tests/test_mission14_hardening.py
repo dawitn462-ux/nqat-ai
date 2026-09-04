@@ -61,17 +61,20 @@ def test_state_changing_endpoint_requires_api_key():
     assert res.status_code == 401
 
 
+from unittest.mock import patch
+
 def test_state_changing_endpoint_with_valid_api_key():
     client = TestClient(app)
-    res = client.post(
-        "/api/v1/scan",
-        json={"target": "http://localhost:3000"},
-        headers={"X-API-Key": VALID_API_KEY}
-    )
-    assert res.status_code == 201
-    data = res.json()
-    assert "id" in data
-    assert data["target"] == "http://localhost:3000"
+    with patch("backend.routers.scans.run_scan_pipeline_background"):
+        res = client.post(
+            "/api/v1/scan",
+            json={"target": "http://localhost:3000"},
+            headers={"X-API-Key": VALID_API_KEY}
+        )
+        assert res.status_code == 201
+        data = res.json()
+        assert "id" in data
+        assert data["target"] == "http://localhost:3000"
 
 
 def test_global_exception_handler_shape():

@@ -38,22 +38,29 @@ app.dependency_overrides[get_db] = override_get_db
 
 class TestFindingsAPI(unittest.TestCase):
 
+    def setUp(self):
+        app.dependency_overrides[get_db] = override_get_db
+
     @classmethod
     def setUpClass(cls):
+        app.dependency_overrides[get_db] = override_get_db
         Base.metadata.create_all(bind=engine)
         cls.client = TestClient(app)
 
-        # Seed test scan and subdomain
         db = TestingSessionLocal()
-        scan = Scan(target="http://localhost:3000", status="COMPLETED")
-        db.add(scan)
-        db.commit()
-        db.refresh(scan)
+        scan = db.query(Scan).filter(Scan.target == "http://localhost:3000").first()
+        if not scan:
+            scan = Scan(target="http://localhost:3000", status="COMPLETED")
+            db.add(scan)
+            db.commit()
+            db.refresh(scan)
 
-        sub = Subdomain(scan_id=scan.id, hostname="localhost", ip_address="127.0.0.1")
-        db.add(sub)
-        db.commit()
-        db.refresh(sub)
+        sub = db.query(Subdomain).filter(Subdomain.scan_id == scan.id, Subdomain.hostname == "localhost").first()
+        if not sub:
+            sub = Subdomain(scan_id=scan.id, hostname="localhost", ip_address="127.0.0.1")
+            db.add(sub)
+            db.commit()
+            db.refresh(sub)
 
         cls.subdomain_id = sub.id
         db.close()

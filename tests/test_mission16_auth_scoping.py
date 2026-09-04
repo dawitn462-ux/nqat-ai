@@ -61,16 +61,17 @@ def test_login_and_organization_scan_scoping(setup_auth_scoping_db):
     assert token_data["organization_id"] == org_id
     token = token_data["access_token"]
 
-    # 2. Trigger scan authenticated via Bearer JWT token
+    from unittest.mock import patch
     headers = {"Authorization": f"Bearer {token}"}
-    scan_res = client.post(
-        "/api/v1/scan",
-        json={"target": "http://localhost:3000"},
-        headers=headers
-    )
-    assert scan_res.status_code == 201
-    scan_obj = scan_res.json()
-    assert scan_obj["organization_id"] == org_id
+    with patch("backend.routers.scans.run_scan_pipeline_background"):
+        scan_res = client.post(
+            "/api/v1/scan",
+            json={"target": "http://localhost:3000"},
+            headers=headers
+        )
+        assert scan_res.status_code == 201
+        scan_obj = scan_res.json()
+        assert scan_obj["organization_id"] == org_id
 
     # 3. Test invalid login credentials
     bad_login = client.post(

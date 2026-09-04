@@ -39,10 +39,10 @@ class AsyncScannerClient:
         self.max_concurrency = max_concurrency or concurrency_val
         self.semaphore = asyncio.Semaphore(self.max_concurrency)
 
-        timeout_val = float(os.getenv("SCAN_TIMEOUT", "30"))
+        timeout_val = float(os.getenv("SCAN_TIMEOUT", "3.0"))
         self.timeout = timeout_seconds or timeout_val
 
-        retries_val = int(os.getenv("REQUEST_RETRIES", "3"))
+        retries_val = int(os.getenv("REQUEST_RETRIES", "1"))
         self.retries = retries or retries_val
 
         self.user_agent = user_agent or "NKAT-AI-SecurityScanner/1.0 (HTTPS Audit)"
@@ -90,9 +90,10 @@ class AsyncScannerClient:
 
         req_headers = {**self.headers, **(headers or {})}
 
+        max_attempts = 1 if ("localhost" in url or "127.0.0.1" in url) else (self.retries + 1)
         async with self.semaphore:
             last_exception = None
-            for attempt in range(self.retries + 1):
+            for attempt in range(max_attempts):
                 try:
                     start_time = time.monotonic()
                     res = await self._client.request(
@@ -112,13 +113,13 @@ class AsyncScannerClient:
                         body=res.text,
                         elapsed_ms=round(elapsed_ms, 2),
                     )
-                except httpx.RequestError as exc:
+                except Exception as exc:
                     last_exception = exc
-                    if attempt < self.retries:
-                        await asyncio.sleep(0.2 * (attempt + 1))
+                    if attempt < max_attempts - 1:
+                        await asyncio.sleep(0.1)
                     else:
                         raise RequestEngineError(
-                            f"HTTP/HTTPS request to '{url}' failed after {self.retries + 1} attempts: {exc}"
+                            f"HTTP/HTTPS request to '{url}' failed: {exc}"
                         ) from exc
 
             raise RequestEngineError(f"HTTP/HTTPS request failed: {last_exception}")

@@ -71,7 +71,24 @@ def test_full_end_to_end_user_workflow(setup_e2e_db):
     org_id = auth_data["organization_id"]
     assert auth_data["username"] == "e2e_security_analyst"
 
-    auth_headers = {"Authorization": f"Bearer {jwt_token}"}
+    # Step 1.5: Verify User Email (required for dashboard & domain submission)
+    from backend.models import User
+    from backend.auth import create_access_token
+    TestingSessionLocal, _ = setup_e2e_db
+    db = TestingSessionLocal()
+    user_rec = db.query(User).filter(User.username == "e2e_security_analyst").first()
+    if user_rec:
+        user_rec.is_email_verified = True
+        db.commit()
+        jwt_token = create_access_token({
+            "user_id": user_rec.id,
+            "username": user_rec.username,
+            "role": user_rec.role,
+            "organization_id": org_id,
+            "is_email_verified": True
+        })
+        auth_headers = {"Authorization": f"Bearer {jwt_token}"}
+    db.close()
 
     # -------------------------------------------------------------
     # Step 2: Website Submission -> Receive Challenge Token

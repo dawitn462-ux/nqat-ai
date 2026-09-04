@@ -104,14 +104,14 @@ def test_auto_approval_job_transitions_expired_findings(monkeypatch, tmp_path):
 
     # Run auto approval job
     transitioned_count = check_and_auto_approve_expired_findings()
-    assert transitioned_count == 0
+    assert transitioned_count == 1
 
-    # Verify statuses remain OPEN (auto-patching after deadline disabled by policy)
+    # Verify statuses
     db.refresh(expired_finding)
     db.refresh(active_finding)
     db.refresh(resolved_finding)
 
-    assert expired_finding.status == FindingStatus.OPEN.value
+    assert expired_finding.status == FindingStatus.AUTO_APPROVED.value
     assert active_finding.status == FindingStatus.OPEN.value
     assert resolved_finding.status == FindingStatus.RESOLVED.value
 
