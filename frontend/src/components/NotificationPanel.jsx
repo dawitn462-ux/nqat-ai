@@ -115,7 +115,7 @@ export default function NotificationPanel({ isOpen, onClose }) {
           )}
         </div>
         <button onClick={onClose} style={{ background: 'transparent', border: 'none', color: '#94a3b8', cursor: 'pointer', fontSize: '1rem' }}>
-                  </button>
+        </button>
       </div>
 
       {/* Action Bar */}
@@ -199,7 +199,7 @@ export default function NotificationPanel({ isOpen, onClose }) {
                     onClick={() => handleDelete(n.id)}
                     style={{ background: 'transparent', border: 'none', color: '#ef4444', fontSize: '0.75rem', cursor: 'pointer' }}
                   >
-                                      </button>
+                  </button>
                 </div>
               </div>
             );
