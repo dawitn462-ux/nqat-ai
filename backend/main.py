@@ -59,6 +59,13 @@ async def lifespan(app: FastAPI):
             ensure_column("findings", "epss_score", "FLOAT")
             ensure_column("findings", "epss_percentile", "FLOAT")
             ensure_column("findings", "is_api_endpoint", "BOOLEAN DEFAULT 0")
+            ensure_column("findings", "priority_tier", "TEXT DEFAULT 'P3'")
+            ensure_column("findings", "contextual_risk_score", "FLOAT")
+            ensure_column("findings", "risk_acceptance_reason", "TEXT")
+            ensure_column("findings", "reverified_at", "TIMESTAMP")
+            ensure_column("findings", "sla_deadline", "TIMESTAMP")
+            ensure_column("findings", "is_sla_breached", "BOOLEAN DEFAULT 0")
+            ensure_column("findings", "historical_context_note", "TEXT")
             ensure_column("subdomains", "is_api_endpoint", "BOOLEAN DEFAULT 0")
             ensure_column("scans", "organization_id", "INTEGER")
             ensure_column("users", "email", "TEXT")
@@ -193,7 +200,7 @@ async def waf_traffic_middleware(request: Request, call_next):
     return response
 
 
-from backend.routers import scans, subdomains, findings, classification, agent, auth, threat_graph, domains, notifications, admin, posts
+from backend.routers import scans, subdomains, findings, classification, agent, auth, threat_graph, domains, notifications, admin, posts, events
 
 # Mount Versioned Routers
 app.include_router(auth.router)
@@ -201,6 +208,7 @@ app.include_router(admin.router)
 app.include_router(posts.router)
 app.include_router(domains.router)
 app.include_router(notifications.router)
+app.include_router(events.router)
 app.include_router(scans.router)
 app.include_router(subdomains.router)
 app.include_router(findings.router)

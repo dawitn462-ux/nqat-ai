@@ -12,7 +12,7 @@ from sqlalchemy.orm import Session
 
 from backend.database import get_db
 from backend.models import Subdomain, Finding, FindingStatus, FeedbackLabel, AuditLog
-from backend.schemas import FindingCreate, FindingResponse, FindingApprovalRequest, AuditLogResponse
+from backend.schemas import FindingCreate, FindingResponse, FindingApprovalRequest, AuditLogResponse, FindingStatusUpdateRequest, ReverifyFindingResponse
 from backend.services.remediation_advisor import generate_recommendation
 from backend.services.deadline_calculator import calculate_review_deadline
 from backend.services.audit_logger import log_audit_event
@@ -90,14 +90,102 @@ def add_finding_to_subdomain(subdomain_id: int, finding_in: FindingCreate, db: S
 @router.get("/api/subdomains/{subdomain_id}/findings/", response_model=List[FindingResponse])
 def list_findings_for_subdomain(subdomain_id: int, db: Session = Depends(get_db)):
     """
-    Lists all findings for a specific subdomain.
+    Lists all findings for a specific subdomain, enriched with Prioritization Index and SLA clock.
     """
+    from backend.services.prioritization import enrich_finding_prioritization
     db_subdomain = db.query(Subdomain).filter(Subdomain.id == subdomain_id).first()
     if not db_subdomain:
         raise HTTPException(status_code=404, detail=f"Subdomain with ID {subdomain_id} not found")
 
     findings = db.query(Finding).filter(Finding.subdomain_id == subdomain_id).all()
+    for f in findings:
+        enrich_finding_prioritization(db, f)
+    db.commit()
     return findings
+
+
+@router.get("/api/v1/findings", response_model=List[FindingResponse])
+@router.get("/api/findings", response_model=List[FindingResponse])
+def list_all_findings(
+    priority_tier: Optional[str] = None,
+    status: Optional[str] = None,
+    is_sla_breached: Optional[bool] = None,
+    skip: int = 0,
+    limit: int = 100,
+    db: Session = Depends(get_db)
+):
+    """
+    Lists all findings across target inventory with optional filtering by Priority Tier (P1-P4), Status, or SLA breach status.
+    """
+    from backend.services.prioritization import enrich_finding_prioritization
+    query = db.query(Finding)
+
+    if priority_tier:
+        query = query.filter(Finding.priority_tier == priority_tier.upper())
+    if status:
+        query = query.filter(Finding.status == status.upper())
+    if is_sla_breached is not None:
+        query = query.filter(Finding.is_sla_breached == is_sla_breached)
+
+    findings = query.order_by(Finding.created_at.desc()).offset(skip).limit(limit).all()
+    for f in findings:
+        enrich_finding_prioritization(db, f)
+    db.commit()
+    return findings
+
+
+@router.put("/api/v1/findings/{finding_id}/status", response_model=FindingResponse)
+@router.put("/api/findings/{finding_id}/status", response_model=FindingResponse)
+def update_finding_governance_status(
+    finding_id: int,
+    status_in: FindingStatusUpdateRequest,
+    db: Session = Depends(get_db)
+):
+    """
+    Lifecycle Governance State Transition.
+    Validates state transitions (OPEN -> UNDER_TRIAGE -> IN_REMEDIATION -> RESOLVED/CLOSED/RISK_ACCEPTED).
+    """
+    from backend.services.governance import transition_finding_status
+    db_finding = db.query(Finding).filter(Finding.id == finding_id).first()
+    if not db_finding:
+        raise HTTPException(status_code=404, detail=f"Finding with ID {finding_id} not found")
+
+    ok, msg = transition_finding_status(
+        db=db,
+        finding=db_finding,
+        new_status=status_in.status,
+        actor=status_in.actor or "analyst",
+        reason=status_in.reason
+    )
+
+    if not ok:
+        raise HTTPException(status_code=400, detail=msg)
+
+    return db_finding
+
+
+@router.post("/api/v1/findings/{finding_id}/reverify", response_model=ReverifyFindingResponse)
+@router.post("/api/findings/{finding_id}/reverify", response_model=ReverifyFindingResponse)
+def reverify_finding_fix(
+    finding_id: int,
+    db: Session = Depends(get_db)
+):
+    """
+    Automated Re-Verification Engine.
+    Programmatically executes an active targeted check against the target asset to confirm resolution before closing finding.
+    """
+    from backend.services.governance import reverify_finding_target
+    result = reverify_finding_target(db, finding_id)
+    if result.get("status") == "NOT_FOUND":
+        raise HTTPException(status_code=404, detail="Finding not found")
+
+    return {
+        "finding_id": result["finding_id"],
+        "status": result["status"],
+        "is_reverified": result["is_reverified"],
+        "details": result["details"],
+        "reverified_at": datetime.now(timezone.utc)
+    }
 
 
 @router.patch("/api/v1/findings/{finding_id}/approve", response_model=FindingResponse, dependencies=[Depends(verify_api_key)])

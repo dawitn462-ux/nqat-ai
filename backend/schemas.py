@@ -23,6 +23,13 @@ class FindingBase(BaseModel):
     epss_score: Optional[float] = None
     epss_percentile: Optional[float] = None
     is_api_endpoint: Optional[bool] = False
+    priority_tier: Optional[str] = "P3"
+    contextual_risk_score: Optional[float] = None
+    risk_acceptance_reason: Optional[str] = None
+    reverified_at: Optional[datetime] = None
+    sla_deadline: Optional[datetime] = None
+    is_sla_breached: Optional[bool] = False
+    historical_context_note: Optional[str] = None
     full_fix_guide: Optional[dict] = None
     remediation_guide: Optional[str] = None
 
@@ -33,6 +40,28 @@ class FindingCreate(FindingBase):
 
 class FindingApprovalRequest(BaseModel):
     approved_by: Optional[str] = "admin"
+
+
+class FindingStatusUpdateRequest(BaseModel):
+    status: str
+    actor: Optional[str] = "analyst"
+    reason: Optional[str] = None
+
+
+class ReverifyFindingResponse(BaseModel):
+    finding_id: int
+    status: str
+    is_reverified: bool
+    details: str
+    reverified_at: datetime
+
+
+class EventWebhookRequest(BaseModel):
+    event_type: str = "CODE_DEPLOY"  # CODE_DEPLOY, COMMIT_PUSH, CVE_ALERT
+    target_url: str
+    commit_sha: Optional[str] = None
+    environment: Optional[str] = "production"
+    triggered_by: Optional[str] = "CI_CD_Pipeline"
 
 
 class FindingResponse(FindingBase):
@@ -48,6 +77,13 @@ class FindingResponse(FindingBase):
     epss_score: Optional[float] = None
     epss_percentile: Optional[float] = None
     is_api_endpoint: Optional[bool] = False
+    priority_tier: Optional[str] = "P3"
+    contextual_risk_score: Optional[float] = None
+    risk_acceptance_reason: Optional[str] = None
+    reverified_at: Optional[datetime] = None
+    sla_deadline: Optional[datetime] = None
+    is_sla_breached: Optional[bool] = False
+    historical_context_note: Optional[str] = None
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)

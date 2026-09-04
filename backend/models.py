@@ -19,7 +19,11 @@ class ScanStatus(str, enum.Enum):
 
 class FindingStatus(str, enum.Enum):
     OPEN = "OPEN"
+    UNDER_TRIAGE = "UNDER_TRIAGE"
+    IN_REMEDIATION = "IN_REMEDIATION"
+    RISK_ACCEPTED = "RISK_ACCEPTED"
     RESOLVED = "RESOLVED"
+    CLOSED = "CLOSED"
     AUTO_APPROVED = "AUTO_APPROVED"
     FALSE_POSITIVE = "FALSE_POSITIVE"
 
@@ -137,6 +141,13 @@ class Finding(Base):
     epss_score = Column(Float, nullable=True, index=True)
     epss_percentile = Column(Float, nullable=True)
     is_api_endpoint = Column(Boolean, default=False, nullable=True, index=True)
+    priority_tier = Column(String(50), nullable=True, default="P3", index=True)
+    contextual_risk_score = Column(Float, nullable=True, index=True)
+    risk_acceptance_reason = Column(Text, nullable=True)
+    reverified_at = Column(DateTime(timezone=True), nullable=True)
+    sla_deadline = Column(DateTime(timezone=True), nullable=True, index=True)
+    is_sla_breached = Column(Boolean, default=False, nullable=True, index=True)
+    historical_context_note = Column(Text, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 
     subdomain = relationship("Subdomain", back_populates="findings")

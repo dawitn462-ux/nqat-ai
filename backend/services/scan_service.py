@@ -365,8 +365,10 @@ async def _execute_scan_async(scan_id: int, target_url: str, db: Optional[Sessio
                     db.add(db_finding)
             db.commit()
 
-        # Step 5: Cross-reference threat intelligence (CISA KEV + EPSS) for all scan findings
+        # Step 5: Cross-reference threat intelligence (CISA KEV + EPSS) and compute Prioritization Index for all scan findings
         from backend.services.threat_feed_client import enrich_finding_with_threat_intel
+        from backend.services.prioritization import enrich_finding_prioritization
+
         scan_findings = (
             db.query(Finding)
             .join(Subdomain, Finding.subdomain_id == Subdomain.id)
@@ -375,6 +377,7 @@ async def _execute_scan_async(scan_id: int, target_url: str, db: Optional[Sessio
         )
         for sf in scan_findings:
             enrich_finding_with_threat_intel(db, sf)
+            enrich_finding_prioritization(db, sf)
 
         db_scan.status = ScanStatus.COMPLETED.value
         db.commit()

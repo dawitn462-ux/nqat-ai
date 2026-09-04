@@ -24,9 +24,10 @@ def start_threat_feed_scheduler() -> BackgroundScheduler:
         logger.info("[Threat Feed Scheduler] Daemon is already running.")
         return _threat_scheduler
 
-    # Initial cache update on startup
+    # Initial cache update in background thread so FastAPI startup is instant
+    import threading
     try:
-        update_threat_feed_caches()
+        threading.Thread(target=update_threat_feed_caches, daemon=True, name="ThreatFeedInitialUpdate").start()
     except Exception as exc:
         logger.warning(f"[Threat Feed Scheduler] Initial startup cache update notice: {exc}")
 
