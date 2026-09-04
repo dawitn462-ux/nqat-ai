@@ -468,7 +468,7 @@ export default function AdminDashboardPage({ user, onLogout }) {
             </span>
           </div>
           <h1 className="heading-font" style={{ fontSize: '2.5rem', fontWeight: 900, color: '#ffffff', margin: 0, letterSpacing: '-0.5px' }}>
-            NKAT AI Administrator Management Hub
+            Nqat AI Administrator Management Hub
           </h1>
           <p style={{ color: '#94a3b8', fontSize: '1rem', marginTop: '6px', marginBot: 0 }}>
             Active Session: <strong style={{ color: '#ffffff' }}>{user ? user.username : 'admin'}</strong> ({user ? user.email : 'admin@nkat.ai'}) | Organization: <strong style={{ color: '#10b981' }}>{user ? user.organization_name : 'Default Organization'}</strong>

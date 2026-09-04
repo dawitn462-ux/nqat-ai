@@ -47,7 +47,7 @@ export default function SecureWebTicker({ variant = 'hero' }) {
               <Shield size={14} /> SECURE YOUR WEB,
             </span>
             <span className="dot-separator">•</span>
-            <span>AUTONOMOUS NKAT AI VULNERABILITY ASSISTANT</span>
+            <span>AUTONOMOUS NQAT AI VULNERABILITY ASSISTANT</span>
             <span className="dot-separator">•</span>
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#ffffff' }}>
               <Activity size={14} /> REAL-TIME THREAT CORRELATION
@@ -69,7 +69,7 @@ export default function SecureWebTicker({ variant = 'hero' }) {
               <Shield size={14} /> SECURE YOUR WEB,
             </span>
             <span className="dot-separator">•</span>
-            <span>AUTONOMOUS NKAT AI VULNERABILITY ASSISTANT</span>
+            <span>AUTONOMOUS NQAT AI VULNERABILITY ASSISTANT</span>
             <span className="dot-separator">•</span>
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#ffffff' }}>
               <Activity size={14} /> REAL-TIME THREAT CORRELATION

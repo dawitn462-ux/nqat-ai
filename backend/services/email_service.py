@@ -41,7 +41,7 @@ def send_verification_email(
     """
     smtp_host, smtp_port, smtp_user, smtp_pass, smtp_from = get_smtp_config()
     clean_email = recipient_email.strip().lower()
-    subject = f"🔐 [NKAT Security] Confirm Your Registered Email Address ({verification_code})"
+    subject = f"🔐 [NQAT Security] Confirm Your Registered Email Address ({verification_code})"
     
     dashboard_verify_url = f"https://127.0.0.1:8443/?verify_token={verification_token}&email={clean_email}"
     backend_verify_url = f"http://127.0.0.1:8000/api/v1/auth/verify-link?token={verification_token}&email={clean_email}"
@@ -49,11 +49,11 @@ def send_verification_email(
 
     text_content = f"""
 ================================================================================
-NKAT AI SECURITY PLATFORM — EMAIL VERIFICATION LINK & OTP CODE
+NQAT AI SECURITY PLATFORM — EMAIL VERIFICATION LINK & OTP CODE
 ================================================================================
 Hello {username},
 
-Thank you for registering your account on NKAT AI Threat Sentinel Console.
+Thank you for registering your account on NQAT AI Threat Sentinel Console.
 Please verify your registered email address ({clean_email}) to unlock your security dashboard.
 
 Notice: This verification request will expire in {expires_in_minutes} minutes.
@@ -92,13 +92,13 @@ If you did not request this registration, please ignore this email.
     <body>
       <div class="container">
         <div class="header">
-          <div class="brand">🛡️ NKAT AI SECURITY PLATFORM</div>
+          <div class="brand">🛡️ NQAT AI SECURITY PLATFORM</div>
           <div class="subbrand">Mandatory Registered Email Verification</div>
         </div>
         
         <p style="font-size: 15px; margin-top: 20px;">Hello <strong>{username}</strong>,</p>
         <p style="color: #cbd5e1; font-size: 14px; line-height: 1.6;">
-          Welcome to NKAT AI Security Sentinel. To complete your registration and access your security dashboard, please confirm ownership of your email address <strong>({clean_email})</strong>:
+          Welcome to NQAT AI Security Sentinel. To complete your registration and access your security dashboard, please confirm ownership of your email address <strong>({clean_email})</strong>:
         </p>
 
         <p style="color: #fbbf24; font-size: 13px; font-weight: 600;">
@@ -118,7 +118,7 @@ If you did not request this registration, please ignore this email.
 
         <div class="footer">
           Dispatched on {timestamp} to registered email {clean_email}.<br/>
-          NKAT Enterprise Threat Sentinel Platform &copy; 2026
+          NQAT Enterprise Threat Sentinel Platform &copy; 2026
         </div>
       </div>
     </body>

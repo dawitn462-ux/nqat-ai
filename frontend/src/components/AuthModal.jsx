@@ -130,124 +130,128 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
     setError('');
     setLoading(true);
 
-    const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || "1098234857201-nkat2026sampleclientid.apps.googleusercontent.com";
+    const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || "771235983799-8va90kksvuueb7pusfl3q1gv1vtg7ohd.apps.googleusercontent.com";
 
-    try {
-      if (window.google?.accounts?.id) {
-        window.google.accounts.id.initialize({
+    if (window.google?.accounts?.oauth2) {
+      try {
+        const client = window.google.accounts.oauth2.initTokenClient({
           client_id: googleClientId,
-          callback: async (response) => {
-            try {
-              let userEmail = "google_user@nkat.ai";
-              let userName = "Google Security User";
-              
-              if (response.credential) {
-                const base64Url = response.credential.split('.')[1];
-                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-                const jsonPayload = decodeURIComponent(atob(base64).split('').map(c => {
-                  return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-                }).join(''));
-                const payload = JSON.parse(jsonPayload);
-                if (payload.email) userEmail = payload.email;
-                if (payload.name) userName = payload.name;
+          scope: 'email profile',
+          prompt: 'select_account',
+          callback: async (tokenResponse) => {
+            if (tokenResponse && tokenResponse.access_token) {
+              try {
+                const userRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+                  headers: { Authorization: `Bearer ${tokenResponse.access_token}` }
+                });
+                const googleProfile = await userRes.json();
+
+                const res = await fetch('/api/v1/auth/google', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    email: googleProfile.email,
+                    name: googleProfile.name || googleProfile.given_name || googleProfile.email.split('@')[0],
+                    id_token: tokenResponse.access_token
+                  })
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.detail || 'Google authentication failed');
+                onAuthSuccess(data);
+                if (onClose) onClose();
+              } catch (authErr) {
+                setError(authErr.message || 'Failed validating Google Account credentials');
+              } finally {
+                setLoading(false);
               }
-
-              const res = await fetch('/api/v1/auth/google', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  id_token: response.credential,
-                  email: userEmail,
-                  name: userName
-                })
-              });
-              
-              let data = {};
-              const resText = await res.text();
-              if (resText) {
-                try { data = JSON.parse(resText); } catch { data = { detail: resText }; }
-              }
-
-              if (!res.ok) throw new Error(data.detail || 'Google Auth endpoint error');
-              onAuthSuccess(data);
-              onClose();
-            } catch (authErr) {
-              setError(authErr.message || 'Google OAuth verification failed.');
-            } finally {
-              setLoading(false);
-            }
-          }
-        });
-
-        window.google.accounts.id.prompt((notification) => {
-          if (notification.isNotDisplayed() || notification.isSkippedMoment() || notification.isDismissedMoment()) {
-            const userEmail = prompt('Google Account Sign-In:\nEnter your Google Email Address to authenticate:', 'user@gmail.com');
-            if (userEmail && userEmail.trim()) {
-              const cleanEmail = userEmail.trim();
-              fetch('/api/v1/auth/google', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  email: cleanEmail,
-                  name: cleanEmail.split('@')[0]
-                })
-              })
-              .then(r => r.json())
-              .then(data => {
-                if (data.access_token) {
-                  onAuthSuccess(data);
-                  onClose();
-                } else {
-                  setError(data.detail || 'Google authentication failed.');
-                }
-              })
-              .catch(err => setError(err.message || 'Google authentication network error.'))
-              .finally(() => setLoading(false));
             } else {
               setLoading(false);
             }
           }
         });
-      } else {
-        const userEmail = prompt('Google Account Sign-In:\nEnter your Google Email Address to authenticate:', 'user@gmail.com');
-        if (userEmail && userEmail.trim()) {
-          const cleanEmail = userEmail.trim();
-          const res = await fetch('/api/v1/auth/google', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              email: cleanEmail,
-              name: cleanEmail.split('@')[0]
-            })
-          });
-          let data = {};
-          const resText = await res.text();
-          if (resText) {
-            try { data = JSON.parse(resText); } catch { data = { detail: resText }; }
-          }
-          if (!res.ok) throw new Error(data.detail || 'Google Auth error');
-          onAuthSuccess(data);
-          onClose();
-        } else {
-          setLoading(false);
-        }
+        client.requestAccessToken({ prompt: 'select_account' });
+        return;
+      } catch (err) {
+        console.warn('GIS Token client error, falling back to popup window:', err);
       }
-    } catch (err) {
-      setError(err.message || 'Google Auth processing error');
-      setLoading(false);
     }
+
+    const redirectUri = window.location.origin;
+    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${encodeURIComponent(googleClientId)}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=token&scope=${encodeURIComponent('email profile')}&prompt=select_account`;
+
+    const width = 500;
+    const height = 650;
+    const left = window.screenX + (window.outerWidth - width) / 2;
+    const top = window.screenY + (window.outerHeight - height) / 2;
+
+    const popup = window.open(
+      authUrl,
+      'Google_Account_Chooser',
+      `width=${width},height=${height},top=${top},left=${left},scrollbars=yes,status=1`
+    );
+
+    if (!popup) {
+      setError('Google Sign-In popup was blocked by browser. Please allow popups.');
+      setLoading(false);
+      return;
+    }
+
+    const checkPopupInterval = setInterval(async () => {
+      try {
+        if (!popup || popup.closed) {
+          clearInterval(checkPopupInterval);
+          setLoading(false);
+          return;
+        }
+
+        if (popup.location && popup.location.origin === window.location.origin) {
+          const hash = popup.location.hash;
+          popup.close();
+          clearInterval(checkPopupInterval);
+
+          if (hash && hash.includes('access_token=')) {
+            const params = new URLSearchParams(hash.substring(1));
+            const accessToken = params.get('access_token');
+            if (accessToken) {
+              const userRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+                headers: { Authorization: `Bearer ${accessToken}` }
+              });
+              const googleProfile = await userRes.json();
+
+              const res = await fetch('/api/v1/auth/google', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  email: googleProfile.email,
+                  name: googleProfile.name || googleProfile.email.split('@')[0],
+                  id_token: accessToken
+                })
+              });
+              const data = await res.json();
+              if (!res.ok) throw new Error(data.detail || 'Google Auth endpoint error');
+              onAuthSuccess(data);
+              if (onClose) onClose();
+            }
+          }
+        }
+      } catch (e) {
+        // Cross-origin checks expected during Google account selection
+      }
+    }, 500);
   };
 
   return (
-    <div className="auth-modal-overlay" onClick={onClose}>
+    <div className="auth-modal-overlay" onClick={onClose} style={{ overflowY: 'auto', padding: '2rem 1rem' }}>
       <div className="auth-modal-box" onClick={(e) => e.stopPropagation()} style={{
         background: '#000000',
         border: '1px solid #1a1a1a',
         boxShadow: '0 24px 60px rgba(0, 0, 0, 0.95)',
         borderRadius: '24px',
-        padding: '2.5rem',
+        padding: '2.25rem',
         maxWidth: '460px',
         width: '100%',
+        maxHeight: '88vh',
+        overflowY: 'auto',
         color: '#ffffff'
       }}>
         
@@ -287,7 +291,7 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
             )}
           </div>
           <h2 className="heading-font" style={{ fontSize: '1.5rem', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.3px' }}>
-            {tab === 'verify' ? 'Verify Registered Email' : (tab === 'login' ? 'Sign In to NKAT AI' : 'Register New Account')}
+            {tab === 'verify' ? 'Verify Registered Email' : (tab === 'login' ? 'Sign In to Nqat AI' : 'Register New Account')}
           </h2>
           <div className="mono-text" style={{ fontSize: '0.74rem', color: '#94a3b8', marginTop: '4px', fontWeight: 700 }}>
             {tab === 'verify' ? ' Mandatory 6-Digit Email OTP Verification' : 'Enterprise Multi-Tenant Security Platform'}
@@ -414,38 +418,27 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
                 </div>
               </div>
 
-              {pendingAuthData?.verification_code ? (
-                <div style={{ background: '#0a0a0a', border: '1px solid #222222', borderRadius: '10px', padding: '12px 14px', marginBottom: '1.25rem', textAlign: 'center' }}>
-                  <span style={{ fontSize: '0.78rem', color: '#94a3b8', display: 'block', marginBottom: '4px' }}>
-                    Verification Link & Code Dispatched to <strong>{verifyIdentity || email}</strong>
-                  </span>
-                  <span style={{ fontSize: '0.85rem', color: '#ffffff', fontWeight: 800 }}>
-                    OTP Code: <span style={{ color: '#ffffff', fontSize: '1.1rem', letterSpacing: '3px', background: '#000000', padding: '2px 8px', borderRadius: '6px', border: '1px solid #333333' }}>{pendingAuthData.verification_code}</span>
-                  </span>
-                </div>
-              ) : (
-                <div style={{ background: '#0a0a0a', border: '1px solid #222222', borderRadius: '10px', padding: '12px 14px', marginBottom: '1.25rem', textAlign: 'center' }}>
-                  <span style={{ fontSize: '0.78rem', color: '#94a3b8', display: 'block', marginBottom: '8px' }}>
-                    Verification email sent to <strong>{verifyIdentity || email}</strong>
-                  </span>
-                  <button
-                    type="button"
-                    onClick={handleResendCode}
-                    style={{
-                      background: '#111111',
-                      border: '1px solid #333333',
-                      color: '#ffffff',
-                      borderRadius: '8px',
-                      padding: '6px 14px',
-                      fontSize: '0.78rem',
-                      fontWeight: 800,
-                      cursor: 'pointer'
-                    }}
-                  >
-                    Show My 6-Digit OTP Code
-                  </button>
-                </div>
-              )}
+              <div style={{ background: '#0a0a0a', border: '1px solid #222222', borderRadius: '10px', padding: '12px 14px', marginBottom: '1.25rem', textAlign: 'center' }}>
+                <span style={{ fontSize: '0.78rem', color: '#94a3b8', display: 'block', marginBottom: '8px' }}>
+                  A 6-digit OTP verification code was sent to <strong>{verifyIdentity || email}</strong>. Please check your email inbox and enter the code above.
+                </span>
+                <button
+                  type="button"
+                  onClick={handleResendCode}
+                  style={{
+                    background: '#111111',
+                    border: '1px solid #333333',
+                    color: '#ffffff',
+                    borderRadius: '8px',
+                    padding: '6px 14px',
+                    fontSize: '0.78rem',
+                    fontWeight: 800,
+                    cursor: 'pointer'
+                  }}
+                >
+                  Resend Verification Email
+                </button>
+              </div>
 
               <div style={{ marginBottom: '1.5rem' }}>
                 <label style={{ fontSize: '0.78rem', color: '#ffffff', fontWeight: 700, display: 'block', marginBottom: '6px', letterSpacing: '0.5px' }}>
@@ -721,20 +714,22 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
             </div>
 
             {/* Continue with Google */}
-            <button
-              onClick={handleGoogleAuth}
-              disabled={loading}
-              className="btn-aegis-secondary"
-              style={{ width: '100%', justifyContent: 'center', padding: '0.8rem' }}
-            >
-              <svg width="18" height="18" viewBox="0 0 24 24">
-                <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
-                <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.24v3.15C3.26 21.39 7.37 24 12 24z"/>
-                <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.24C.45 8.16 0 9.99 0 12s.45 3.84 1.24 5.42l4.04-3.15z"/>
-                <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.37 0 3.26 2.61 1.24 6.58l4.04 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
-              </svg>
-              Continue with Google
-            </button>
+            <div style={{ marginBottom: '1.25rem' }}>
+              <button
+                onClick={handleGoogleAuth}
+                disabled={loading}
+                className="btn-aegis-secondary"
+                style={{ width: '100%', justifyContent: 'center', padding: '0.8rem' }}
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24">
+                  <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
+                  <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.24v3.15C3.26 21.39 7.37 24 12 24z"/>
+                  <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.24C.45 8.16 0 9.99 0 12s.45 3.84 1.24 5.42l4.04-3.15z"/>
+                  <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.37 0 3.26 2.61 1.24 6.58l4.04 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
+                </svg>
+                Continue with Google
+              </button>
+            </div>
           </>
         )}
 

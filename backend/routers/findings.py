@@ -7,11 +7,11 @@ import re
 import json
 from datetime import datetime, timezone
 from typing import List, Optional
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy.orm import Session
 
 from backend.database import get_db
-from backend.models import Subdomain, Finding, FindingStatus, FeedbackLabel, AuditLog
+from backend.models import Subdomain, Finding, FindingStatus, FeedbackLabel, AuditLog, Scan
 from backend.schemas import FindingCreate, FindingResponse, FindingApprovalRequest, AuditLogResponse, FindingStatusUpdateRequest, ReverifyFindingResponse
 from backend.services.remediation_advisor import generate_recommendation
 from backend.services.deadline_calculator import calculate_review_deadline
@@ -107,6 +107,7 @@ def list_findings_for_subdomain(subdomain_id: int, db: Session = Depends(get_db)
 @router.get("/api/v1/findings", response_model=List[FindingResponse])
 @router.get("/api/findings", response_model=List[FindingResponse])
 def list_all_findings(
+    request: Request,
     priority_tier: Optional[str] = None,
     status: Optional[str] = None,
     is_sla_breached: Optional[bool] = None,
@@ -116,9 +117,28 @@ def list_all_findings(
 ):
     """
     Lists all findings across target inventory with optional filtering by Priority Tier (P1-P4), Status, or SLA breach status.
+    Scoped by organization_id for non-admin users.
     """
     from backend.services.prioritization import enrich_finding_prioritization
+
+    auth_header = request.headers.get("Authorization") if request else None
+    org_id = None
+    role = None
+    if auth_header and auth_header.startswith("Bearer "):
+        try:
+            from backend.auth import decode_access_token
+            token_str = auth_header.split(" ")[1]
+            payload = decode_access_token(token_str)
+            org_id = payload.get("organization_id")
+            role = payload.get("role")
+        except Exception:
+            pass
+
     query = db.query(Finding)
+    if role != "admin" and org_id is not None:
+        query = query.join(Subdomain, Finding.subdomain_id == Subdomain.id)\
+                     .join(Scan, Subdomain.scan_id == Scan.id)\
+                     .filter(Scan.organization_id == org_id)
 
     if priority_tier:
         query = query.filter(Finding.priority_tier == priority_tier.upper())

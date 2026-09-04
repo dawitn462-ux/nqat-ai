@@ -205,7 +205,7 @@ export default function AdminPanelModal({ isOpen, onClose }) {
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <ShieldAlert size={26} color="#ef4444" />
               <h2 style={{ fontSize: '1.75rem', fontWeight: 900, color: '#ffffff', margin: 0, letterSpacing: '-0.4px' }}>
-                NKAT Enterprise Admin Control Panel
+                Nqat Enterprise Admin Control Panel
               </h2>
             </div>
             <p style={{ color: '#94a3b8', fontSize: '0.9rem', margin: '4px 0 0 0' }}>

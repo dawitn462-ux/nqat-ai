@@ -138,12 +138,32 @@ def update_scan_status(scan_id: int, update: ScanStatusUpdate, db: Session = Dep
 
 
 @router.get("/scans/{scan_id}/report/pdf")
-def export_scan_pdf_report(scan_id: int, db: Session = Depends(get_db)):
+def export_scan_pdf_report(scan_id: int, request: Request, db: Session = Depends(get_db)):
     """
     Generates and returns an executive PDF security report for scan_id.
+    Enforces multi-tenant organization authorization.
     """
     from fastapi.responses import Response
     from backend.services.pdf_generator import generate_scan_pdf_report
+
+    db_scan = db.query(Scan).filter(Scan.id == scan_id).first()
+    if not db_scan:
+        raise HTTPException(status_code=404, detail=f"Scan with ID #{scan_id} not found")
+
+    auth_header = request.headers.get("Authorization") if request else None
+    if auth_header and auth_header.startswith("Bearer "):
+        try:
+            from backend.auth import decode_access_token
+            token_str = auth_header.split(" ")[1]
+            payload = decode_access_token(token_str)
+            org_id = payload.get("organization_id")
+            role = payload.get("role")
+            if role != "admin" and org_id is not None and db_scan.organization_id != org_id:
+                raise HTTPException(status_code=403, detail="Access denied: You do not have permission to download reports for this website scan.")
+        except HTTPException:
+            raise
+        except Exception:
+            pass
 
     try:
         pdf_bytes = generate_scan_pdf_report(db, scan_id)

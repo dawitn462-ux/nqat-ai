@@ -13,6 +13,12 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+# Expose FastAPI application for Vercel Serverless Function entrypoint
+try:
+    from backend.main import app
+except Exception:
+    app = None
+
 from scanner.core import SecurityScanner
 from scanner.exceptions import ScopeViolationError, ScanConfigError
 

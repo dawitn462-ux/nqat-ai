@@ -1,5 +1,5 @@
 """
-Automated Test Suite for Real Email Verification & Google Auth — NKAT AI
+Automated Test Suite for Real Email Verification & Google Auth — NQAT AI
 -------------------------------------------------------------------------
 Tests end-to-end user registration, unverified account access blocking (403),
 OTP code and direct link email verification, single-use token invalidation,

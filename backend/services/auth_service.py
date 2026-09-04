@@ -9,11 +9,13 @@ All user credentials, hashes, and organization records remain 100% on localhost.
 Zero data transmission to any external network or cloud endpoint.
 """
 
+import os
 import logging
 import secrets
 import random
 from datetime import datetime, timezone, timedelta
 import bcrypt
+import httpx
 from sqlalchemy.orm import Session
 
 
@@ -90,52 +92,77 @@ def seed_default_organization_and_user(db: Session) -> dict:
 
 def verify_google_id_token(id_token_str: str) -> dict:
     """
-    Validates a Google OAuth ID token server-side using Google's public tokeninfo endpoint / google-auth.
+    Validates a Google OAuth ID token or Access token server-side using Google's public endpoints.
     Extracts verified email, sub (Google provider ID), and name.
+    Supports both OpenID Connect ID Tokens (JWT) and OAuth2 Access Tokens.
     """
     if not id_token_str or not id_token_str.strip():
-        raise ValueError("Google ID Token is missing or empty.")
+        raise ValueError("Google Token is missing or empty.")
     
     clean_token = id_token_str.strip()
     google_client_id = os.getenv("GOOGLE_CLIENT_ID", "").strip()
 
-    # 1. Try google-auth library if available
-    try:
-        from google.oauth2 import id_token
-        from google.auth.transport import requests as google_requests
-        req = google_requests.Request()
-        payload = id_token.verify_oauth2_token(
-            clean_token,
-            req,
-            audience=google_client_id if google_client_id else None
-        )
-        if not payload.get("email_verified", False):
-            raise ValueError("Google account email is not verified by Google.")
-        return {
-            "email": payload.get("email", "").lower(),
-            "sub": payload.get("sub"),
-            "name": payload.get("name", payload.get("email", "").split("@")[0])
-        }
-    except ImportError:
-        pass
-    except Exception as g_err:
-        logger.info(f"[+] Falling back to httpx tokeninfo check: {g_err}")
+    # Check if token is an OAuth2 Access Token (e.g. starts with ya29. or is not a 3-part JWT)
+    is_access_token = clean_token.startswith("ya29.") or clean_token.count(".") != 2
+
+    if is_access_token:
+        try:
+            with httpx.Client(timeout=6.0) as client:
+                resp = client.get(
+                    "https://www.googleapis.com/oauth2/v3/userinfo",
+                    headers={"Authorization": f"Bearer {clean_token}"}
+                )
+                if resp.status_code == 200:
+                    payload = resp.json()
+                    email = payload.get("email", "").strip().lower()
+                    if email:
+                        return {
+                            "email": email,
+                            "sub": payload.get("sub"),
+                            "name": payload.get("name", email.split("@")[0])
+                        }
+        except Exception as exc:
+            logger.info(f"[+] Userinfo check failed for access token: {exc}")
+
+    # 1. Try google-auth library for JWT ID tokens if available
+    if not is_access_token:
+        try:
+            from google.oauth2 import id_token
+            from google.auth.transport import requests as google_requests
+            req = google_requests.Request()
+            payload = id_token.verify_oauth2_token(
+                clean_token,
+                req,
+                audience=google_client_id if google_client_id else None
+            )
+            if not payload.get("email_verified", False):
+                raise ValueError("Google account email is not verified by Google.")
+            return {
+                "email": payload.get("email", "").lower(),
+                "sub": payload.get("sub"),
+                "name": payload.get("name", payload.get("email", "").split("@")[0])
+            }
+        except ImportError:
+            pass
+        except Exception as g_err:
+            logger.info(f"[+] Falling back to httpx tokeninfo check: {g_err}")
 
     # 2. Fallback to HTTPS request to Google tokeninfo API endpoint
     try:
-        token_info_url = f"https://oauth2.googleapis.com/tokeninfo?id_token={clean_token}"
+        url_param = "access_token" if is_access_token else "id_token"
+        token_info_url = f"https://oauth2.googleapis.com/tokeninfo?{url_param}={clean_token}"
         with httpx.Client(timeout=6.0) as client:
             resp = client.get(token_info_url)
             if resp.status_code != 200:
-                raise ValueError(f"Google ID Token validation failed: HTTP {resp.status_code}")
+                raise ValueError(f"Google Token validation failed: HTTP {resp.status_code}")
             payload = resp.json()
             
-            if google_client_id and payload.get("aud") != google_client_id:
+            if google_client_id and payload.get("aud") != google_client_id and payload.get("azp") != google_client_id:
                 logger.warning(f"[!] Notice: Google Token audience mismatch (aud='{payload.get('aud')}')")
 
             email = payload.get("email", "").strip().lower()
             if not email:
-                raise ValueError("No email address returned in Google ID Token.")
+                raise ValueError("No email address returned in Google Token.")
             
             return {
                 "email": email,
@@ -143,7 +170,7 @@ def verify_google_id_token(id_token_str: str) -> dict:
                 "name": payload.get("name", email.split("@")[0])
             }
     except Exception as exc:
-        raise ValueError(f"Failed to verify Google ID token server-side: {exc}")
+        raise ValueError(f"Failed to verify Google token server-side: {exc}")
 
 
 def create_user_account(
@@ -171,7 +198,11 @@ def create_user_account(
     if existing_email:
         raise ValueError(f"Email '{clean_email}' is already registered.")
 
-    org_name = organization_name.strip() if organization_name and organization_name.strip() else "Default Organization"
+    if organization_name and organization_name.strip() and organization_name.strip() != "Default Organization":
+        org_name = organization_name.strip()
+    else:
+        org_name = f"{clean_username}'s Org"
+
     org = db.query(Organization).filter(Organization.name == org_name).first()
     if not org:
         org = Organization(name=org_name)

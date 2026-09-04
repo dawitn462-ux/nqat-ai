@@ -64,7 +64,7 @@ export default function Navbar({ user, onOpenAuth, onLogout }) {
         </div>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span className="brand-font" style={{ fontSize: '1.25rem', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.3px' }}>NKAT AI</span>
+            <span className="brand-font" style={{ fontFamily: "'Outfit', 'Syne', sans-serif", fontSize: '1.35rem', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.5px' }}>Nqat AI</span>
             <span className="aegis-badge-pill" style={{ padding: '2px 8px', fontSize: '0.65rem' }}>
               v2.0
             </span>
@@ -89,29 +89,6 @@ export default function Navbar({ user, onOpenAuth, onLogout }) {
           <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 8px #10b981' }}></span>
           <span>Engine Online</span>
         </div>
-
-        {/* Admin Console Button (Only for Admins) */}
-        {isAdmin && (
-          <button
-            onClick={() => setIsAdminOpen(true)}
-            style={{
-              background: 'rgba(239, 68, 68, 0.2)',
-              border: '2px solid #000000',
-              color: '#ffffff',
-              borderRadius: '9999px',
-              padding: '6px 14px',
-              fontSize: '0.8rem',
-              fontWeight: 800,
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              boxShadow: '0 0 14px rgba(0, 0, 0, 0.5)'
-            }}
-          >
-            <ShieldAlert size={15} /> Admin Console
-          </button>
-        )}
 
         {/* Notification Bell Button */}
         <button

@@ -142,8 +142,8 @@ export default function PublicLandingPage({ user, onAuthSuccess, onLogout }) {
             </svg>
           </div>
           <div>
-            <div className="brand-font" style={{ fontSize: '1.3rem', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.3px', lineHeight: 1.1 }}>
-              NKAT <span style={{ color: '#ffffff' }}>AI</span>
+            <div className="brand-font" style={{ fontFamily: "'Outfit', 'Syne', sans-serif", fontSize: '1.35rem', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.5px', lineHeight: 1.1 }}>
+              Nqat <span style={{ color: '#ffffff' }}>AI</span>
             </div>
             <div style={{ fontSize: '0.62rem', color: '#94a3b8', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase' }}>
               WEBSITE VULNERABILITY ASSISTANT
@@ -270,7 +270,7 @@ export default function PublicLandingPage({ user, onAuthSuccess, onLogout }) {
           letterSpacing: '-1.5px',
           marginTop: '1.25rem'
         }}>
-          NKAT AI <br />
+          Nqat AI <br />
           <span style={{
             background: 'linear-gradient(135deg, #ffffff 0%, #ef4444 100%)',
             WebkitBackgroundClip: 'text',
@@ -385,7 +385,7 @@ export default function PublicLandingPage({ user, onAuthSuccess, onLogout }) {
           
           <div className="aegis-section-header">
             <div className="aegis-badge-pill">
-              <span>ABOUT NKAT AI ASSISTANT</span>
+              <span>ABOUT Nqat AI ASSISTANT</span>
             </div>
             <h2 className="aegis-section-title">
               Engineered for Precision & Security Autonomy
@@ -400,7 +400,7 @@ export default function PublicLandingPage({ user, onAuthSuccess, onLogout }) {
             {/* Why Choose Column */}
             <div>
               <h3 className="heading-font" style={{ fontSize: '1.6rem', fontWeight: 800, color: '#ffffff', marginBottom: '1.5rem' }}>
-                Why Choose NKAT AI Website Vulnerability Assistant?
+                Why Choose Nqat AI Website Vulnerability Assistant?
               </h3>
               <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
                 <li style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
@@ -675,13 +675,13 @@ export default function PublicLandingPage({ user, onAuthSuccess, onLogout }) {
       }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <div className="brand-font" style={{ fontSize: '1.25rem', color: '#ffffff', fontWeight: 800, marginBottom: '6px' }}>
-            NKAT AI WEBSITE VULNERABILITY ASSISTANT
+            Nqat AI WEBSITE VULNERABILITY ASSISTANT
           </div>
           <div style={{ fontSize: '0.88rem', color: '#64748b', marginBottom: '1.5rem' }}>
             Local-First Autonomous Cybersecurity Operations • Strictly Scoped Security Testing
           </div>
           <div style={{ fontSize: '0.8rem', color: '#475569', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '1.5rem' }}>
-            2026 NKAT AI Platform. All rights reserved.
+            2026 Nqat AI Platform. All rights reserved.
           </div>
         </div>
       </footer>

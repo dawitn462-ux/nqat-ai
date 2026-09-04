@@ -53,6 +53,10 @@ export default function CrowdStrikeHomepage({ user, onOpenAuth }) {
           const scansList = await scansRes.json();
           if (scansList && scansList.length > 0) {
             targetId = scansList[0].id;
+          } else {
+            setScanData(null);
+            setActiveScanId(null);
+            return;
           }
         }
       }
@@ -68,7 +72,13 @@ export default function CrowdStrikeHomepage({ user, onOpenAuth }) {
           data.findings = allFindings;
           setScanData(data);
           setActiveScanId(targetId);
+        } else {
+          setScanData(null);
+          setActiveScanId(null);
         }
+      } else {
+        setScanData(null);
+        setActiveScanId(null);
       }
     } catch (err) {
       console.error('Failed to fetch scan data:', err);
@@ -205,7 +215,7 @@ export default function CrowdStrikeHomepage({ user, onOpenAuth }) {
             letterSpacing: '-0.8px',
             marginBottom: '1rem'
           }}>
-            NKAT AI <br />
+            Nqat AI <br />
             <span className="platform-title-gradient">WEBSITE VULNERABILITY ASSISTANT</span>
           </h1>
 
@@ -215,7 +225,7 @@ export default function CrowdStrikeHomepage({ user, onOpenAuth }) {
             lineHeight: 1.6,
             marginBottom: '2rem'
           }}>
-            Real-time vulnerability auditing, machine learning risk classification, CISA KEV exploitation feed correlation, and automated remediation guides in your unified NKAT AI Assistant Console.
+            Real-time vulnerability auditing, machine learning risk classification, CISA KEV exploitation feed correlation, and automated remediation guides in your unified Nqat AI Assistant Console.
           </p>
 
           {/* Target Scan Submission Input Form */}
