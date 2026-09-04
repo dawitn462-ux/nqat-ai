@@ -471,7 +471,7 @@ export default function AdminDashboardPage({ user, onLogout }) {
             Nqat AI Administrator Management Hub
           </h1>
           <p style={{ color: '#94a3b8', fontSize: '1rem', marginTop: '6px', marginBot: 0 }}>
-            Active Session: <strong style={{ color: '#ffffff' }}>{user ? user.username : 'admin'}</strong> ({user ? user.email : 'admin@nkat.ai'}) | Organization: <strong style={{ color: '#38bdf8' }}>{user ? user.organization_name : 'Default Organization'}</strong>
+            Active Session: <strong style={{ color: '#ffffff' }}>{user ? user.username : 'admin'}</strong> ({user ? user.email : 'admin@nkat.ai'}) | Organization: <strong style={{ color: '#ffffff' }}>{user ? user.organization_name : 'Default Organization'}</strong>
           </p>
         </div>
 
@@ -958,7 +958,7 @@ export default function AdminDashboardPage({ user, onLogout }) {
                   <div style={{ display: 'flex', gap: '8px' }}>
                     <button
                       onClick={() => handleEditPost(p)}
-                      style={{ background: 'rgba(56, 189, 248, 0.15)', border: '1px solid #38bdf8', color: '#38bdf8', borderRadius: '6px', padding: '4px 10px', fontSize: '0.78rem', cursor: 'pointer', fontWeight: 700 }}
+                      style={{ background: '#ffffff', border: '1.5px solid #ffffff', color: '#000000', borderRadius: '6px', padding: '4px 10px', fontSize: '0.78rem', cursor: 'pointer', fontWeight: 800 }}
                     >
                       Edit
                     </button>

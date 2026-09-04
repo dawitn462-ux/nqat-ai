@@ -329,9 +329,10 @@ def resend_email_verification(db: Session, identity: str) -> dict:
     user.email_verification_expires_at = expires_at
     db.commit()
 
+    email_res = {}
     try:
         from backend.services.email_service import send_verification_email
-        send_verification_email(
+        email_res = send_verification_email(
             recipient_email=user.email,
             username=user.username,
             verification_code=v_code,
@@ -340,13 +341,22 @@ def resend_email_verification(db: Session, identity: str) -> dict:
         )
     except Exception as email_err:
         logger.warning(f"[!] Email dispatch notice: {email_err}")
+        email_res = {"status": "logged", "error": str(email_err)}
+
+    status_sent = email_res.get("status") == "sent" if isinstance(email_res, dict) else False
+
+    if status_sent:
+        msg = f"Fresh 6-digit verification code sent to {user.email}."
+    else:
+        msg = f"Fresh 6-digit OTP verification code generated for {user.email}: {v_code}"
 
     return {
-        "message": f"Fresh 6-digit verification code & link sent to {user.email}.",
+        "message": msg,
         "email": user.email,
         "verification_code": v_code,
         "verification_token": v_token,
-        "is_verified": False
+        "is_verified": False,
+        "email_sent": status_sent
     }
 
 

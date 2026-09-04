@@ -3,10 +3,10 @@ import { Mail, Lock, User, Building, AlertCircle, ArrowRight, ShieldCheck, Refre
 
 export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
   const [tab, setTab] = useState('login'); // 'login' | 'register' | 'verify'
-  const [identity, setIdentity] = useState('analyst@nkat.ai'); // Username or Email for login
-  const [username, setUsername] = useState('analyst');
-  const [email, setEmail] = useState('analyst@nkat.ai');
-  const [password, setPassword] = useState('admin_secret_2026');
+  const [identity, setIdentity] = useState(''); // Username or Email for login
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [orgName, setOrgName] = useState('');
   
@@ -86,7 +86,11 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
         setPendingAuthData(data);
         setVerifyIdentity(data.email || email || username);
         setTab('verify');
-        setInfoMsg(` Real verification email dispatched to '${data.email || email}'! Enter your 6-digit OTP code below.`);
+        if (data.verification_code) {
+          setVerificationCode(data.verification_code);
+        }
+        const codeNotice = data.verification_code ? ` (OTP Code: ${data.verification_code})` : '';
+        setInfoMsg(` Verification code generated for '${data.email || email}'!${codeNotice}`);
       } else {
         onAuthSuccess(data);
         onClose();
@@ -118,6 +122,9 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
       }
 
       setPendingAuthData(data);
+      if (data.verification_code) {
+        setVerificationCode(data.verification_code);
+      }
       setInfoMsg(data.message || `Fresh 6-digit verification code generated for ${verifyIdentity || email}!`);
     } catch (err) {
       setError(err.message || 'Error resending verification code.');

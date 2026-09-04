@@ -4,9 +4,9 @@ export default function AuthLandingPage({ onAuthSuccess }) {
   const [tab, setTab] = useState('login'); // 'login' | 'register' | 'verify'
   const [regStep, setRegStep] = useState(1); // 1: Basic Info, 2: Password & Org
   
-  const [username, setUsername] = useState('admin');
-  const [email, setEmail] = useState('analyst@nkat.ai');
-  const [password, setPassword] = useState('admin_secret_2026');
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [orgName, setOrgName] = useState('');
   
   // Verification states
@@ -16,14 +16,6 @@ export default function AuthLandingPage({ onAuthSuccess }) {
 
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-
-  // Quick account choices for side-by-side chooser view
-  const googleAccounts = [
-    { name: 'Dawit Nigus', email: 'dawitn462@gmail.com', avatar: 'D', bg: '#3b82f6' },
-    { name: 'Dawit Nigus', email: 'dawitnigus156@gmail.com', avatar: 'D', bg: '#ef4444' },
-    { name: 'Zeki Teshome', email: 'zekiteshome03@gmail.com', avatar: 'Z', bg: '#06b6d4' },
-    { name: 'Alemu Abebe', email: 'devemymhret21@gmail.com', avatar: 'A', bg: '#0284c7' }
-  ];
 
   const handleSubmit = async (e) => {
     if (e) e.preventDefault();
@@ -86,7 +78,11 @@ export default function AuthLandingPage({ onAuthSuccess }) {
       if (tab === 'register' || (!data.is_email_verified && data.role !== 'admin' && data.requires_verification)) {
         setVerifyIdentity(data.email || email || username);
         setTab('verify');
-        setInfoMsg(`Real verification email dispatched to '${data.email || email}'! Enter your 6-digit OTP code below.`);
+        if (data.verification_code) {
+          setVerificationCode(data.verification_code);
+        }
+        const codeNotice = data.verification_code ? ` (OTP Code: ${data.verification_code})` : '';
+        setInfoMsg(`Verification code generated for '${data.email || email}'!${codeNotice}`);
       } else {
         onAuthSuccess(data);
       }
@@ -116,7 +112,10 @@ export default function AuthLandingPage({ onAuthSuccess }) {
         throw new Error(data.detail || 'Failed to resend email verification code.');
       }
 
-      setInfoMsg(data.message || `Fresh 6-digit verification code sent to ${verifyIdentity || email}! Please check your email inbox.`);
+      if (data.verification_code) {
+        setVerificationCode(data.verification_code);
+      }
+      setInfoMsg(data.message || `Fresh 6-digit verification code sent to ${verifyIdentity || email}!`);
     } catch (err) {
       setError(err.message || 'Error resending verification code.');
     } finally {
@@ -377,45 +376,8 @@ export default function AuthLandingPage({ onAuthSuccess }) {
               </h3>
             </div>
             <p style={{ fontSize: '0.82rem', color: '#64748b', margin: '0 0 1rem 0' }}>
-              Select a Google account logged in your browser to sign in or complete registration instantly:
+              Sign in with your Google account to access your security dashboard:
             </p>
-
-            {/* Quick Email Choice List */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '1.25rem' }}>
-              {googleAccounts.map((acc) => (
-                <div
-                  key={acc.email}
-                  className="google-acc-card"
-                  onClick={() => handleQuickAccountSelect(acc.email)}
-                >
-                  <div style={{
-                    width: '32px',
-                    height: '32px',
-                    borderRadius: '50%',
-                    background: acc.bg,
-                    color: '#ffffff',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontWeight: 800,
-                    fontSize: '0.85rem'
-                  }}>
-                    {acc.avatar}
-                  </div>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: '0.84rem', fontWeight: 700, color: '#0f172a', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                      {acc.name}
-                    </div>
-                    <div style={{ fontSize: '0.75rem', color: '#64748b', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                      {acc.email}
-                    </div>
-                  </div>
-                  <span style={{ fontSize: '0.7rem', background: '#e2e8f0', color: '#475569', padding: '2px 6px', borderRadius: '4px', fontWeight: 600 }}>
-                    Sign In
-                  </span>
-                </div>
-              ))}
-            </div>
 
             {/* Main Google Popup Button */}
             <button

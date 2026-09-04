@@ -136,9 +136,24 @@ app.add_middleware(
 )
 
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse, Response
+
 uploads_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "uploads")
 os.makedirs(uploads_dir, exist_ok=True)
 app.mount("/uploads", StaticFiles(directory=uploads_dir), name="uploads")
+
+@app.get("/favicon.ico", include_in_schema=False)
+@app.get("/favicon.png", include_in_schema=False)
+@app.get("/favicon.svg", include_in_schema=False)
+def get_favicon(request: Request):
+    filename = request.url.path.lstrip("/")
+    dist_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "frontend", "dist", filename)
+    public_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "frontend", "public", filename)
+    if os.path.exists(dist_file):
+        return FileResponse(dist_file)
+    elif os.path.exists(public_file):
+        return FileResponse(public_file)
+    return Response(status_code=404)
 
 # Register Centralized Error Handlers
 @app.exception_handler(HTTPException)
@@ -156,7 +171,7 @@ async def custom_http_exception_handler(request: Request, exc: HTTPException):
 @app.middleware("http")
 async def waf_traffic_middleware(request: Request, call_next):
     path_and_query = str(request.url)
-    if not (request.url.path.startswith("/uploads") or request.url.path.startswith("/assets") or request.url.path == "/favicon.ico"):
+    if not (request.url.path.startswith("/uploads") or request.url.path.startswith("/assets") or request.url.path.startswith("/favicon")):
         client_ip = request.client.host if request.client else "127.0.0.1"
         try:
             from backend.services.waf_service import analyze_request_payload, trigger_waf_blocked_attack_alerts

@@ -295,14 +295,14 @@ export default function CrowdStrikeHomepage({ user, onOpenAuth }) {
         background: 'linear-gradient(135deg, rgba(12, 12, 12, 0.95) 0%, rgba(20, 20, 20, 0.95) 100%)',
         padding: '1.75rem 2rem',
         borderRadius: '16px',
-        border: '1.5px solid rgba(56, 189, 248, 0.4)',
-        boxShadow: '0 12px 35px rgba(0, 0, 0, 0.5), 0 0 25px rgba(56, 189, 248, 0.15)',
+        border: '2px solid #000000',
+        boxShadow: '0 12px 35px rgba(0, 0, 0, 0.8)',
         marginBottom: '2rem'
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', marginBottom: '1.25rem', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '1rem' }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '4px' }}>
-              <span style={{ background: 'rgba(56, 189, 248, 0.2)', color: '#38bdf8', border: '1px solid #38bdf8', padding: '3px 10px', borderRadius: '10px', fontWeight: 800, fontSize: '0.72rem' }}>
+              <span style={{ background: '#000000', color: '#ffffff', border: '1.5px solid #ffffff', padding: '3px 10px', borderRadius: '10px', fontWeight: 800, fontSize: '0.72rem' }}>
                 ACTIVE WAF ENFORCEMENT
               </span>
               <span className="mono-text" style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
@@ -318,7 +318,7 @@ export default function CrowdStrikeHomepage({ user, onOpenAuth }) {
           </div>
 
           <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-            <span style={{ fontSize: '0.85rem', color: '#38bdf8', fontWeight: 800, background: 'rgba(56, 189, 248, 0.15)', padding: '8px 14px', borderRadius: '10px', border: '1px solid #38bdf8' }}>
+            <span style={{ fontSize: '0.85rem', color: '#ffffff', fontWeight: 800, background: '#000000', padding: '8px 14px', borderRadius: '10px', border: '1.5px solid #ffffff' }}>
               {userWafData?.blocked_attacks_count || 0} Attacks Blocked on Your Website
             </span>
           </div>
@@ -334,7 +334,7 @@ export default function CrowdStrikeHomepage({ user, onOpenAuth }) {
           ]).map(rule => (
             <div key={rule.id} style={{ background: '#000000', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '10px', padding: '10px 14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <span style={{ fontSize: '0.78rem', color: '#e2e8f0', fontWeight: 700 }}>{rule.name}</span>
-              <span style={{ fontSize: '0.68rem', background: 'rgba(56, 189, 248, 0.2)', color: '#38bdf8', padding: '2px 6px', borderRadius: '6px', fontWeight: 800 }}>{rule.status}</span>
+              <span style={{ fontSize: '0.68rem', background: '#000000', color: '#ffffff', border: '1px solid #ffffff', padding: '2px 6px', borderRadius: '6px', fontWeight: 800 }}>{rule.status}</span>
             </div>
           ))}
         </div>
@@ -530,7 +530,7 @@ export default function CrowdStrikeHomepage({ user, onOpenAuth }) {
         <div style={{ background: 'rgba(14, 14, 14, 0.95)', padding: '1.4rem 1.6rem', borderRadius: '14px', border: '1px solid rgba(255, 255, 255, 0.12)' }}>
           <div style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: 600, textTransform: 'uppercase' }}>Active User Session</div>
           <div style={{ fontSize: '1.2rem', fontWeight: 800, color: '#ffffff', marginTop: '8px' }}>{user ? user.username : 'Guest / Viewer'}</div>
-          <div style={{ fontSize: '0.78rem', color: '#38bdf8', marginTop: '4px' }}>{user ? user.organization_name : 'Single-Machine Local Mode'}</div>
+          <div style={{ fontSize: '0.78rem', color: '#ffffff', fontWeight: 600, marginTop: '4px' }}>{user ? user.organization_name : 'Single-Machine Local Mode'}</div>
         </div>
       </section>
 

@@ -58,8 +58,8 @@ export default function Navbar({ user, onOpenAuth, onLogout }) {
           flexShrink: 0
         }}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 3L22 20H2L12 3Z" fill="#FFFFFF" stroke="#FFFFFF" strokeWidth="1" strokeLinejoin="round"/>
-            <path d="M12 9.5L16.5 17.5H7.5L12 9.5Z" fill="#050609"/>
+            <path d="M12 4L20.5 19H3.5L12 4Z" fill="#FFFFFF" stroke="#FFFFFF" strokeWidth="0.5" strokeLinejoin="round"/>
+            <path d="M12 9.5L16.2 17H7.8L12 9.5Z" fill="#000000"/>
           </svg>
         </div>
         <div>

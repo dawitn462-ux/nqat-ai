@@ -120,8 +120,8 @@ export default function SecureWebTicker({ variant = 'hero' }) {
         <span className="secure-sub-tag" style={{
           fontSize: '0.72rem',
           fontWeight: 800,
-          color: '#ffffff',
-          background: '#ef4444',
+          color: '#000000',
+          background: '#ffffff',
           padding: '2px 8px',
           borderRadius: '10px',
           letterSpacing: '0.5px'
