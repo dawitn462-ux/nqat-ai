@@ -498,160 +498,242 @@ export default function AdminDashboardPage({ user, onLogout }) {
         </div>
       )}
 
-      {/* Navigation Tabs */}
-      <div style={{ display: 'flex', gap: '1rem', marginBottom: '2rem', flexWrap: 'wrap', borderBottom: '2px solid #000000', paddingBottom: '1rem' }}>
-        <button
-          onClick={() => setActiveTab('posts_manager')}
-          style={{
-            background: activeTab === 'posts_manager' ? 'rgba(239, 68, 68, 0.2)' : 'rgba(255,255,255,0.03)',
-            border: `2px solid ${activeTab === 'posts_manager' ? '#ef4444' : '#000000'}`,
-            color: activeTab === 'posts_manager' ? '#ef4444' : '#94a3b8',
-            borderRadius: '12px',
-            padding: '12px 22px',
-            fontWeight: 800,
-            fontSize: '0.95rem',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px'
-          }}
-        >
-          <FileText size={18} /> Cyber News & Threat Posts Manager ({postsList.length})
-        </button>
+      {/* Main Container: Left Sidebar + Right Active Tab Content */}
+      <div style={{ display: 'flex', gap: '2rem', alignItems: 'flex-start', flexWrap: 'wrap' }}>
+        {/* Left Sidebar Navigation */}
+        <aside style={{
+          width: '320px',
+          minWidth: '280px',
+          background: 'rgba(12, 12, 12, 0.95)',
+          border: '1.5px solid rgba(255, 255, 255, 0.15)',
+          borderRadius: '16px',
+          padding: '1.25rem',
+          boxShadow: '0 12px 30px rgba(0,0,0,0.6)',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '0.5rem',
+          position: 'sticky',
+          top: '1.5rem',
+          backdropFilter: 'blur(10px)'
+        }}>
+          <div style={{ padding: '4px 8px 12px 8px', borderBottom: '1px solid rgba(255,255,255,0.08)', marginBottom: '4px' }}>
+            <div style={{ fontSize: '0.72rem', fontWeight: 800, color: '#94a3b8', letterSpacing: '1px', textTransform: 'uppercase' }}>
+              ADMIN NAVIGATION MENU
+            </div>
+          </div>
 
-        <button
-          onClick={() => setActiveTab('users')}
-          style={{
-            background: activeTab === 'users' ? 'rgba(239, 68, 68, 0.2)' : 'rgba(255,255,255,0.03)',
-            border: `2px solid ${activeTab === 'users' ? '#ef4444' : '#000000'}`,
-            color: activeTab === 'users' ? '#ef4444' : '#94a3b8',
-            borderRadius: '12px',
-            padding: '12px 22px',
-            fontWeight: 800,
-            fontSize: '0.95rem',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px'
-          }}
-        >
-          <Users size={18} /> User Accounts & Roles ({usersList.length})
-        </button>
+          <button
+            onClick={() => setActiveTab('posts_manager')}
+            style={{
+              width: '100%',
+              textAlign: 'left',
+              background: activeTab === 'posts_manager' ? 'rgba(239, 68, 68, 0.2)' : 'transparent',
+              border: `1.5px solid ${activeTab === 'posts_manager' ? '#ef4444' : 'transparent'}`,
+              color: activeTab === 'posts_manager' ? '#ef4444' : '#94a3b8',
+              borderRadius: '10px',
+              padding: '12px 16px',
+              fontWeight: 800,
+              fontSize: '0.88rem',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justify: 'space-between',
+              transition: 'all 0.2s ease'
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <FileText size={18} />
+              <span>Cyber News & Threat Posts</span>
+            </div>
+            <span className="mono-text" style={{ fontSize: '0.75rem', background: activeTab === 'posts_manager' ? 'rgba(239,68,68,0.3)' : 'rgba(255,255,255,0.08)', padding: '2px 8px', borderRadius: '12px', color: activeTab === 'posts_manager' ? '#ef4444' : '#ffffff' }}>
+              {postsList.length}
+            </span>
+          </button>
 
-        <button
-          onClick={() => setActiveTab('overrides')}
-          style={{
-            background: activeTab === 'overrides' ? 'rgba(239, 68, 68, 0.2)' : 'rgba(255,255,255,0.03)',
-            border: `2px solid ${activeTab === 'overrides' ? '#ef4444' : '#000000'}`,
-            color: activeTab === 'overrides' ? '#ef4444' : '#94a3b8',
-            borderRadius: '12px',
-            padding: '12px 22px',
-            fontWeight: 800,
-            fontSize: '0.95rem',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px'
-          }}
-        >
-          <ShieldAlert size={18} /> Policy & Vulnerability Batch Controls
-        </button>
+          <button
+            onClick={() => setActiveTab('users')}
+            style={{
+              width: '100%',
+              textAlign: 'left',
+              background: activeTab === 'users' ? 'rgba(239, 68, 68, 0.2)' : 'transparent',
+              border: `1.5px solid ${activeTab === 'users' ? '#ef4444' : 'transparent'}`,
+              color: activeTab === 'users' ? '#ef4444' : '#94a3b8',
+              borderRadius: '10px',
+              padding: '12px 16px',
+              fontWeight: 800,
+              fontSize: '0.88rem',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justify: 'space-between',
+              transition: 'all 0.2s ease'
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <Users size={18} />
+              <span>User Accounts & Roles</span>
+            </div>
+            <span className="mono-text" style={{ fontSize: '0.75rem', background: activeTab === 'users' ? 'rgba(239,68,68,0.3)' : 'rgba(255,255,255,0.08)', padding: '2px 8px', borderRadius: '12px', color: activeTab === 'users' ? '#ef4444' : '#ffffff' }}>
+              {usersList.length}
+            </span>
+          </button>
 
-        <button
-          onClick={() => setActiveTab('threat_feeds')}
-          style={{
-            background: activeTab === 'threat_feeds' ? 'rgba(255, 255, 255, 0.18)' : 'rgba(255,255,255,0.03)',
-            border: `1.5px solid ${activeTab === 'threat_feeds' ? '#ffffff' : 'rgba(255,255,255,0.12)'}`,
-            color: activeTab === 'threat_feeds' ? '#ffffff' : '#94a3b8',
-            borderRadius: '12px',
-            padding: '12px 22px',
-            fontWeight: 800,
-            fontSize: '0.95rem',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px'
-          }}
-        >
-          <ShieldCheck size={18} /> Real-Time Threat Feeds (CISA, NIST, EPSS)
-        </button>
+          <button
+            onClick={() => setActiveTab('overrides')}
+            style={{
+              width: '100%',
+              textAlign: 'left',
+              background: activeTab === 'overrides' ? 'rgba(239, 68, 68, 0.2)' : 'transparent',
+              border: `1.5px solid ${activeTab === 'overrides' ? '#ef4444' : 'transparent'}`,
+              color: activeTab === 'overrides' ? '#ef4444' : '#94a3b8',
+              borderRadius: '10px',
+              padding: '12px 16px',
+              fontWeight: 800,
+              fontSize: '0.88rem',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px',
+              transition: 'all 0.2s ease'
+            }}
+          >
+            <ShieldAlert size={18} />
+            <span>Policy & Batch Controls</span>
+          </button>
 
-        <button
-          onClick={() => setActiveTab('waf_traffic')}
-          style={{
-            background: activeTab === 'waf_traffic' ? 'rgba(239, 68, 68, 0.18)' : 'rgba(255,255,255,0.03)',
-            border: `1.5px solid ${activeTab === 'waf_traffic' ? '#ef4444' : 'rgba(255,255,255,0.12)'}`,
-            color: activeTab === 'waf_traffic' ? '#ef4444' : '#94a3b8',
-            borderRadius: '12px',
-            padding: '12px 22px',
-            fontWeight: 800,
-            fontSize: '0.95rem',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px'
-          }}
-        >
-          <ShieldAlert size={18} /> WAF Live Traffic ({wafData ? wafData.total_requests : '0'})
-        </button>
+          <button
+            onClick={() => setActiveTab('threat_feeds')}
+            style={{
+              width: '100%',
+              textAlign: 'left',
+              background: activeTab === 'threat_feeds' ? 'rgba(56, 189, 248, 0.2)' : 'transparent',
+              border: `1.5px solid ${activeTab === 'threat_feeds' ? '#38bdf8' : 'transparent'}`,
+              color: activeTab === 'threat_feeds' ? '#38bdf8' : '#94a3b8',
+              borderRadius: '10px',
+              padding: '12px 16px',
+              fontWeight: 800,
+              fontSize: '0.88rem',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px',
+              transition: 'all 0.2s ease'
+            }}
+          >
+            <ShieldCheck size={18} />
+            <span>Real-Time Threat Feeds</span>
+          </button>
 
-        <button
-          onClick={() => setActiveTab('activity_logs')}
-          style={{
-            background: activeTab === 'activity_logs' ? 'rgba(239, 68, 68, 0.2)' : 'rgba(255,255,255,0.03)',
-            border: `2px solid ${activeTab === 'activity_logs' ? '#ef4444' : '#000000'}`,
-            color: activeTab === 'activity_logs' ? '#ef4444' : '#94a3b8',
-            borderRadius: '12px',
-            padding: '12px 22px',
-            fontWeight: 800,
-            fontSize: '0.95rem',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px'
-          }}
-        >
-          <FileText size={18} /> Unified Activity & Audit Logs ({activityReport ? activityReport.total_records : '0'})
-        </button>
+          <button
+            onClick={() => setActiveTab('waf_traffic')}
+            style={{
+              width: '100%',
+              textAlign: 'left',
+              background: activeTab === 'waf_traffic' ? 'rgba(239, 68, 68, 0.2)' : 'transparent',
+              border: `1.5px solid ${activeTab === 'waf_traffic' ? '#ef4444' : 'transparent'}`,
+              color: activeTab === 'waf_traffic' ? '#ef4444' : '#94a3b8',
+              borderRadius: '10px',
+              padding: '12px 16px',
+              fontWeight: 800,
+              fontSize: '0.88rem',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justify: 'space-between',
+              transition: 'all 0.2s ease'
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <ShieldAlert size={18} />
+              <span>WAF Live Traffic</span>
+            </div>
+            <span className="mono-text" style={{ fontSize: '0.75rem', background: activeTab === 'waf_traffic' ? 'rgba(239,68,68,0.3)' : 'rgba(255,255,255,0.08)', padding: '2px 8px', borderRadius: '12px', color: activeTab === 'waf_traffic' ? '#ef4444' : '#ffffff' }}>
+              {wafData ? wafData.total_requests : '0'}
+            </span>
+          </button>
 
-        <button
-          onClick={() => setActiveTab('updates_report')}
-          style={{
-            background: activeTab === 'updates_report' ? 'rgba(56, 189, 248, 0.18)' : 'rgba(255,255,255,0.03)',
-            border: `2px solid ${activeTab === 'updates_report' ? '#38bdf8' : '#000000'}`,
-            color: activeTab === 'updates_report' ? '#38bdf8' : '#94a3b8',
-            borderRadius: '12px',
-            padding: '12px 22px',
-            fontWeight: 800,
-            fontSize: '0.95rem',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px'
-          }}
-        >
-          <RefreshCw size={18} /> Real System Updates Report ({updatesReport?.updates?.length || '0'})
-        </button>
+          <button
+            onClick={() => setActiveTab('activity_logs')}
+            style={{
+              width: '100%',
+              textAlign: 'left',
+              background: activeTab === 'activity_logs' ? 'rgba(239, 68, 68, 0.2)' : 'transparent',
+              border: `1.5px solid ${activeTab === 'activity_logs' ? '#ef4444' : 'transparent'}`,
+              color: activeTab === 'activity_logs' ? '#ef4444' : '#94a3b8',
+              borderRadius: '10px',
+              padding: '12px 16px',
+              fontWeight: 800,
+              fontSize: '0.88rem',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justify: 'space-between',
+              transition: 'all 0.2s ease'
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <FileText size={18} />
+              <span>Activity & Audit Logs</span>
+            </div>
+            <span className="mono-text" style={{ fontSize: '0.75rem', background: activeTab === 'activity_logs' ? 'rgba(239,68,68,0.3)' : 'rgba(255,255,255,0.08)', padding: '2px 8px', borderRadius: '12px', color: activeTab === 'activity_logs' ? '#ef4444' : '#ffffff' }}>
+              {activityReport ? activityReport.total_records : '0'}
+            </span>
+          </button>
 
-        <button
-          onClick={() => setActiveTab('db_telemetry')}
-          style={{
-            background: activeTab === 'db_telemetry' ? 'rgba(239, 68, 68, 0.2)' : 'rgba(255,255,255,0.03)',
-            border: `2px solid ${activeTab === 'db_telemetry' ? '#ef4444' : '#000000'}`,
-            color: activeTab === 'db_telemetry' ? '#ef4444' : '#94a3b8',
-            borderRadius: '12px',
-            padding: '12px 22px',
-            fontWeight: 800,
-            fontSize: '0.95rem',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px'
-          }}
-        >
-          <Database size={18} /> Database Telemetry & Storage
-        </button>
-      </div>
+          <button
+            onClick={() => setActiveTab('updates_report')}
+            style={{
+              width: '100%',
+              textAlign: 'left',
+              background: activeTab === 'updates_report' ? 'rgba(56, 189, 248, 0.2)' : 'transparent',
+              border: `1.5px solid ${activeTab === 'updates_report' ? '#38bdf8' : 'transparent'}`,
+              color: activeTab === 'updates_report' ? '#38bdf8' : '#94a3b8',
+              borderRadius: '10px',
+              padding: '12px 16px',
+              fontWeight: 800,
+              fontSize: '0.88rem',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justify: 'space-between',
+              transition: 'all 0.2s ease'
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <RefreshCw size={18} />
+              <span>Real System Updates</span>
+            </div>
+            <span className="mono-text" style={{ fontSize: '0.75rem', background: activeTab === 'updates_report' ? 'rgba(56,189,248,0.3)' : 'rgba(255,255,255,0.08)', padding: '2px 8px', borderRadius: '12px', color: activeTab === 'updates_report' ? '#38bdf8' : '#ffffff' }}>
+              {updatesReport?.updates?.length || '0'}
+            </span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('db_telemetry')}
+            style={{
+              width: '100%',
+              textAlign: 'left',
+              background: activeTab === 'db_telemetry' ? 'rgba(239, 68, 68, 0.2)' : 'transparent',
+              border: `1.5px solid ${activeTab === 'db_telemetry' ? '#ef4444' : 'transparent'}`,
+              color: activeTab === 'db_telemetry' ? '#ef4444' : '#94a3b8',
+              borderRadius: '10px',
+              padding: '12px 16px',
+              fontWeight: 800,
+              fontSize: '0.88rem',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px',
+              transition: 'all 0.2s ease'
+            }}
+          >
+            <Database size={18} />
+            <span>Database Telemetry</span>
+          </button>
+        </aside>
+
+        {/* Right Main Content Area */}
+        <main style={{ flex: 1, minWidth: 0 }}>
 
       {/* TAB 1: Cyber News & Threat Posts Manager */}
       {activeTab === 'posts_manager' && (
@@ -1689,6 +1771,8 @@ export default function AdminDashboardPage({ user, onLogout }) {
           </div>
         </div>
       )}
+        </main>
+      </div>
     </div>
   );
 }

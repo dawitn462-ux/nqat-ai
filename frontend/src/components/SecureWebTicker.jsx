@@ -92,15 +92,42 @@ export default function SecureWebTicker({ variant = 'hero' }) {
   }
 
   return (
-    <div className="secure-web-hero-badge">
-      <div className="secure-web-pulse-ring" />
-      <div className="secure-web-badge-inner">
-        <Shield size={16} style={{ color: '#38bdf8' }} />
-        <span className="secure-web-typewriter">
+    <div className="secure-web-hero-badge" style={{
+      display: 'inline-flex',
+      alignItems: 'center',
+      gap: '10px',
+      background: 'rgba(239, 68, 68, 0.12)',
+      border: '1.5px solid #ef4444',
+      padding: '8px 20px',
+      borderRadius: '9999px',
+      backdropFilter: 'blur(12px)',
+      boxShadow: '0 0 20px rgba(239, 68, 68, 0.3)'
+    }}>
+      <div className="secure-web-pulse-ring" style={{ borderColor: '#ef4444' }} />
+      <div className="secure-web-badge-inner" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+        <Shield size={18} style={{ color: '#ef4444', flexShrink: 0 }} />
+        <span className="secure-web-typewriter" style={{
+          color: '#ef4444',
+          fontWeight: 900,
+          fontSize: '1rem',
+          letterSpacing: '0.8px',
+          fontFamily: 'var(--font-mono)',
+          textShadow: '0 0 12px rgba(239, 68, 68, 0.5)'
+        }}>
           {displayText}
-          <span className="typewriter-cursor">|</span>
+          <span className="typewriter-cursor" style={{ color: '#ef4444', fontWeight: 900 }}>|</span>
         </span>
-        <span className="secure-sub-tag">NEXT-GEN CYBER DEFENSE</span>
+        <span className="secure-sub-tag" style={{
+          fontSize: '0.72rem',
+          fontWeight: 800,
+          color: '#ffffff',
+          background: '#ef4444',
+          padding: '2px 8px',
+          borderRadius: '10px',
+          letterSpacing: '0.5px'
+        }}>
+          NEXT-GEN CYBER DEFENSE
+        </span>
       </div>
     </div>
   );

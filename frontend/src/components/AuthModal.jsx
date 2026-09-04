@@ -309,7 +309,7 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
             border: '1px solid #1a1a1a'
           }}>
             <button
-              onClick={() => { setTab('login'); setError(''); setInfoMsg(''); }}
+              onClick={() => { setTab('login'); setError(''); setInfoMsg(''); setLoading(false); }}
               style={{
                 flex: 1,
                 padding: '9px',
@@ -331,6 +331,7 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
                 setTab('register');
                 setError('');
                 setInfoMsg('');
+                setLoading(false);
                 if (username === 'analyst' || username === 'admin') setUsername('');
                 if (email === 'analyst@nkat.ai') setEmail('');
                 if (password === 'admin_secret_2026') setPassword('');
@@ -690,7 +691,7 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
                 className="btn-aegis-primary"
                 style={{ width: '100%', justifyContent: 'center', padding: '0.85rem' }}
               >
-                {loading ? 'Authenticating...' : (tab === 'login' ? 'Sign In & Continue' : 'Register Account & Send Email OTP')} <ArrowRight size={16} />
+                {loading ? (tab === 'register' ? 'Registering Account & Sending OTP...' : 'Authenticating...') : (tab === 'login' ? 'Sign In & Continue' : 'Register Account & Send Email OTP')} <ArrowRight size={16} />
               </button>
             </>
           )}
