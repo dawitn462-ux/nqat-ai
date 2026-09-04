@@ -293,7 +293,7 @@ export default function AdminPanelModal({ isOpen, onClose }) {
           </div>
         )}
         {successMsg && (
-          <div style={{ background: 'rgba(16, 185, 129, 0.15)', border: '1px solid #10b981', color: '#6ee7b7', padding: '12px 16px', borderRadius: '8px', marginBottom: '1.25rem', fontSize: '0.9rem' }}>
+          <div style={{ background: 'rgba(56, 189, 248, 0.15)', border: '1px solid #38bdf8', color: '#38bdf8', padding: '12px 16px', borderRadius: '8px', marginBottom: '1.25rem', fontSize: '0.9rem' }}>
             {successMsg}
           </div>
         )}
@@ -323,7 +323,7 @@ export default function AdminPanelModal({ isOpen, onClose }) {
 
                 <div style={{ background: '#000000', padding: '12px 16px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.08)' }}>
                   <div style={{ color: '#94a3b8', fontSize: '0.78rem', fontWeight: 700 }}>CURRENT DB DISK SIZE</div>
-                  <div className="mono-text" style={{ color: '#34d399', marginTop: '4px', fontWeight: 800, fontSize: '1.1rem' }}>
+                  <div className="mono-text" style={{ color: '#38bdf8', marginTop: '4px', fontWeight: 800, fontSize: '1.1rem' }}>
                     {stats ? `${stats.database_size_mb} MB (${stats.database_size_bytes.toLocaleString()} bytes)` : '0.52 MB'}
                   </div>
                 </div>
@@ -353,7 +353,7 @@ export default function AdminPanelModal({ isOpen, onClose }) {
 
               <div style={{ background: 'rgba(255,255,255,0.03)', border: '2px solid #000000', padding: '1.2rem', borderRadius: '12px' }}>
                 <div style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: 700 }}>APPROVED FINDINGS</div>
-                <div style={{ fontSize: '2rem', fontWeight: 800, color: '#10b981', marginTop: '4px' }}>{stats ? stats.total_approved_findings : 0}</div>
+                <div style={{ fontSize: '2rem', fontWeight: 800, color: '#38bdf8', marginTop: '4px' }}>{stats ? stats.total_approved_findings : 0}</div>
               </div>
 
               <div style={{ background: 'rgba(255,255,255,0.03)', border: '2px solid #000000', padding: '1.2rem', borderRadius: '12px' }}>
@@ -446,15 +446,15 @@ export default function AdminPanelModal({ isOpen, onClose }) {
             </h3>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.25rem' }}>
-              <div style={{ background: '#000000', border: '1px solid rgba(16, 185, 129, 0.4)', borderRadius: '12px', padding: '1.25rem' }}>
-                <h4 style={{ color: '#34d399', margin: '0 0 8px 0', fontSize: '1rem', fontWeight: 800 }}> Bulk Approve All Findings</h4>
+              <div style={{ background: '#000000', border: '1px solid rgba(56, 189, 248, 0.4)', borderRadius: '12px', padding: '1.25rem' }}>
+                <h4 style={{ color: '#38bdf8', margin: '0 0 8px 0', fontSize: '1rem', fontWeight: 800 }}> Bulk Approve All Findings</h4>
                 <p style={{ fontSize: '0.82rem', color: '#94a3b8', lineHeight: 1.5 }}>
                   Instantly approve all currently open vulnerability findings across all targets with admin override logging.
                 </p>
                 <button
                   onClick={handleBulkApprove}
                   disabled={loading}
-                  style={{ background: '#10b981', color: '#ffffff', border: 'none', borderRadius: '8px', padding: '8px 16px', fontWeight: 800, fontSize: '0.85rem', cursor: 'pointer', marginTop: '10px' }}
+                  style={{ background: '#38bdf8', color: '#000000', border: 'none', borderRadius: '8px', padding: '8px 16px', fontWeight: 800, fontSize: '0.85rem', cursor: 'pointer', marginTop: '10px' }}
                 >
                   Approve All Findings
                 </button>

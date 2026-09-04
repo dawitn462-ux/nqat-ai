@@ -471,7 +471,7 @@ export default function AdminDashboardPage({ user, onLogout }) {
             Nqat AI Administrator Management Hub
           </h1>
           <p style={{ color: '#94a3b8', fontSize: '1rem', marginTop: '6px', marginBot: 0 }}>
-            Active Session: <strong style={{ color: '#ffffff' }}>{user ? user.username : 'admin'}</strong> ({user ? user.email : 'admin@nkat.ai'}) | Organization: <strong style={{ color: '#10b981' }}>{user ? user.organization_name : 'Default Organization'}</strong>
+            Active Session: <strong style={{ color: '#ffffff' }}>{user ? user.username : 'admin'}</strong> ({user ? user.email : 'admin@nkat.ai'}) | Organization: <strong style={{ color: '#38bdf8' }}>{user ? user.organization_name : 'Default Organization'}</strong>
           </p>
         </div>
 
@@ -488,7 +488,7 @@ export default function AdminDashboardPage({ user, onLogout }) {
 
       {/* Status & Error Alerts */}
       {statusMsg && (
-        <div style={{ background: 'rgba(16, 185, 129, 0.15)', border: '2px solid #000000', color: '#10b981', padding: '14px 20px', borderRadius: '12px', marginBottom: '2rem', fontSize: '0.92rem', fontWeight: 600 }}>
+        <div style={{ background: 'rgba(56, 189, 248, 0.15)', border: '2px solid #000000', color: '#38bdf8', padding: '14px 20px', borderRadius: '12px', marginBottom: '2rem', fontSize: '0.92rem', fontWeight: 600 }}>
           {statusMsg}
         </div>
       )}
@@ -617,9 +617,9 @@ export default function AdminDashboardPage({ user, onLogout }) {
         <button
           onClick={() => setActiveTab('updates_report')}
           style={{
-            background: activeTab === 'updates_report' ? 'rgba(16, 185, 129, 0.18)' : 'rgba(255,255,255,0.03)',
-            border: `2px solid ${activeTab === 'updates_report' ? '#10b981' : '#000000'}`,
-            color: activeTab === 'updates_report' ? '#10b981' : '#94a3b8',
+            background: activeTab === 'updates_report' ? 'rgba(56, 189, 248, 0.18)' : 'rgba(255,255,255,0.03)',
+            border: `2px solid ${activeTab === 'updates_report' ? '#38bdf8' : '#000000'}`,
+            color: activeTab === 'updates_report' ? '#38bdf8' : '#94a3b8',
             borderRadius: '12px',
             padding: '12px 22px',
             fontWeight: 800,
@@ -687,7 +687,7 @@ export default function AdminDashboardPage({ user, onLogout }) {
                       if (tag === 'ZERO-DAY ALERT') color = '#ef4444';
                       if (tag === 'ML TRIAGE ENGINE') color = '#ef4444';
                       if (tag === 'TARGET VERIFICATION') color = '#ffffff';
-                      if (tag === 'EXECUTIVE REPORTING') color = '#10b981';
+                      if (tag === 'EXECUTIVE REPORTING') color = '#38bdf8';
                       setPostForm({ ...postForm, tag, tag_color: color });
                     }}
                     style={{ width: '100%', padding: '12px 14px', borderRadius: '8px', background: '#000000', border: '2px solid #000000', color: '#ffffff', outline: 'none' }}
@@ -695,7 +695,7 @@ export default function AdminDashboardPage({ user, onLogout }) {
                     <option value="ZERO-DAY ALERT">ZERO-DAY ALERT (Red)</option>
                     <option value="TARGET VERIFICATION">TARGET VERIFICATION (White)</option>
                     <option value="ML TRIAGE ENGINE">ML TRIAGE ENGINE (Red)</option>
-                    <option value="EXECUTIVE REPORTING">EXECUTIVE REPORTING (Green)</option>
+                    <option value="EXECUTIVE REPORTING">EXECUTIVE REPORTING (Blue)</option>
                     <option value="PLATFORM ANNOUNCEMENT">PLATFORM ANNOUNCEMENT (Slate)</option>
                   </select>
                 </div>
@@ -746,7 +746,7 @@ export default function AdminDashboardPage({ user, onLogout }) {
                 {postForm.image_url && (
                   <div style={{ marginTop: '10px', display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <img src={postForm.image_url} alt="Preview" style={{ width: '80px', height: '50px', objectFit: 'cover', borderRadius: '6px', border: '2px solid #000000' }} />
-                    <span style={{ fontSize: '0.78rem', color: '#10b981' }}> Photo attached</span>
+                    <span style={{ fontSize: '0.78rem', color: '#38bdf8' }}> Photo attached</span>
                   </div>
                 )}
               </div>
@@ -772,7 +772,7 @@ export default function AdminDashboardPage({ user, onLogout }) {
                 {postForm.video_url && (
                   <div style={{ marginTop: '10px' }}>
                     <video src={postForm.video_url} controls style={{ width: '100%', maxHeight: '160px', borderRadius: '6px', border: '2px solid #000000' }} />
-                    <span style={{ fontSize: '0.78rem', color: '#10b981', display: 'block', marginTop: '4px' }}> Video attached</span>
+                    <span style={{ fontSize: '0.78rem', color: '#38bdf8', display: 'block', marginTop: '4px' }}> Video attached</span>
                   </div>
                 )}
               </div>
@@ -976,15 +976,15 @@ export default function AdminDashboardPage({ user, onLogout }) {
           </h3>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
-            <div style={{ background: '#04060a', border: '1px solid rgba(16, 185, 129, 0.4)', borderRadius: '12px', padding: '1.5rem' }}>
-              <h4 style={{ color: '#34d399', margin: '0 0 8px 0', fontSize: '1.05rem', fontWeight: 800 }}> Bulk Approve All Findings</h4>
+            <div style={{ background: '#04060a', border: '1px solid rgba(56, 189, 248, 0.4)', borderRadius: '12px', padding: '1.5rem' }}>
+              <h4 style={{ color: '#38bdf8', margin: '0 0 8px 0', fontSize: '1.05rem', fontWeight: 800 }}> Bulk Approve All Findings</h4>
               <p style={{ fontSize: '0.85rem', color: '#94a3b8', lineHeight: 1.5 }}>
                 Instantly approve all currently open vulnerability findings across all targets with admin override logging.
               </p>
               <button
                 onClick={handleBulkApprove}
                 disabled={loading}
-                style={{ background: '#10b981', color: '#ffffff', border: 'none', borderRadius: '8px', padding: '10px 18px', fontWeight: 800, fontSize: '0.88rem', cursor: 'pointer', marginTop: '12px' }}
+                style={{ background: '#38bdf8', color: '#000000', border: 'none', borderRadius: '8px', padding: '10px 18px', fontWeight: 800, fontSize: '0.88rem', cursor: 'pointer', marginTop: '12px' }}
               >
                 Approve All Open Findings
               </button>
@@ -1063,7 +1063,7 @@ export default function AdminDashboardPage({ user, onLogout }) {
             <div style={{ background: '#04060a', border: '1px solid rgba(239, 68, 68, 0.4)', borderRadius: '12px', padding: '1.4rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                 <span style={{ fontSize: '0.8rem', color: '#fca5a5', fontWeight: 800 }}>CISA KEV CATALOG</span>
-                <span style={{ fontSize: '0.72rem', background: 'rgba(16, 185, 129, 0.2)', color: '#34d399', padding: '2px 8px', borderRadius: '10px', border: '1px solid #10b981', fontWeight: 800 }}>LIVE CONNECTED</span>
+                <span style={{ fontSize: '0.72rem', background: 'rgba(56, 189, 248, 0.2)', color: '#38bdf8', padding: '2px 8px', borderRadius: '10px', border: '1px solid #38bdf8', fontWeight: 800 }}>LIVE CONNECTED</span>
               </div>
               <div style={{ fontSize: '1.8rem', fontWeight: 900, color: '#ffffff' }}>
                 {feedStatus ? `${feedStatus.cisa_kev.count} CVEs` : '1,142 CVEs'}
@@ -1076,7 +1076,7 @@ export default function AdminDashboardPage({ user, onLogout }) {
             <div style={{ background: '#04060a', border: '1px solid rgba(56, 189, 248, 0.4)', borderRadius: '12px', padding: '1.4rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                 <span style={{ fontSize: '0.8rem', color: '#38bdf8', fontWeight: 800 }}>NIST NVD API v2</span>
-                <span style={{ fontSize: '0.72rem', background: 'rgba(16, 185, 129, 0.2)', color: '#34d399', padding: '2px 8px', borderRadius: '10px', border: '1px solid #10b981', fontWeight: 800 }}>LIVE CONNECTED</span>
+                <span style={{ fontSize: '0.72rem', background: 'rgba(56, 189, 248, 0.2)', color: '#38bdf8', padding: '2px 8px', borderRadius: '10px', border: '1px solid #38bdf8', fontWeight: 800 }}>LIVE CONNECTED</span>
               </div>
               <div style={{ fontSize: '1.8rem', fontWeight: 900, color: '#ffffff' }}>
                 {feedStatus ? `${feedStatus.nist_nvd.count} Records` : '50 Recent CVEs'}
@@ -1089,7 +1089,7 @@ export default function AdminDashboardPage({ user, onLogout }) {
             <div style={{ background: '#04060a', border: '2px solid #000000', borderRadius: '12px', padding: '1.4rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                 <span style={{ fontSize: '0.8rem', color: '#ffffff', fontWeight: 800 }}>FIRST EPSS SCORES</span>
-                <span style={{ fontSize: '0.72rem', background: 'rgba(16, 185, 129, 0.2)', color: '#10b981', padding: '2px 8px', borderRadius: '10px', border: '1px solid #10b981', fontWeight: 800 }}>LIVE CONNECTED</span>
+                <span style={{ fontSize: '0.72rem', background: 'rgba(56, 189, 248, 0.2)', color: '#38bdf8', padding: '2px 8px', borderRadius: '10px', border: '1px solid #38bdf8', fontWeight: 800 }}>LIVE CONNECTED</span>
               </div>
               <div style={{ fontSize: '1.8rem', fontWeight: 900, color: '#ffffff' }}>
                 {feedStatus ? `${feedStatus.epss.count} Scores` : '100 Active Scores'}
@@ -1102,7 +1102,7 @@ export default function AdminDashboardPage({ user, onLogout }) {
             <div style={{ background: '#04060a', border: '1px solid rgba(251, 191, 36, 0.4)', borderRadius: '12px', padding: '1.4rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                 <span style={{ fontSize: '0.8rem', color: '#fbbf24', fontWeight: 800 }}>GITHUB SECURITY ADVISORIES</span>
-                <span style={{ fontSize: '0.72rem', background: 'rgba(16, 185, 129, 0.2)', color: '#34d399', padding: '2px 8px', borderRadius: '10px', border: '1px solid #10b981', fontWeight: 800 }}>GRAPHQL LIVE</span>
+                <span style={{ fontSize: '0.72rem', background: 'rgba(56, 189, 248, 0.2)', color: '#38bdf8', padding: '2px 8px', borderRadius: '10px', border: '1px solid #38bdf8', fontWeight: 800 }}>GRAPHQL LIVE</span>
               </div>
               <div style={{ fontSize: '1.8rem', fontWeight: 900, color: '#ffffff' }}>
                 {feedStatus?.github_advisories ? `${feedStatus.github_advisories.count} GHSA Advisories` : '100 GHSA Advisories'}
@@ -1115,7 +1115,7 @@ export default function AdminDashboardPage({ user, onLogout }) {
             <div style={{ background: '#04060a', border: '1px solid rgba(239, 68, 68, 0.4)', borderRadius: '12px', padding: '1.4rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                 <span style={{ fontSize: '0.8rem', color: '#f87171', fontWeight: 800 }}>URLHAUS MALWARE FEED</span>
-                <span style={{ fontSize: '0.72rem', background: 'rgba(16, 185, 129, 0.2)', color: '#34d399', padding: '2px 8px', borderRadius: '10px', border: '1px solid #10b981', fontWeight: 800 }}>LIVE CONNECTED</span>
+                <span style={{ fontSize: '0.72rem', background: 'rgba(56, 189, 248, 0.2)', color: '#38bdf8', padding: '2px 8px', borderRadius: '10px', border: '1px solid #38bdf8', fontWeight: 800 }}>LIVE CONNECTED</span>
               </div>
               <div style={{ fontSize: '1.8rem', fontWeight: 900, color: '#ffffff' }}>
                 {feedStatus?.urlhaus ? `${feedStatus.urlhaus.count} Malicious URLs` : '15,926 Malicious URLs'}
@@ -1128,7 +1128,7 @@ export default function AdminDashboardPage({ user, onLogout }) {
             <div style={{ background: '#04060a', border: '1px solid rgba(14, 165, 233, 0.4)', borderRadius: '12px', padding: '1.4rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                 <span style={{ fontSize: '0.8rem', color: '#38bdf8', fontWeight: 800 }}>THREATFOX IOC INDICATORS</span>
-                <span style={{ fontSize: '0.72rem', background: 'rgba(16, 185, 129, 0.2)', color: '#34d399', padding: '2px 8px', borderRadius: '10px', border: '1px solid #10b981', fontWeight: 800 }}>LIVE CONNECTED</span>
+                <span style={{ fontSize: '0.72rem', background: 'rgba(56, 189, 248, 0.2)', color: '#38bdf8', padding: '2px 8px', borderRadius: '10px', border: '1px solid #38bdf8', fontWeight: 800 }}>LIVE CONNECTED</span>
               </div>
               <div style={{ fontSize: '1.8rem', fontWeight: 900, color: '#ffffff' }}>
                 {feedStatus?.threatfox ? `${feedStatus.threatfox.count} IOC Indicators` : '5,674 IOC Indicators'}
@@ -1161,9 +1161,9 @@ export default function AdminDashboardPage({ user, onLogout }) {
                     <td style={{ padding: '12px 16px', fontWeight: 800, color: '#ffffff' }}>{s.name}</td>
                     <td className="mono-text" style={{ padding: '12px 16px', color: '#38bdf8', fontSize: '0.8rem' }}>{s.url}</td>
                     <td style={{ padding: '12px 16px', color: '#cbd5e1' }}>15 Minutes Daemon</td>
-                    <td style={{ padding: '12px 16px', color: '#34d399' }}>Free Public API (No Key Required)</td>
+                    <td style={{ padding: '12px 16px', color: '#38bdf8' }}>Free Public API (No Key Required)</td>
                     <td style={{ padding: '12px 16px', textAlign: 'right' }}>
-                      <span style={{ background: 'rgba(16, 185, 129, 0.2)', color: '#34d399', border: '1px solid #10b981', padding: '4px 12px', borderRadius: '12px', fontSize: '0.75rem', fontWeight: 800 }}>
+                      <span style={{ background: 'rgba(56, 189, 248, 0.2)', color: '#38bdf8', border: '1px solid #38bdf8', padding: '4px 12px', borderRadius: '12px', fontSize: '0.75rem', fontWeight: 800 }}>
                         {s.status.toUpperCase()}
                       </span>
                     </td>
@@ -1204,7 +1204,7 @@ export default function AdminDashboardPage({ user, onLogout }) {
 
               <div style={{ background: '#04060a', padding: '16px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)' }}>
                 <div style={{ color: '#94a3b8', fontSize: '0.8rem', fontWeight: 700 }}>CURRENT DB DISK STORAGE SIZE</div>
-                <div className="mono-text" style={{ color: '#34d399', marginTop: '6px', fontWeight: 900, fontSize: '1.2rem' }}>
+                <div className="mono-text" style={{ color: '#38bdf8', marginTop: '6px', fontWeight: 900, fontSize: '1.2rem' }}>
                   {stats ? `${stats.database_size_mb} MB (${stats.database_size_bytes.toLocaleString()} bytes)` : '0.52 MB'}
                 </div>
               </div>
@@ -1233,7 +1233,7 @@ export default function AdminDashboardPage({ user, onLogout }) {
 
             <div style={{ background: '#090d16', border: '1px solid rgba(255,255,255,0.1)', padding: '1.4rem', borderRadius: '14px' }}>
               <div style={{ fontSize: '0.82rem', color: '#94a3b8', fontWeight: 700 }}>APPROVED REMEDIATIONS</div>
-              <div style={{ fontSize: '2.2rem', fontWeight: 900, color: '#34d399', marginTop: '4px' }}>{stats ? stats.total_approved_findings : 0}</div>
+              <div style={{ fontSize: '2.2rem', fontWeight: 900, color: '#38bdf8', marginTop: '4px' }}>{stats ? stats.total_approved_findings : 0}</div>
             </div>
 
             <div style={{ background: '#090d16', border: '2px solid #000000', padding: '1.4rem', borderRadius: '14px' }}>
@@ -1300,9 +1300,9 @@ export default function AdminDashboardPage({ user, onLogout }) {
               <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '6px' }}>Real-time HTTP Stream</div>
             </div>
 
-            <div style={{ background: '#04060a', border: '1px solid rgba(16, 185, 129, 0.4)', borderRadius: '14px', padding: '1.4rem' }}>
-              <div style={{ fontSize: '0.78rem', color: '#34d399', fontWeight: 800 }}>ALLOWED REQUESTS (200 OK)</div>
-              <div style={{ fontSize: '2rem', fontWeight: 900, color: '#34d399', marginTop: '4px' }}>
+            <div style={{ background: '#04060a', border: '1px solid rgba(56, 189, 248, 0.4)', borderRadius: '14px', padding: '1.4rem' }}>
+              <div style={{ fontSize: '0.78rem', color: '#38bdf8', fontWeight: 800 }}>ALLOWED REQUESTS (200 OK)</div>
+              <div style={{ fontSize: '2rem', fontWeight: 900, color: '#38bdf8', marginTop: '4px' }}>
                 {wafData ? wafData.allowed_requests : 0}
               </div>
               <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '6px' }}>Clean Legitimate Traffic</div>
@@ -1372,7 +1372,7 @@ export default function AdminDashboardPage({ user, onLogout }) {
                         </td>
                         <td style={{ padding: '12px 14px' }}>
                           <span style={{
-                            color: isBlocked ? '#ef4444' : '#34d399',
+                            color: isBlocked ? '#ef4444' : '#38bdf8',
                             fontWeight: 800
                           }}>
                             {log.classification}
@@ -1383,9 +1383,9 @@ export default function AdminDashboardPage({ user, onLogout }) {
                         </td>
                         <td style={{ padding: '12px 14px', textAlign: 'right' }}>
                           <span style={{
-                            background: isBlocked ? 'rgba(239, 68, 68, 0.2)' : 'rgba(16, 185, 129, 0.2)',
-                            color: isBlocked ? '#ef4444' : '#34d399',
-                            border: `1px solid ${isBlocked ? '#ef4444' : '#10b981'}`,
+                            background: isBlocked ? 'rgba(239, 68, 68, 0.2)' : 'rgba(56, 189, 248, 0.2)',
+                            color: isBlocked ? '#ef4444' : '#38bdf8',
+                            border: `1px solid ${isBlocked ? '#ef4444' : '#38bdf8'}`,
                             padding: '4px 10px',
                             borderRadius: '10px',
                             fontSize: '0.75rem',
@@ -1485,7 +1485,7 @@ export default function AdminDashboardPage({ user, onLogout }) {
                     let badgeBg = 'rgba(56, 189, 248, 0.2)';
                     if (log.action_type === 'LOGIN') { badgeColor = '#38bdf8'; badgeBg = 'rgba(56, 189, 248, 0.2)'; }
                     else if (log.action_type === 'SCAN_TRIGGER') { badgeColor = '#00f0ff'; badgeBg = 'rgba(0, 240, 255, 0.2)'; }
-                    else if (log.action_type.includes('APPROVE')) { badgeColor = '#34d399'; badgeBg = 'rgba(16, 185, 129, 0.2)'; }
+                    else if (log.action_type.includes('APPROVE')) { badgeColor = '#38bdf8'; badgeBg = 'rgba(56, 189, 248, 0.2)'; }
                     else if (log.action_type.includes('REJECT')) { badgeColor = '#ef4444'; badgeBg = 'rgba(239, 68, 68, 0.2)'; }
                     else if (log.action_type.includes('ROLE')) { badgeColor = '#fbbf24'; badgeBg = 'rgba(251, 191, 36, 0.2)'; }
                     else if (log.action_type.includes('DOMAIN')) { badgeColor = '#c084fc'; badgeBg = 'rgba(168, 85, 247, 0.2)'; }
@@ -1556,14 +1556,14 @@ export default function AdminDashboardPage({ user, onLogout }) {
 
       {/* TAB: Real System Updates & Telemetry Report */}
       {activeTab === 'updates_report' && (
-        <div style={{ background: '#090d16', border: '1px solid rgba(16, 185, 129, 0.35)', borderRadius: '16px', padding: '2rem' }}>
+        <div style={{ background: '#090d16', border: '1px solid rgba(56, 189, 248, 0.35)', borderRadius: '16px', padding: '2rem' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', marginBottom: '2rem', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '1.25rem' }}>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
-                <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#34d399', margin: 0, display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#38bdf8', margin: 0, display: 'flex', alignItems: 'center', gap: '10px' }}>
                   <RefreshCw size={24} /> True Real System Updates & Telemetry Report
                 </h3>
-                <span className="mono-text" style={{ fontSize: '0.75rem', background: 'rgba(16, 185, 129, 0.2)', color: '#34d399', padding: '3px 10px', borderRadius: '10px', border: '1px solid #10b981', fontWeight: 800 }}>
+                <span className="mono-text" style={{ fontSize: '0.75rem', background: 'rgba(56, 189, 248, 0.2)', color: '#38bdf8', padding: '3px 10px', borderRadius: '10px', border: '1px solid #38bdf8', fontWeight: 800 }}>
                   LIVE 5S TELEMETRY STREAM
                 </span>
               </div>
@@ -1575,7 +1575,7 @@ export default function AdminDashboardPage({ user, onLogout }) {
             <button
               onClick={fetchUpdatesReport}
               className="btn-aegis-primary"
-              style={{ padding: '0.85rem 1.6rem', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '8px', background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)', border: 'none' }}
+              style={{ padding: '0.85rem 1.6rem', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '8px', background: 'linear-gradient(135deg, #0284c7 0%, #0369a1 100%)', border: 'none' }}
             >
               <RefreshCw size={16} className={loading ? 'spin' : ''} /> Refresh Updates Stream
             </button>
@@ -1591,8 +1591,8 @@ export default function AdminDashboardPage({ user, onLogout }) {
               <div style={{ fontSize: '0.78rem', color: '#94a3b8', marginTop: '4px' }}>CISA, EPSS, NVD, GHSA, URLhaus, ThreatFox</div>
             </div>
 
-            <div style={{ background: '#04060a', border: '1px solid rgba(16, 185, 129, 0.4)', borderRadius: '12px', padding: '1.4rem' }}>
-              <span style={{ fontSize: '0.8rem', color: '#34d399', fontWeight: 800 }}>POLLING SCHEDULER</span>
+            <div style={{ background: '#04060a', border: '1px solid rgba(56, 189, 248, 0.4)', borderRadius: '12px', padding: '1.4rem' }}>
+              <span style={{ fontSize: '0.8rem', color: '#38bdf8', fontWeight: 800 }}>POLLING SCHEDULER</span>
               <div style={{ fontSize: '1.2rem', fontWeight: 800, color: '#ffffff', marginTop: '8px' }}>
                 {updatesReport?.summary?.polling_schedule || '15-Min APScheduler Tick'}
               </div>
@@ -1664,9 +1664,9 @@ export default function AdminDashboardPage({ user, onLogout }) {
                       </td>
                       <td style={{ padding: '14px 18px' }}>
                         <span style={{
-                          background: item.status.includes('200') || item.status === 'SUCCESS' ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)',
-                          color: item.status.includes('200') || item.status === 'SUCCESS' ? '#34d399' : '#f87171',
-                          border: `1px solid ${item.status.includes('200') || item.status === 'SUCCESS' ? '#10b981' : '#ef4444'}`,
+                          background: item.status.includes('200') || item.status === 'SUCCESS' ? 'rgba(56, 189, 248, 0.2)' : 'rgba(239, 68, 68, 0.2)',
+                          color: item.status.includes('200') || item.status === 'SUCCESS' ? '#38bdf8' : '#f87171',
+                          border: `1px solid ${item.status.includes('200') || item.status === 'SUCCESS' ? '#38bdf8' : '#ef4444'}`,
                           padding: '4px 10px',
                           borderRadius: '10px',
                           fontSize: '0.75rem',

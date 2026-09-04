@@ -29,6 +29,17 @@ export default function AuthLandingPage({ onAuthSuccess }) {
     if (e) e.preventDefault();
     setError('');
     setInfoMsg('');
+
+    if (tab === 'register' && regStep === 1) {
+      if (!username.trim() || !email.trim()) {
+        setError('Please enter both a username and email address to continue.');
+        return;
+      }
+      setRegStep(2);
+      setLoading(false);
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -141,6 +152,9 @@ export default function AuthLandingPage({ onAuthSuccess }) {
   const handleGoogleAuth = async () => {
     setError('');
     setLoading(true);
+
+    // Timeout safety fallback in case Google GIS popup is closed without callback
+    const safetyTimer = setTimeout(() => setLoading(false), 7000);
 
     const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || "771235983799-8va90kksvuueb7pusfl3q1gv1vtg7ohd.apps.googleusercontent.com";
 
@@ -466,7 +480,7 @@ export default function AuthLandingPage({ onAuthSuccess }) {
             border: '1px solid #cbd5e1'
           }}>
             <button
-              onClick={() => { setTab('login'); setError(''); setInfoMsg(''); setRegStep(1); }}
+              onClick={() => { setTab('login'); setError(''); setInfoMsg(''); setRegStep(1); setLoading(false); }}
               style={{
                 flex: 1,
                 padding: '10px',
@@ -489,6 +503,7 @@ export default function AuthLandingPage({ onAuthSuccess }) {
                 setError('');
                 setInfoMsg('');
                 setRegStep(1);
+                setLoading(false);
                 if (username === 'admin' || username === 'analyst') setUsername('');
                 if (email === 'analyst@nkat.ai') setEmail('');
                 if (password === 'admin_secret_2026') setPassword('');
