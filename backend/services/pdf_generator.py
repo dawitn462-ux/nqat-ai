@@ -245,9 +245,32 @@ def generate_scan_pdf_report(db: Session, scan_id: int) -> bytes:
         ]))
         story.append(find_table)
 
+    story.append(Spacer(1, 10))
+
+    # 5. Real-Time WAF Attack Telemetry Summary Section
+    story.append(Paragraph("Real-Time WAF Defense & Attack Interception Telemetry", h2_style))
+    try:
+        from backend.services.waf_service import generate_waf_summary_report
+        waf_summary = generate_waf_summary_report(db)
+        waf_data_rows = [
+            [Paragraph("WAF Status", body_bold), Paragraph(waf_summary.get("waf_status", "ACTIVE"), body_style)],
+            [Paragraph("Total Inspected Requests", body_bold), Paragraph(str(waf_summary.get("total_requests_inspected", 0)), body_style)],
+            [Paragraph("Blocked Malicious Attacks", body_bold), Paragraph(f"<font color='#ef4444'><b>{waf_summary.get('blocked_attacks_count', 0)}</b></font>", body_style)],
+            [Paragraph("Block Success Rate", body_bold), Paragraph(f"{waf_summary.get('block_rate_percent', 0.0)}%", body_style)]
+        ]
+        waf_table = Table(waf_data_rows, colWidths=[180, 360])
+        waf_table.setStyle(TableStyle([
+            ('BACKGROUND', (0, 0), (0, -1), colors.HexColor("#f1f5f9")),
+            ('PADDING', (0, 0), (-1, -1), 5),
+            ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor("#cbd5e1")),
+        ]))
+        story.append(waf_table)
+    except Exception as waf_err:
+        story.append(Paragraph(f"WAF Telemetry: Active (Error compiling summary: {waf_err})", body_style))
+
     story.append(Spacer(1, 14))
 
-    # 5. Footer & Policy Scoping Notice
+    # 6. Footer & Policy Scoping Notice
     story.append(HRFlowable(width="100%", thickness=1, color=colors.HexColor("#cbd5e1"), spaceAfter=6))
     policy_notice = (
         "CONFIDENTIALITY NOTICE: This report is generated locally by NKAT Sentinel Console. "
@@ -262,3 +285,162 @@ def generate_scan_pdf_report(db: Session, scan_id: int) -> bytes:
 
     logger.info(f"[+] Generated PDF Executive Report for Scan #{scan_id} ({len(pdf_bytes)} bytes)")
     return pdf_bytes
+
+
+def generate_waf_pdf_report(db: Session = None) -> bytes:
+    """
+    Generates binary PDF content for a dedicated Executive WAF Security Telemetry Report.
+    """
+    from backend.services.waf_service import generate_waf_summary_report
+
+    waf_data = generate_waf_summary_report(db)
+
+    buffer = io.BytesIO()
+    doc = SimpleDocTemplate(
+        buffer,
+        pagesize=letter,
+        rightMargin=36,
+        leftMargin=36,
+        topMargin=36,
+        bottomMargin=36
+    )
+
+    styles = getSampleStyleSheet()
+
+    primary_color = colors.HexColor("#0f172a")
+    accent_blue = colors.HexColor("#0284c7")
+    text_dark = colors.HexColor("#334155")
+
+    title_style = ParagraphStyle(
+        "WafDocTitle",
+        parent=styles["Normal"],
+        fontName="Helvetica-Bold",
+        fontSize=20,
+        leading=24,
+        textColor=primary_color,
+        spaceAfter=4
+    )
+
+    subtitle_style = ParagraphStyle(
+        "WafDocSubtitle",
+        parent=styles["Normal"],
+        fontName="Helvetica-Bold",
+        fontSize=11,
+        leading=14,
+        textColor=accent_blue,
+        spaceAfter=12
+    )
+
+    h2_style = ParagraphStyle(
+        "WafSectionHeader",
+        parent=styles["Normal"],
+        fontName="Helvetica-Bold",
+        fontSize=13,
+        leading=16,
+        textColor=primary_color,
+        spaceBefore=10,
+        spaceAfter=6
+    )
+
+    body_style = ParagraphStyle(
+        "WafBodyText",
+        parent=styles["Normal"],
+        fontName="Helvetica",
+        fontSize=9,
+        leading=12,
+        textColor=text_dark
+    )
+
+    body_bold = ParagraphStyle(
+        "WafBodyBold",
+        parent=styles["Normal"],
+        fontName="Helvetica-Bold",
+        fontSize=9,
+        leading=12,
+        textColor=primary_color
+    )
+
+    story = []
+
+    # Header
+    story.append(Paragraph("NKAT AI — Real-Time WAF Security Executive Report", title_style))
+    story.append(Paragraph(f"Generated at: {waf_data.get('generated_at')} | Status: {waf_data.get('waf_status')}", subtitle_style))
+    story.append(HRFlowable(width="100%", thickness=1.5, color=accent_blue, spaceAfter=10))
+
+    # Summary Metrics
+    story.append(Paragraph("WAF Traffic & Attack Interception Overview", h2_style))
+
+    metrics_table_data = [
+        [Paragraph("Metric Description", body_bold), Paragraph("Telemetry Value", body_bold)],
+        [Paragraph("Protection Status", body_style), Paragraph(f"<b>{waf_data.get('waf_status')}</b>", body_style)],
+        [Paragraph("Total Inspected Requests", body_style), Paragraph(str(waf_data.get("total_requests_inspected")), body_style)],
+        [Paragraph("Blocked Malicious Threats", body_style), Paragraph(f"<font color='#ef4444'><b>{waf_data.get('blocked_attacks_count')}</b></font>", body_style)],
+        [Paragraph("Allowed Legitimate Requests", body_style), Paragraph(str(waf_data.get("allowed_requests_count")), body_style)],
+        [Paragraph("Threat Mitigation Block Rate", body_style), Paragraph(f"<b>{waf_data.get('block_rate_percent')}%</b>", body_style)],
+    ]
+
+    metrics_table = Table(metrics_table_data, colWidths=[240, 300])
+    metrics_table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor("#e2e8f0")),
+        ('PADDING', (0, 0), (-1, -1), 6),
+        ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor("#cbd5e1")),
+    ]))
+    story.append(metrics_table)
+    story.append(Spacer(1, 10))
+
+    # Active WAF Rules
+    story.append(Paragraph("Enforced Security Rules", h2_style))
+    rule_rows = [[Paragraph("Rule ID", body_bold), Paragraph("Rule Title & Classification", body_bold), Paragraph("Enforcement State", body_bold)]]
+    for rule in waf_data.get("active_waf_rules", []):
+        rule_rows.append([
+            Paragraph(rule.get("rule_id"), body_style),
+            Paragraph(rule.get("name"), body_style),
+            Paragraph(f"<font color='#16a34a'><b>{rule.get('status')}</b></font>", body_style)
+        ])
+    rule_table = Table(rule_rows, colWidths=[100, 320, 120])
+    rule_table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor("#e2e8f0")),
+        ('PADDING', (0, 0), (-1, -1), 5),
+        ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor("#cbd5e1")),
+    ]))
+    story.append(rule_table)
+    story.append(Spacer(1, 10))
+
+    # Recent Blocked Attacks
+    story.append(Paragraph("Recent Intercepted Attack Log Stream", h2_style))
+    attack_rows = [[Paragraph("Timestamp", body_bold), Paragraph("Client IP", body_bold), Paragraph("Attack Category", body_bold), Paragraph("Action Taken", body_bold)]]
+    for log in waf_data.get("recent_blocked_threats", [])[:8]:
+        ts = str(log.get("timestamp", ""))[:19]
+        attack_rows.append([
+            Paragraph(ts, body_style),
+            Paragraph(log.get("client_ip", "N/A"), body_style),
+            Paragraph(log.get("classification", "Attack"), body_style),
+            Paragraph("<font color='#ef4444'><b>BLOCKED (403)</b></font>", body_style)
+        ])
+    if len(attack_rows) == 1:
+        attack_rows.append([Paragraph("No recent attack logs", body_style), Paragraph("-", body_style), Paragraph("Clean Traffic", body_style), Paragraph("-", body_style)])
+
+    attack_table = Table(attack_rows, colWidths=[130, 110, 200, 100])
+    attack_table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor("#e2e8f0")),
+        ('PADDING', (0, 0), (-1, -1), 5),
+        ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor("#cbd5e1")),
+    ]))
+    story.append(attack_table)
+    story.append(Spacer(1, 14))
+
+    # Footer
+    story.append(HRFlowable(width="100%", thickness=1, color=colors.HexColor("#cbd5e1"), spaceAfter=6))
+    policy_notice = (
+        "NKAT AI WAF REPORT — Confidential Real-Time Traffic & Threat Analysis Report. "
+        "Generated locally by NKAT Sentinel Console."
+    )
+    story.append(Paragraph(policy_notice, ParagraphStyle("WafFooter", parent=styles["Normal"], fontName="Helvetica-Oblique", fontSize=7, leading=9, textColor=colors.HexColor("#64748b"))))
+
+    doc.build(story)
+    pdf_bytes = buffer.getvalue()
+    buffer.close()
+
+    logger.info(f"[+] Generated Executive WAF Security PDF Report ({len(pdf_bytes)} bytes)")
+    return pdf_bytes
+

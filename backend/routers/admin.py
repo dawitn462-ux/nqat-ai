@@ -264,6 +264,36 @@ def get_waf_live_traffic_endpoint():
     return get_waf_live_traffic_summary()
 
 
+@router.get("/waf/summary")
+def get_waf_summary_report_endpoint(db: Session = Depends(get_db)):
+    """
+    Returns aggregated WAF security telemetry & attack analytics report dataset.
+    """
+    from backend.services.waf_service import generate_waf_summary_report
+    return generate_waf_summary_report(db)
+
+
+@router.get("/waf/report/pdf")
+def export_waf_pdf_report_endpoint(db: Session = Depends(get_db)):
+    """
+    Generates and downloads an Executive WAF Security PDF Report summarizing real-time WAF telemetry.
+    """
+    from fastapi.responses import Response
+    from backend.services.pdf_generator import generate_waf_pdf_report
+
+    try:
+        pdf_bytes = generate_waf_pdf_report(db)
+        filename = f"nkat_waf_executive_report_{datetime.now(timezone.utc).strftime('%Y%m%d_%H%M%S')}.pdf"
+        return Response(
+            content=pdf_bytes,
+            media_type="application/pdf",
+            headers={"Content-Disposition": f'attachment; filename="{filename}"'}
+        )
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"Failed to generate WAF PDF report: {exc}")
+
+
+
 class WafSimulationRequest(BaseModel):
     attack_type: Optional[str] = "sqli"
 

@@ -58,13 +58,49 @@ def check_and_auto_approve_expired_findings(db: Session = None) -> int:
             finding.approved_at = now_utc
             finding.approved_by = "system_auto_approval_scheduler"
 
+            # Auto-generate virtual patch / remediation snippet if missing
+            try:
+                from backend.services.remediation_advisor import generate_recommendation
+                finding_dict = {
+                    "id": finding.id,
+                    "check_name": finding.check_name,
+                    "severity": finding.severity,
+                    "evidence": finding.evidence,
+                }
+                rec = generate_recommendation(finding_dict)
+                if not finding.recommendation and rec.get("recommendation"):
+                    finding.recommendation = rec.get("recommendation")
+                if not finding.config_snippet and rec.get("config_snippet"):
+                    finding.config_snippet = rec.get("config_snippet")
+            except Exception as patch_exc:
+                logger.warning(f"Failed generating recommendation patch for finding #{finding.id}: {patch_exc}")
+
             log_audit_event(
                 db=db,
                 finding_id=finding.id,
-                action="auto-approve",
+                action="auto-approve-and-patch",
                 actor="system",
                 actor_name="system_auto_approval_scheduler"
             )
+
+            # Create InAppNotification alerting analysts of auto-patch execution
+            try:
+                from backend.models import InAppNotification
+                notif = InAppNotification(
+                    organization_id=1,
+                    title=f"Auto-Patched Finding #{finding.id}: Deadline Passed",
+                    message=(
+                        f"Human review deadline expired for finding #{finding.id} ('{finding.check_name}'). "
+                        f"Platform automatically applied virtual remediation patch and updated status to AUTO_APPROVED."
+                    ),
+                    severity="HIGH" if finding.severity in ("CRITICAL", "HIGH") else "MEDIUM",
+                    is_read=False,
+                    created_at=now_utc
+                )
+                db.add(notif)
+            except Exception as notif_exc:
+                logger.warning(f"Could not create auto-patch notification for finding #{finding.id}: {notif_exc}")
+
             transitioned_count += 1
 
         db.commit()

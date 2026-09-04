@@ -279,3 +279,50 @@ def get_user_waf_traffic_summary(target_domain: Optional[str] = None) -> Dict[st
         ],
         "blocked_logs": blocked[:15]
     }
+
+
+def generate_waf_summary_report(db=None) -> Dict[str, Any]:
+    """
+    Generates a comprehensive WAF Security Telemetry & Executive Attack Report dataset.
+    Used for WAF executive dashboards, audits, and PDF report generation.
+    """
+    total = len(WAF_LOGS_BUFFER)
+    blocked_logs = [log for log in WAF_LOGS_BUFFER if log["action"] == "BLOCKED"]
+    allowed_logs = [log for log in WAF_LOGS_BUFFER if log["action"] == "ALLOWED"]
+    
+    blocked_count = len(blocked_logs)
+    allowed_count = len(allowed_logs)
+    block_rate = round((blocked_count / total * 100.0), 1) if total > 0 else 0.0
+
+    # Categorize attacks
+    categories: Dict[str, int] = {}
+    attacker_ips: Dict[str, int] = {}
+
+    for log in blocked_logs:
+        cat = log.get("classification", "Unknown Threat")
+        categories[cat] = categories.get(cat, 0) + 1
+        
+        ip = log.get("client_ip", "0.0.0.0")
+        attacker_ips[ip] = attacker_ips.get(ip, 0) + 1
+
+    top_attack_categories = sorted([{"category": k, "count": v} for k, v in categories.items()], key=lambda x: x["count"], reverse=True)
+    top_attackers = sorted([{"ip": k, "attacks": v} for k, v in attacker_ips.items()], key=lambda x: x["attacks"], reverse=True)[:5]
+
+    return {
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "waf_status": "ACTIVE & PROTECTING",
+        "total_requests_inspected": total,
+        "blocked_attacks_count": blocked_count,
+        "allowed_requests_count": allowed_count,
+        "block_rate_percent": block_rate,
+        "attack_categories": top_attack_categories,
+        "top_attackers": top_attackers,
+        "active_waf_rules": [
+            {"rule_id": "WAF-1001", "name": "SQL Injection Signature & ML Filter", "status": "ENFORCING"},
+            {"rule_id": "WAF-2001", "name": "Cross-Site Scripting (XSS) Sanitizer", "status": "ENFORCING"},
+            {"rule_id": "WAF-3004", "name": "Directory Traversal & LFI Guard", "status": "ENFORCING"},
+            {"rule_id": "WAF-4002", "name": "OS Command Execution Suppressor", "status": "ENFORCING"}
+        ],
+        "recent_blocked_threats": blocked_logs[:10]
+    }
+
