@@ -1,20 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
-  <defs>
-    <linearGradient id="nqat-bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#111827"/>
-      <stop offset="100%" stop-color="#030712"/>
-    </linearGradient>
-    <linearGradient id="red-glow" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#f87171"/>
-      <stop offset="100%" stop-color="#ef4444"/>
-    </linearGradient>
-  </defs>
-  <!-- Background Rounded Rect with Red Border -->
-  <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#nqat-bg)" stroke="#ef4444" stroke-width="3"/>
-  <!-- Outer Delta Triangle -->
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="#090d16" stroke="#ef4444" stroke-width="3"/>
   <path d="M32 10 L52 50 L12 50 Z" fill="#ffffff" stroke="#ffffff" stroke-width="1.5" stroke-linejoin="round"/>
-  <!-- Inner Delta Cutout -->
-  <path d="M32 23 L43 45 L21 45 Z" fill="#030712"/>
-  <!-- Red AI Core Node -->
-  <circle cx="32" cy="38" r="4.5" fill="url(#red-glow)"/>
+  <path d="M32 23 L43 45 L21 45 Z" fill="#090d16"/>
+  <circle cx="32" cy="38" r="5" fill="#ef4444"/>
 </svg>

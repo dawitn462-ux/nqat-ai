@@ -696,7 +696,7 @@ export default function CrowdStrikeHomepage({ user, onOpenAuth }) {
                     gap: '1rem'
                   }}>
                     <div>
-                      <div style={{ fontWeight: 700, fontSize: '0.9rem', color: '#38bdf8', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <div style={{ fontWeight: 700, fontSize: '0.9rem', color: '#ef4444', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '6px' }}>
                         Actionable Fix Recommendation:
                       </div>
                       <p style={{ fontSize: '0.88rem', color: '#e2e8f0', lineHeight: 1.5, margin: 0 }}>
