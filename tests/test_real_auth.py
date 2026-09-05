@@ -51,6 +51,8 @@ def test_user_registration_and_unverified_blocking():
         assert reg_res.status_code == 200
         reg_data = reg_res.json()
         assert reg_data["is_email_verified"] is False
+        assert reg_data["verification_code"] is None
+        assert reg_data["verification_token"] is None
         token = reg_data["access_token"]
 
         # Attempt to access protected dashboard endpoint with unverified JWT token -> Should receive 403 Forbidden
