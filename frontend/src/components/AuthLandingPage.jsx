@@ -78,11 +78,7 @@ export default function AuthLandingPage({ onAuthSuccess }) {
       if (tab === 'register' || (!data.is_email_verified && data.role !== 'admin' && data.requires_verification)) {
         setVerifyIdentity(data.email || email || username);
         setTab('verify');
-        if (data.verification_code) {
-          setVerificationCode(data.verification_code);
-        }
-        const codeNotice = data.verification_code ? ` (OTP Code: ${data.verification_code})` : '';
-        setInfoMsg(`Verification code generated for '${data.email || email}'!${codeNotice}`);
+        setInfoMsg(`A 6-digit OTP verification code was sent to '${data.email || email}'. Please check your email inbox.`);
       } else {
         onAuthSuccess(data);
       }
@@ -112,10 +108,7 @@ export default function AuthLandingPage({ onAuthSuccess }) {
         throw new Error(data.detail || 'Failed to resend email verification code.');
       }
 
-      if (data.verification_code) {
-        setVerificationCode(data.verification_code);
-      }
-      setInfoMsg(data.message || `Fresh 6-digit verification code sent to ${verifyIdentity || email}!`);
+      setInfoMsg(data.message || `A fresh 6-digit OTP verification code was sent to ${verifyIdentity || email}. Please check your email inbox.`);
     } catch (err) {
       setError(err.message || 'Error resending verification code.');
     } finally {

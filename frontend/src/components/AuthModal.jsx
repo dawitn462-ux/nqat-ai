@@ -86,11 +86,7 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
         setPendingAuthData(data);
         setVerifyIdentity(data.email || email || username);
         setTab('verify');
-        if (data.verification_code) {
-          setVerificationCode(data.verification_code);
-        }
-        const codeNotice = data.verification_code ? ` (OTP Code: ${data.verification_code})` : '';
-        setInfoMsg(` Verification code generated for '${data.email || email}'!${codeNotice}`);
+        setInfoMsg(`A 6-digit OTP verification code was sent to '${data.email || email}'. Please check your email inbox.`);
       } else {
         onAuthSuccess(data);
         onClose();
@@ -122,10 +118,7 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
       }
 
       setPendingAuthData(data);
-      if (data.verification_code) {
-        setVerificationCode(data.verification_code);
-      }
-      setInfoMsg(data.message || `Fresh 6-digit verification code generated for ${verifyIdentity || email}!`);
+      setInfoMsg(data.message || `A fresh 6-digit OTP verification code was sent to ${verifyIdentity || email}. Please check your email inbox.`);
     } catch (err) {
       setError(err.message || 'Error resending verification code.');
     } finally {

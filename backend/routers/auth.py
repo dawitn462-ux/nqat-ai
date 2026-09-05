@@ -95,8 +95,8 @@ def login(credentials: LoginRequest, request: Request, db: Session = Depends(get
         organization_id=user.organization_id,
         organization_name=org_name,
         is_email_verified=user.is_email_verified,
-        verification_code=user.email_verification_code,
-        verification_token=user.email_verification_token
+        verification_code=None,
+        verification_token=None
     )
 
 
@@ -176,8 +176,8 @@ def register(req: RegisterRequest, request: Request, db: Session = Depends(get_d
         organization_id=user.organization_id,
         organization_name=org_name,
         is_email_verified=user.is_email_verified,
-        verification_code=user.email_verification_code,
-        verification_token=user.email_verification_token
+        verification_code=None,
+        verification_token=None
     )
 
 

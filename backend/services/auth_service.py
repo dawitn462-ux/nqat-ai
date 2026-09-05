@@ -345,16 +345,11 @@ def resend_email_verification(db: Session, identity: str) -> dict:
 
     status_sent = email_res.get("status") == "sent" if isinstance(email_res, dict) else False
 
-    if status_sent:
-        msg = f"Fresh 6-digit verification code sent to {user.email}."
-    else:
-        msg = f"Fresh 6-digit OTP verification code generated for {user.email}: {v_code}"
+    msg = f"Fresh 6-digit verification code sent to {user.email}. Please check your email inbox."
 
     return {
         "message": msg,
         "email": user.email,
-        "verification_code": v_code,
-        "verification_token": v_token,
         "is_verified": False,
         "email_sent": status_sent
     }
