@@ -320,10 +320,7 @@ export default function AuthLandingPage({ onAuthSuccess }) {
           alignItems: 'center',
           justifyContent: 'center'
         }}>
-          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 3L22 20H2L12 3Z" fill="#FFFFFF" stroke="#FFFFFF" strokeWidth="1" strokeLinejoin="round"/>
-            <path d="M12 9.5L16.5 17.5H7.5L12 9.5Z" fill="#050609"/>
-          </svg>
+          <img src="/logo.png" alt="Nqat AI Emblem" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '14px' }} />
         </div>
         <h1 style={{ fontFamily: "'Outfit', 'Syne', sans-serif", fontSize: '2.4rem', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.5px', margin: 0 }}>
           Nqat AI <span style={{ color: '#ffffff' }}>SENTINEL</span>

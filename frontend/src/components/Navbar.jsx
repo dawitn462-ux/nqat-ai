@@ -57,10 +57,7 @@ export default function Navbar({ user, onOpenAuth, onLogout }) {
           justifyContent: 'center',
           flexShrink: 0
         }}>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 4L20.5 19H3.5L12 4Z" fill="#FFFFFF" stroke="#FFFFFF" strokeWidth="0.5" strokeLinejoin="round"/>
-            <path d="M12 9.5L16.2 17H7.8L12 9.5Z" fill="#000000"/>
-          </svg>
+          <img src="/logo.png" alt="Nqat AI Logo" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '7px' }} />
         </div>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>

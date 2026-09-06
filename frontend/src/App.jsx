@@ -1,8 +1,17 @@
 import React, { useState } from 'react';
 import PublicLandingPage from './components/PublicLandingPage';
 import CyberBackground from './components/CyberBackground';
+import QatLoadingScreen from './components/QatLoadingScreen';
 
 export default function App() {
+  const [showLoadingAnimation, setShowLoadingAnimation] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('skip_intro') === 'true') return false;
+    }
+    return true;
+  });
+
   const [user, setUser] = useState(() => {
     // Check URL parameters for direct email link click verification
     if (typeof window !== 'undefined' && window.location.search) {
@@ -55,6 +64,9 @@ export default function App() {
 
   return (
     <div className="app-container">
+      {showLoadingAnimation && (
+        <QatLoadingScreen onComplete={() => setShowLoadingAnimation(false)} />
+      )}
       <CyberBackground />
 
       <PublicLandingPage
