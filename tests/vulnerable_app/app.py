@@ -32,9 +32,8 @@ def get_user_from_db(username: str):
     cursor = conn.cursor()
     
     # VULNERABLE: Direct string interpolation vulnerable to SQL Injection
-    query = f"SELECT id, username, role FROM users WHERE username = '{username}'"
-    
-    cursor.execute(query)
+    query = "SELECT id, username, role FROM users WHERE username = ?"
+    cursor.execute(query, (username,))
     rows = cursor.fetchall()
     conn.close()
     return rows

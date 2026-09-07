@@ -28,16 +28,6 @@ class FindingStatus(str, enum.Enum):
     FALSE_POSITIVE = "FALSE_POSITIVE"
 
 
-class AssessmentStatus(str, enum.Enum):
-    PLANNED = "PLANNED"
-    RUNNING = "RUNNING"
-    ANALYZING = "ANALYZING"
-    REMEDIATING = "REMEDIATING"
-    VERIFYING = "VERIFYING"
-    COMPLETED = "COMPLETED"
-    FAILED = "FAILED"
-
-
 
 class SeverityLevel(str, enum.Enum):
     CRITICAL = "CRITICAL"
@@ -96,6 +86,11 @@ class User(Base):
 class AssessmentStatus(str, enum.Enum):
     PENDING = "PENDING"
     IN_PROGRESS = "IN_PROGRESS"
+    PLANNED = "PLANNED"
+    RUNNING = "RUNNING"
+    ANALYZING = "ANALYZING"
+    REMEDIATING = "REMEDIATING"
+    VERIFYING = "VERIFYING"
     COMPLETED = "COMPLETED"
     FAILED = "FAILED"
 
@@ -106,7 +101,9 @@ class Assessment(Base):
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     organization_id = Column(Integer, ForeignKey("organizations.id", ondelete="SET NULL"), nullable=True, index=True)
     name = Column(String(255), nullable=False, index=True)
+    title = Column(String(255), nullable=True, index=True)
     target_url = Column(String(255), nullable=True)
+    target_scope = Column(Text, nullable=True)
     repository_path = Column(String(255), nullable=True)
     status = Column(String(50), nullable=False, default=AssessmentStatus.PENDING.value, index=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
@@ -114,6 +111,7 @@ class Assessment(Base):
 
     organization = relationship("Organization")
     scans = relationship("Scan", back_populates="assessment")
+    findings = relationship("Finding", back_populates="assessment")
 
     def __repr__(self):
         return f"<Assessment(id={self.id}, name='{self.name}', target='{self.target_url}', status='{self.status}')>"
@@ -400,22 +398,6 @@ class Remediation(Base):
 
     def __repr__(self):
         return f"<Remediation(id={self.id}, finding_id={self.finding_id}, status='{self.status}', confidence={self.confidence})>"
-
-
-class Assessment(Base):
-    __tablename__ = "assessments"
-
-    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    title = Column(String(255), nullable=False, index=True)
-    target_scope = Column(Text, nullable=True)
-    status = Column(String(50), nullable=False, default=AssessmentStatus.PLANNED.value, index=True)
-    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
-    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
-
-    findings = relationship("Finding", back_populates="assessment")
-
-    def __repr__(self):
-        return f"<Assessment(id={self.id}, title='{self.title}', status='{self.status}')>"
 
 
 

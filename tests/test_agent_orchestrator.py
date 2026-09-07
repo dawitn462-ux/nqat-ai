@@ -191,8 +191,8 @@ def test_full_autonomous_agentic_orchestrator_lifecycle(test_db, test_app_server
     assert val_res["data"]["status"] == RemediationStatus.VERIFIED.value
 
     # Verify parent finding resolved in DB
-    test_db.refresh(f)
-    assert f.status == FindingStatus.RESOLVED.value
+    f_updated = test_db.query(Finding).filter(Finding.id == f.id).first()
+    assert f_updated.status == FindingStatus.RESOLVED.value
 
     # Rollback for clean git state
     roll_res = orchestrator_gateway.execute_capability(test_db, "rollback_remediation", remediation_id=rem_id)

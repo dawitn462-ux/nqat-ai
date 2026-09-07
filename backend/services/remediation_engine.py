@@ -184,7 +184,7 @@ def validate_patch_safety(patch: str, affected_file: str) -> Tuple[bool, str]:
 
     # Check that affected file is within PROJECT_ROOT
     abs_file = os.path.abspath(os.path.join(PROJECT_ROOT, affected_file))
-    if not abs_file.startswith(os.path.abspath(PROJECT_ROOT)):
+    if not os.path.normcase(abs_file).startswith(os.path.normcase(os.path.abspath(PROJECT_ROOT))):
         return False, f"File path '{affected_file}' falls outside authorized repository root."
 
     return True, "Patch safety validation passed."
