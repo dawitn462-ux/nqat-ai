@@ -48,13 +48,25 @@ def validate_target_authorization(target_url: str, db: Optional[Session] = None,
     Raises ValueError if target ownership has not been verified or is not listed in authorization policy.
     """
     target_clean = (target_url or "").strip().rstrip("/")
+    if not target_clean:
+        raise ValueError("Target URL must be a non-empty string.")
+
+    target_parsed = urlparse(target_clean if target_clean.startswith(("http://", "https://")) else f"http://{target_clean}")
+    target_host = (target_parsed.hostname or "").lower()
 
     # 1. Check against static policy file (built-in authorized targets)
     try:
         auth_targets = TargetParser.get_authorized_targets()
         for auth in auth_targets:
-            if auth.rstrip("/") == target_clean or target_clean in auth:
-                return target_clean or auth
+            auth_clean = auth.rstrip("/")
+            auth_parsed = urlparse(auth_clean if auth_clean.startswith(("http://", "https://")) else f"http://{auth_clean}")
+            auth_host = (auth_parsed.hostname or "").lower()
+
+            if auth_clean and target_clean and (
+                auth_clean == target_clean or
+                (target_host and auth_host and target_host == auth_host)
+            ):
+                return target_clean
     except Exception:
         pass
 

@@ -140,6 +140,7 @@ async def run_content_discovery_async(
     """
     # 1. Authorization & Scope check
     from backend.services.scan_service import validate_target_authorization
+    validate_target_authorization(target_url)
     validator = ScopeValidator(target_url=target_url)
     validator.validate_url(target_url)
 

@@ -28,6 +28,17 @@ class FindingStatus(str, enum.Enum):
     FALSE_POSITIVE = "FALSE_POSITIVE"
 
 
+class AssessmentStatus(str, enum.Enum):
+    PLANNED = "PLANNED"
+    RUNNING = "RUNNING"
+    ANALYZING = "ANALYZING"
+    REMEDIATING = "REMEDIATING"
+    VERIFYING = "VERIFYING"
+    COMPLETED = "COMPLETED"
+    FAILED = "FAILED"
+
+
+
 class SeverityLevel(str, enum.Enum):
     CRITICAL = "CRITICAL"
     HIGH = "HIGH"
@@ -82,16 +93,44 @@ class User(Base):
         return f"<User(id={self.id}, username='{self.username}', role='{self.role}', verified={self.is_email_verified}, provider='{self.auth_provider}')>"
 
 
+class AssessmentStatus(str, enum.Enum):
+    PENDING = "PENDING"
+    IN_PROGRESS = "IN_PROGRESS"
+    COMPLETED = "COMPLETED"
+    FAILED = "FAILED"
+
+
+class Assessment(Base):
+    __tablename__ = "assessments"
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    organization_id = Column(Integer, ForeignKey("organizations.id", ondelete="SET NULL"), nullable=True, index=True)
+    name = Column(String(255), nullable=False, index=True)
+    target_url = Column(String(255), nullable=True)
+    repository_path = Column(String(255), nullable=True)
+    status = Column(String(50), nullable=False, default=AssessmentStatus.PENDING.value, index=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
+
+    organization = relationship("Organization")
+    scans = relationship("Scan", back_populates="assessment")
+
+    def __repr__(self):
+        return f"<Assessment(id={self.id}, name='{self.name}', target='{self.target_url}', status='{self.status}')>"
+
+
 class Scan(Base):
     __tablename__ = "scans"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     organization_id = Column(Integer, ForeignKey("organizations.id", ondelete="SET NULL"), nullable=True, index=True)
+    assessment_id = Column(Integer, ForeignKey("assessments.id", ondelete="SET NULL"), nullable=True, index=True)
     target = Column(String(255), nullable=False, index=True)
     status = Column(String(50), nullable=False, default=ScanStatus.PENDING.value, index=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 
     organization = relationship("Organization", back_populates="scans")
+    assessment = relationship("Assessment", back_populates="scans")
     subdomains = relationship("Subdomain", back_populates="scan", cascade="all, delete-orphan")
 
     def __repr__(self):
@@ -123,6 +162,7 @@ class Finding(Base):
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     subdomain_id = Column(Integer, ForeignKey("subdomains.id", ondelete="CASCADE"), nullable=False, index=True)
+    assessment_id = Column(Integer, ForeignKey("assessments.id", ondelete="SET NULL"), nullable=True, index=True)
     check_name = Column(String(255), nullable=False, index=True)
     severity = Column(String(50), nullable=False, index=True)
     evidence = Column(Text, nullable=True)
@@ -151,6 +191,7 @@ class Finding(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 
     subdomain = relationship("Subdomain", back_populates="findings")
+    assessment = relationship("Assessment", back_populates="findings")
 
     @property
     def full_fix_guide(self):
@@ -189,7 +230,9 @@ class AuditLog(Base):
     __tablename__ = "audit_logs"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    finding_id = Column(Integer, ForeignKey("findings.id", ondelete="CASCADE"), nullable=False, index=True)
+    finding_id = Column(Integer, ForeignKey("findings.id", ondelete="CASCADE"), nullable=True, index=True)
+    scan_id = Column(Integer, ForeignKey("scans.id", ondelete="CASCADE"), nullable=True, index=True)
+    subdomain_id = Column(Integer, ForeignKey("subdomains.id", ondelete="CASCADE"), nullable=True, index=True)
     action = Column(String(50), nullable=False, index=True)
     actor = Column(String(50), nullable=False)
     actor_name = Column(String(255), nullable=True)
@@ -308,6 +351,73 @@ class PlatformActivityLog(Base):
 
     def __repr__(self):
         return f"<PlatformActivityLog(id={self.id}, username='{self.username}', action_type='{self.action_type}', target='{self.target_resource}')>"
+
+
+class RemediationStatus(str, enum.Enum):
+    DETECTED = "DETECTED"
+    ANALYZING = "ANALYZING"
+    PROPOSED = "PROPOSED"
+    PATCH_GENERATED = "PATCH_GENERATED"
+    PATCH_VALIDATING = "PATCH_VALIDATING"
+    VALIDATION_FAILED = "VALIDATION_FAILED"
+    VALIDATION_PASSED = "VALIDATION_PASSED"
+    AWAITING_APPROVAL = "AWAITING_APPROVAL"
+    APPROVED = "APPROVED"
+    APPLYING = "APPLYING"
+    RESCANNING = "RESCANNING"
+    VERIFIED = "VERIFIED"
+    REGRESSION_DETECTED = "REGRESSION_DETECTED"
+    ROLLING_BACK = "ROLLING_BACK"
+    ROLLED_BACK = "ROLLED_BACK"
+    FAILED = "FAILED"
+    MANUAL_REVIEW_REQUIRED = "MANUAL_REVIEW_REQUIRED"
+
+
+class Remediation(Base):
+    __tablename__ = "remediations"
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    finding_id = Column(Integer, ForeignKey("findings.id", ondelete="CASCADE"), nullable=False, index=True)
+    repository = Column(String(255), nullable=True)
+    branch = Column(String(255), nullable=True)
+    base_commit = Column(String(255), nullable=True)
+    applied_commit = Column(String(255), nullable=True)
+    rollback_commit = Column(String(255), nullable=True)
+    patch = Column(Text, nullable=True)
+    root_cause = Column(Text, nullable=True)
+    affected_file = Column(String(255), nullable=True)
+    affected_function = Column(String(255), nullable=True)
+    vulnerable_line = Column(Integer, nullable=True)
+    patch_strategy = Column(Text, nullable=True)
+    status = Column(String(50), nullable=False, default=RemediationStatus.DETECTED.value, index=True)
+    confidence = Column(Float, nullable=False, default=0.0)
+    validation_status = Column(Text, nullable=True)  # JSON representation of syntax, tests, sast, dast, regression
+    approval_status = Column(String(50), nullable=False, default="MANUAL", index=True)  # MANUAL, SEMI_AUTOMATIC, AUTOMATIC
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
+
+    finding = relationship("Finding")
+
+    def __repr__(self):
+        return f"<Remediation(id={self.id}, finding_id={self.finding_id}, status='{self.status}', confidence={self.confidence})>"
+
+
+class Assessment(Base):
+    __tablename__ = "assessments"
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    title = Column(String(255), nullable=False, index=True)
+    target_scope = Column(Text, nullable=True)
+    status = Column(String(50), nullable=False, default=AssessmentStatus.PLANNED.value, index=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
+
+    findings = relationship("Finding", back_populates="assessment")
+
+    def __repr__(self):
+        return f"<Assessment(id={self.id}, title='{self.title}', status='{self.status}')>"
+
+
 
 
 

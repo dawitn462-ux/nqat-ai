@@ -11,16 +11,20 @@ from backend.models import AuditLog
 
 def log_audit_event(
     db: Session,
-    finding_id: int,
-    action: str,
-    actor: str,
-    actor_name: str = None
+    finding_id: Optional[int] = None,
+    action: str = "action",
+    actor: str = "agent",
+    actor_name: str = None,
+    subdomain_id: Optional[int] = None,
+    scan_id: Optional[int] = None
 ) -> AuditLog:
     """
-    Creates and persists an AuditLog entry for a finding status transition.
+    Creates and persists an AuditLog entry for a finding or agent status transition.
     """
     log_entry = AuditLog(
         finding_id=finding_id,
+        subdomain_id=subdomain_id,
+        scan_id=scan_id,
         action=action,
         actor=actor,
         actor_name=actor_name,

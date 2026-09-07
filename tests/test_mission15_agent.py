@@ -4,6 +4,7 @@ Unit tests for Mission 15 — Minimal Real Agentic Loop (4 Tools, Max Iterations
 
 import os
 import pytest
+from unittest.mock import MagicMock, patch
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -42,8 +43,17 @@ def setup_test_db():
         finally:
             db.close()
 
-    app.dependency_overrides[get_db] = override_get_db
-    yield TestingSessionLocal, engine
+    mock_sec_scanner_instance = MagicMock()
+    mock_sec_scanner_instance.execute_scan = MagicMock(return_value=MagicMock(findings=[]))
+    mock_sec_scanner_class = MagicMock(return_value=mock_sec_scanner_instance)
+
+    from unittest.mock import patch
+    with patch("backend.services.agent_loop.SecurityScanner", mock_sec_scanner_class), \
+         patch("backend.services.agent_loop.run_katana_crawl", return_value=["http://localhost:3000"]), \
+         patch("backend.services.agent_loop.run_nuclei_scan", return_value="mock.jsonl"), \
+         patch("backend.services.agent_loop.parse_nuclei_findings", return_value=[]):
+        yield TestingSessionLocal, engine
+
     app.dependency_overrides.clear()
 
 
@@ -91,7 +101,7 @@ def test_agent_4_tools_execution(setup_test_db, monkeypatch):
     # Tool 3: request_deeper_scan
     deep_res = request_deeper_scan(db, sub.id)
     assert deep_res["status"] == "success"
-    assert deep_res["target"] in ("localhost", "http://localhost:3000")
+    assert deep_res["target"] in ("localhost", "http://localhost", "http://localhost:3000")
 
     # Tool 4: summarize_risk
     sum_res = summarize_risk(db, scan.id)

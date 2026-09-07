@@ -51,6 +51,11 @@ async def lifespan(app: FastAPI):
                 conn.execute(text(f"ALTER TABLE {table_name} ADD COLUMN {col_name} {col_def};"))
 
         try:
+            ensure_column("audit_logs", "scan_id", "INTEGER")
+            ensure_column("audit_logs", "subdomain_id", "INTEGER")
+            ensure_column("audit_logs", "assessment_id", "INTEGER")
+            ensure_column("scans", "assessment_id", "INTEGER")
+            ensure_column("findings", "assessment_id", "INTEGER")
             ensure_column("findings", "review_deadline", "TIMESTAMP")
             ensure_column("findings", "previous_state", "TEXT")
             ensure_column("findings", "owasp_category", "TEXT")
@@ -224,7 +229,7 @@ async def waf_traffic_middleware(request: Request, call_next):
     return response
 
 
-from backend.routers import scans, subdomains, findings, classification, agent, auth, threat_graph, domains, notifications, admin, posts, events
+from backend.routers import scans, subdomains, findings, classification, agent, auth, threat_graph, domains, notifications, admin, posts, events, remediation
 
 # Mount Versioned Routers
 app.include_router(auth.router)
@@ -239,6 +244,7 @@ app.include_router(findings.router)
 app.include_router(classification.router)
 app.include_router(agent.router)
 app.include_router(threat_graph.router)
+app.include_router(remediation.router)
 
 
 @app.get("/", include_in_schema=False)
