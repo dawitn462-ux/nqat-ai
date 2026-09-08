@@ -1,0 +1,10 @@
+<%- include('_header') %>
+<h1>Register</h1>
+<% if (error) { %><pre class="error"><%= error %></pre><% } %>
+<form action="/register" method="POST" class="authform">
+  <label>Username <input type="text" name="username"></label>
+  <label>Email <input type="email" name="email"></label>
+  <label>Password <input type="password" name="password"></label>
+  <button type="submit">Create account</button>
+</form>
+<%- include('_footer') %>

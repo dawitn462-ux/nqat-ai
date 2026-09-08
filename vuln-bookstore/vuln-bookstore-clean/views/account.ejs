@@ -1,0 +1,15 @@
+<%- include('_header') %>
+<h1>Account</h1>
+<% if (acct) { %>
+  <table>
+    <tr><td>ID</td><td><%= acct.id %></td></tr>
+    <tr><td>Username</td><td><%= acct.username %></td></tr>
+    <tr><td>Email</td><td><%= acct.email %></td></tr>
+    <tr><td>Role</td><td><%= acct.role %></td></tr>
+    <tr><td>API Key</td><td><%= acct.api_key %></td></tr>
+  </table>
+  <p class="hint">Try changing the number in the URL — /account/1, /account/2 ...</p>
+<% } else { %>
+  <p>No such account.</p>
+<% } %>
+<%- include('_footer') %>

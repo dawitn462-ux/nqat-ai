@@ -174,6 +174,7 @@ class DomainTargetResponse(BaseModel):
     dns_txt_record_value: Optional[str] = None
     file_verification_url: Optional[str] = None
     file_verification_content: Optional[str] = None
+    owner: Optional[str] = None
 
     model_config = ConfigDict(from_attributes=True)
 

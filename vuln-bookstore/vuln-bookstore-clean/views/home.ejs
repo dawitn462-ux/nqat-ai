@@ -1,0 +1,12 @@
+<%- include('_header') %>
+<h1>Featured Books</h1>
+<div class="grid">
+  <% books.forEach(function(b) { %>
+    <div class="card">
+      <a href="/book/<%= b.id %>"><h3><%= b.title %></h3></a>
+      <p class="author">by <%= b.author %></p>
+      <p class="price">$<%= b.price.toFixed(2) %></p>
+    </div>
+  <% }) %>
+</div>
+<%- include('_footer') %>

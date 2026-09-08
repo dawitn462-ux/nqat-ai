@@ -10,6 +10,7 @@
 
 | Target Name | URL / Scope | Protocol | Environment | Authorization Status |
 | :--- | :--- | :--- | :--- | :--- |
+| Vuln Bookstore (Default Test App) | `http://localhost:3000` | HTTP | Local Test / Dev | **AUTHORIZED** |
 | OWASP Juice Shop (HTTP) | `http://localhost:3000` | HTTP | Local Docker / Test | **AUTHORIZED** |
 | OWASP Juice Shop (HTTPS) | `https://localhost:3000` | HTTPS (TLS) | Local Docker / Test | **AUTHORIZED** |
 | NKAT Vulnerable Security Lab | `http://127.0.0.1:8888` | HTTP | Local Test Lab | **AUTHORIZED** |

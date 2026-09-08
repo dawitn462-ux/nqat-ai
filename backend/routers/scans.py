@@ -98,6 +98,7 @@ def get_scan(scan_id: int, request: Request, db: Session = Depends(get_db)):
 
 
 @router.get("/scans", response_model=List[ScanResponse])
+@router.get("/scans/", response_model=List[ScanResponse], include_in_schema=False)
 def list_scans(
     request: Request,
     skip: int = 0,

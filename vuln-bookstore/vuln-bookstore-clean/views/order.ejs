@@ -1,0 +1,15 @@
+<%- include('_header') %>
+<h1>Order Detail</h1>
+<% if (order) { %>
+  <table>
+    <tr><td>Order ID</td><td><%= order.id %></td></tr>
+    <tr><td>User ID</td><td><%= order.user_id %></td></tr>
+    <tr><td>Book ID</td><td><%= order.book_id %></td></tr>
+    <tr><td>Quantity</td><td><%= order.quantity %></td></tr>
+    <tr><td>Total</td><td>$<%= order.total %></td></tr>
+    <tr><td>Address</td><td><%= order.address %></td></tr>
+  </table>
+<% } else { %>
+  <p>No such order.</p>
+<% } %>
+<%- include('_footer') %>

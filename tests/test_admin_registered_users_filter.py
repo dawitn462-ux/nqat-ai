@@ -5,9 +5,12 @@ from backend.database import SessionLocal
 from backend.models import User, Organization
 from backend.services.auth_service import seed_default_organization_and_user
 
+from backend.database import SessionLocal, Base, engine
+
 client = TestClient(app)
 
 def test_admin_registered_users_filter():
+    Base.metadata.create_all(bind=engine)
     db = SessionLocal()
     try:
         seed_default_organization_and_user(db)

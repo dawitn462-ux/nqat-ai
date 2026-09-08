@@ -1,0 +1,15 @@
+<%- include('_header') %>
+<h1>Search results for "<%= q %>"</h1>
+<% if (error) { %>
+  <pre class="error"><%= error %></pre>
+<% } %>
+<div class="grid">
+  <% results.forEach(function(b) { %>
+    <div class="card">
+      <a href="/book/<%= b.id %>"><h3><%= b.title %></h3></a>
+      <p class="author">by <%= b.author %></p>
+      <p class="price">$<%= b.price.toFixed(2) %></p>
+    </div>
+  <% }) %>
+</div>
+<%- include('_footer') %>

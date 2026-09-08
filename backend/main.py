@@ -42,6 +42,7 @@ from backend.models import Scan, ScanStatus
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     logger.info("Initializing database migrations and tables...")
+    Base.metadata.create_all(bind=engine)
     with engine.connect() as conn:
         def ensure_column(table_name: str, col_name: str, col_def: str):
             res = conn.execute(text(f"PRAGMA table_info({table_name});")).fetchall()

@@ -11,12 +11,13 @@ import json
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from backend.database import SessionLocal
+from backend.database import SessionLocal, Base, engine
 from backend.models import Scan, Subdomain, Finding, FindingStatus
 from backend.services.threat_feed_client import check_asset_against_malicious_feeds
 
 
 def test_malicious_crossref():
+    Base.metadata.create_all(bind=engine)
     print("=" * 70)
     print("MISSION 31 PART 3 — MALICIOUS INFRASTRUCTURE CROSS-REFERENCE TEST")
     print("=" * 70)

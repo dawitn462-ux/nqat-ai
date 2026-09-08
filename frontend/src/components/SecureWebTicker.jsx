@@ -96,30 +96,30 @@ export default function SecureWebTicker({ variant = 'hero' }) {
       display: 'inline-flex',
       alignItems: 'center',
       gap: '12px',
-      background: 'rgba(8, 4, 4, 0.9)',
-      border: '1.5px solid #ffffff',
+      background: 'rgba(12, 4, 4, 0.95)',
+      border: '1.5px solid #ef4444',
       padding: '7px 18px',
       borderRadius: '9999px',
       backdropFilter: 'blur(12px)',
-      boxShadow: '0 0 15px rgba(255, 255, 255, 0.2)',
+      boxShadow: '0 0 20px rgba(239, 68, 68, 0.45)',
       margin: '0.75rem 0'
     }}>
       <div style={{ display: 'inline-flex', alignItems: 'center', gap: '10px' }}>
-        <Shield size={18} style={{ color: '#ffffff', flexShrink: 0 }} />
+        <Shield size={18} style={{ color: '#ef4444', flexShrink: 0 }} />
         <span className="secure-web-typewriter" style={{
-          color: '#ffffff',
+          color: '#ef4444',
           fontWeight: 900,
           fontSize: '0.95rem',
           letterSpacing: '1px',
           fontFamily: 'var(--font-mono, monospace)',
-          textShadow: '0 0 10px rgba(255, 255, 255, 0.4)'
+          textShadow: '0 0 12px rgba(239, 68, 68, 0.6)'
         }}>
           {displayText}
-          <span className="typewriter-cursor" style={{ color: '#ffffff', fontWeight: 900 }}>|</span>
+          <span className="typewriter-cursor" style={{ color: '#ef4444', fontWeight: 900 }}>|</span>
         </span>
       </div>
 
-      <div style={{ width: '1.5px', height: '18px', background: 'rgba(255, 255, 255, 0.6)', flexShrink: 0 }} />
+      <div style={{ width: '1.5px', height: '18px', background: 'rgba(239, 68, 68, 0.6)', flexShrink: 0 }} />
 
       <span className="secure-sub-tag" style={{
         fontSize: '0.72rem',

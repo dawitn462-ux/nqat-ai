@@ -1,0 +1,37 @@
+<%- include('_header') %>
+<% if (book) { %>
+  <div class="book-detail">
+    <h1><%= book.title %></h1>
+    <p class="author">by <%= book.author %></p>
+    <p><%= book.description %></p>
+    <p class="price">$<%= book.price.toFixed(2) %></p>
+
+    <form action="/checkout" method="POST" class="checkout-form">
+      <input type="hidden" name="book_id" value="<%= book.id %>">
+      <!-- A04: price is a hidden field trusted by the server on submit -->
+      <input type="hidden" name="price" value="<%= book.price %>" id="priceField">
+      <label>Quantity <input type="number" name="quantity" value="1" min="1"></label>
+      <label>Shipping address <input type="text" name="address" required></label>
+      <button type="submit">Buy now</button>
+    </form>
+  </div>
+
+  <h2>Reviews</h2>
+  <div class="reviews">
+    <% reviews.forEach(function(r) { %>
+      <div class="review">
+        <strong><%= r.username %></strong>
+        <!-- A03: Stored XSS — comment rendered unescaped -->
+        <p><%- r.comment %></p>
+      </div>
+    <% }) %>
+  </div>
+  <form action="/book/<%= book.id %>/review" method="POST" class="review-form">
+    <input type="text" name="username" placeholder="Your name">
+    <textarea name="comment" placeholder="Write a review..."></textarea>
+    <button type="submit">Post review</button>
+  </form>
+<% } else { %>
+  <p>Book not found.</p>
+<% } %>
+<%- include('_footer') %>

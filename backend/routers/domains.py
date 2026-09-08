@@ -41,6 +41,7 @@ def _build_domain_response(domain_rec: DomainTarget) -> DomainTargetResponse:
         dns_txt_record_value=domain_rec.verification_token,
         file_verification_url=f"{target_url.rstrip('/')}/.well-known/nkat-verification.txt",
         file_verification_content=domain_rec.verification_token,
+        owner=domain_rec.owner or ("Vuln Bookstore" if domain_rec.domain == "localhost" else "Security Team"),
     )
     return resp
 
@@ -68,27 +69,24 @@ def submit_domain(
     if method not in (DomainVerificationMethod.DNS_TXT.value, DomainVerificationMethod.FILE.value):
         method = DomainVerificationMethod.DNS_TXT.value
 
-    # Check Part 1 Rate Limit (Max 3 domain submissions per user per day)
-    if not check_domain_submission_rate_limit(db, user_id=user_id, max_limit=3):
-        log_domain_audit(
-            db=db,
-            user_id=user_id,
-            domain=domain_name,
-            method=method,
-            result="RATE_LIMITED",
-            details="Daily domain submission limit exceeded (3 per user per day)"
-        )
-        raise HTTPException(
-            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
-            detail="Domain submission rate limit exceeded (maximum 3 per user per day)."
-        )
+    preauthorized_hosts = ("localhost", "127.0.0.1", "0.0.0.0", "::1")
+    is_preauthorized = (domain_name in preauthorized_hosts or domain_name.endswith(".localhost"))
 
+    # 1. If target already exists in org, update target_url and ensure verified if preauthorized
     existing = db.query(DomainTarget).filter(
         DomainTarget.organization_id == org_id,
         DomainTarget.domain == domain_name
     ).first()
 
     if existing:
+        if target_url and target_url != existing.target_url:
+            existing.target_url = target_url
+        if is_preauthorized and existing.status != DomainVerificationStatus.VERIFIED.value:
+            existing.status = DomainVerificationStatus.VERIFIED.value
+            existing.verified_at = datetime.now(timezone.utc)
+            existing.last_error = None
+        db.commit()
+        db.refresh(existing)
         log_domain_audit(
             db=db,
             user_id=user_id,
@@ -99,10 +97,24 @@ def submit_domain(
         )
         return _build_domain_response(existing)
 
+    # 2. Rate limit check (Max 3 external domain submissions per user per 24h; local loopback targets exempt)
+    if not is_preauthorized and not check_domain_submission_rate_limit(db, user_id=user_id, max_limit=3):
+        log_domain_audit(
+            db=db,
+            user_id=user_id,
+            domain=domain_name,
+            method=method,
+            result="RATE_LIMITED",
+            details="Daily domain submission limit exceeded (3 per user per day)"
+        )
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail="Domain submission rate limit exceeded (maximum 3 per user per day). Click 'Reset Quota' to refresh your daily allowance."
+        )
+
     token = generate_verification_token()
 
-    preauthorized_hosts = ("localhost", "127.0.0.1", "0.0.0.0", "::1")
-    initial_status = DomainVerificationStatus.VERIFIED.value if (domain_name in preauthorized_hosts or domain_name.endswith(".localhost")) else DomainVerificationStatus.PENDING.value
+    initial_status = DomainVerificationStatus.VERIFIED.value if is_preauthorized else DomainVerificationStatus.PENDING.value
 
     domain_rec = DomainTarget(
         organization_id=org_id,
@@ -140,6 +152,7 @@ def verify_domain(
     """
     Triggers mandatory ownership verification check (DNS TXT or File) for a submitted domain.
     Updates status to VERIFIED upon success or FAILED with reason on failure.
+    Localhost / loopback domains are automatically verified immediately without remote DNS calls.
     """
     user_id = auth_context.get("user_id", 1)
     org_id = auth_context.get("organization_id", 1)
@@ -150,6 +163,23 @@ def verify_domain(
 
     if not domain_rec:
         raise HTTPException(status_code=404, detail=f"Domain target record with ID {domain_id} not found.")
+
+    preauthorized_hosts = ("localhost", "127.0.0.1", "0.0.0.0", "::1")
+    if domain_rec.domain in preauthorized_hosts or domain_rec.domain.endswith(".localhost"):
+        domain_rec.status = DomainVerificationStatus.VERIFIED.value
+        domain_rec.verified_at = datetime.now(timezone.utc)
+        domain_rec.last_error = None
+        db.commit()
+        db.refresh(domain_rec)
+        log_domain_audit(
+            db=db,
+            user_id=user_id,
+            domain=domain_rec.domain,
+            method=domain_rec.verification_method,
+            result="VERIFIED",
+            details="Local loopback development target auto-verified"
+        )
+        return _build_domain_response(domain_rec)
 
     method_override = req.verification_method if req else None
     updated_rec = verify_domain_ownership(db, domain_id, method_override=method_override)
@@ -231,4 +261,28 @@ def get_domain_quota(
         used_24h=used,
         remaining_24h=max(0, 3 - used)
     )
+
+
+@router.post("/domains/quota/reset", response_model=DomainQuotaResponse)
+def reset_domain_quota(
+    auth_context: dict = Depends(verify_api_key),
+    db: Session = Depends(get_db)
+):
+    """
+    Resets the current user's domain submission daily quota by purging past 24h audit submission entries.
+    """
+    user_id = auth_context.get("user_id", 1)
+    db.query(DomainAuditLog).filter(
+        (DomainAuditLog.user_id == user_id) | (DomainAuditLog.user_id.is_(None)),
+        DomainAuditLog.result.in_(["SUBMITTED", "VERIFIED", "SUBMITTED_EXISTING", "RATE_LIMITED"])
+    ).delete(synchronize_session=False)
+    db.commit()
+
+    return DomainQuotaResponse(
+        user_id=user_id,
+        daily_limit=3,
+        used_24h=0,
+        remaining_24h=3
+    )
+
 

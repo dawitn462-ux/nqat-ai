@@ -124,12 +124,17 @@ def enrich_finding_prioritization(db: Session, finding: Finding) -> Finding:
     # 4. Compute SLA Deadline if not already set
     if not finding.sla_deadline:
         start = finding.created_at or datetime.now(timezone.utc)
+        if getattr(start, "tzinfo", None) is None:
+            start = start.replace(tzinfo=timezone.utc)
         finding.sla_deadline = calculate_sla_deadline(tier, start)
 
     # 5. Check SLA breach
     now = datetime.now(timezone.utc)
     if finding.sla_deadline and finding.status not in ("RESOLVED", "CLOSED", "RISK_ACCEPTED", "FALSE_POSITIVE"):
-        if now > finding.sla_deadline:
+        sla = finding.sla_deadline
+        if getattr(sla, "tzinfo", None) is None:
+            sla = sla.replace(tzinfo=timezone.utc)
+        if now > sla:
             finding.is_sla_breached = True
 
     finding.historical_context_note = hist_ctx.get("historical_note")

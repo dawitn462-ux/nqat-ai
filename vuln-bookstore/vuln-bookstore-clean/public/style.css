@@ -1,0 +1,17 @@
+* { box-sizing: border-box; font-family: system-ui, sans-serif; }
+body { margin: 0; background: #f7f5f0; color: #2b2b2b; }
+header { display: flex; align-items: center; gap: 1.5rem; padding: 1rem 2rem; background: #2b2b2b; color: #fff; }
+header .brand { color: #fff; font-weight: bold; text-decoration: none; font-size: 1.2rem; }
+header nav { margin-left: auto; display: flex; gap: 1rem; }
+header a { color: #f0e6d2; text-decoration: none; }
+.searchbar { display: flex; gap: .5rem; }
+main { max-width: 960px; margin: 2rem auto; padding: 0 1rem; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap: 1rem; }
+.card { background: #fff; border: 1px solid #e0dccc; border-radius: 8px; padding: 1rem; }
+.price { font-weight: bold; color: #7a5c2e; }
+.authform, .checkout-form, .review-form { display: flex; flex-direction: column; gap: .75rem; max-width: 360px; }
+table { border-collapse: collapse; width: 100%; }
+td, th { border: 1px solid #ddd; padding: .5rem; text-align: left; }
+.error { background: #fde2e2; color: #7a1f1f; padding: .75rem; border-radius: 6px; white-space: pre-wrap; }
+.hint { color: #8a6d3b; font-style: italic; }
+footer { text-align: center; padding: 2rem; color: #999; }

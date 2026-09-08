@@ -1,0 +1,10 @@
+<%- include('_header') %>
+<h1>Admin Panel</h1>
+<p class="hint">This page never checks that the visitor is actually an admin.</p>
+<table>
+  <tr><th>ID</th><th>Username</th><th>Email</th><th>Role</th><th>API Key</th></tr>
+  <% users.forEach(function(u) { %>
+    <tr><td><%= u.id %></td><td><%= u.username %></td><td><%= u.email %></td><td><%= u.role %></td><td><%= u.api_key %></td></tr>
+  <% }) %>
+</table>
+<%- include('_footer') %>

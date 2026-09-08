@@ -114,6 +114,31 @@ try:
                 conn.execute(text("ALTER TABLE findings ADD COLUMN is_sla_breached BOOLEAN DEFAULT 0"))
             if "historical_context_note" not in f_cols:
                 conn.execute(text("ALTER TABLE findings ADD COLUMN historical_context_note TEXT"))
+
+        if "domain_targets" in tables:
+            dt_cols = {col["name"] for col in inspector.get_columns("domain_targets")}
+            if "target_status" not in dt_cols:
+                conn.execute(text("ALTER TABLE domain_targets ADD COLUMN target_status VARCHAR(50) DEFAULT 'ACTIVE'"))
+            if "target_type" not in dt_cols:
+                conn.execute(text("ALTER TABLE domain_targets ADD COLUMN target_type VARCHAR(50) DEFAULT 'PRIMARY_DOMAIN'"))
+            if "allowed_hosts" not in dt_cols:
+                conn.execute(text("ALTER TABLE domain_targets ADD COLUMN allowed_hosts TEXT"))
+            if "allowed_ports" not in dt_cols:
+                conn.execute(text("ALTER TABLE domain_targets ADD COLUMN allowed_ports TEXT"))
+            if "allowed_paths" not in dt_cols:
+                conn.execute(text("ALTER TABLE domain_targets ADD COLUMN allowed_paths TEXT"))
+            if "auth_method" not in dt_cols:
+                conn.execute(text("ALTER TABLE domain_targets ADD COLUMN auth_method VARCHAR(50)"))
+            if "scan_profile" not in dt_cols:
+                conn.execute(text("ALTER TABLE domain_targets ADD COLUMN scan_profile VARCHAR(50)"))
+            if "owner" not in dt_cols:
+                conn.execute(text("ALTER TABLE domain_targets ADD COLUMN owner VARCHAR(100)"))
+            if "approval_timestamp" not in dt_cols:
+                conn.execute(text("ALTER TABLE domain_targets ADD COLUMN approval_timestamp DATETIME"))
+            if "approval_expiration" not in dt_cols:
+                conn.execute(text("ALTER TABLE domain_targets ADD COLUMN approval_expiration DATETIME"))
+            if "scope_restrictions" not in dt_cols:
+                conn.execute(text("ALTER TABLE domain_targets ADD COLUMN scope_restrictions TEXT"))
 except Exception as exc:
     sys.stderr.write(f"[!] Notice creating or updating DB tables: {exc}\n")
 

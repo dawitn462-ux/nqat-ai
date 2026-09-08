@@ -381,9 +381,12 @@ export default function CrowdStrikeHomepage({ user, onOpenAuth }) {
       <DomainVerificationModal
         isOpen={isDomainModalOpen}
         onClose={() => setIsDomainModalOpen(false)}
-        onVerifiedDomainAdded={(domain) => {
-          setTargetUrl(`https://${domain}`);
-          setMessage(`Verified target '${domain}' added to scoped authorized targets!`);
+        onVerifiedDomainAdded={(target) => {
+          const formatted = (typeof target === 'string' && (target.startsWith('http://') || target.startsWith('https://')))
+            ? target
+            : ((typeof target === 'string' && (target === 'localhost' || target.startsWith('127.0.0.1'))) ? `http://${target}` : `https://${target}`);
+          setTargetUrl(formatted);
+          setMessage(`Verified target '${formatted}' added to scoped authorized targets!`);
           fetchUserDomains();
         }}
       />
@@ -440,7 +443,16 @@ export default function CrowdStrikeHomepage({ user, onOpenAuth }) {
                 }}>
                   <div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                      <span style={{ fontSize: '1.05rem', fontWeight: 800, color: '#ffffff' }}>{dom.domain}</span>
+                      <div>
+                        <span style={{ fontSize: '1.05rem', fontWeight: 800, color: '#ffffff' }}>
+                          {dom.owner || dom.domain}
+                        </span>
+                        {dom.owner && dom.owner !== dom.domain && (
+                          <div style={{ fontSize: '0.74rem', color: '#38bdf8', fontWeight: 600 }}>
+                            {dom.domain}
+                          </div>
+                        )}
+                      </div>
                       <span style={{
                         fontSize: '0.72rem',
                         fontWeight: 800,

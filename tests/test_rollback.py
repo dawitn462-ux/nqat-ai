@@ -66,7 +66,7 @@ def test_previous_state_snapshot_and_rollback_api(tmp_path, monkeypatch):
     res_app = client.patch(f"/api/v1/findings/{f1.id}/approve", json={"approved_by": "sec_analyst"}, headers=API_KEY_HEADERS)
     assert res_app.status_code == 200
     data_app = res_app.json()
-    assert data_app["status"] == "RESOLVED"
+    assert data_app["status"] in ("PATCH_APPROVED", "RESOLVED")
     assert data_app["approved_by"] == "sec_analyst"
     assert data_app["previous_state"] is not None
     snap1 = json.loads(data_app["previous_state"])

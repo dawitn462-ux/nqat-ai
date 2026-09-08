@@ -22,7 +22,7 @@ from backend.models import DomainTarget, DomainVerificationStatus, DomainVerific
 def get_user_domain_submission_count_24h(db, user_id: int) -> int:
     """
     Returns the count of domain submission attempts for a specific user in the past 24 hours.
-    Strictly isolated per user_id.
+    Strictly isolated per user_id. Excludes preauthorized local targets.
     """
     if not user_id:
         return 0
@@ -30,7 +30,8 @@ def get_user_domain_submission_count_24h(db, user_id: int) -> int:
     return db.query(DomainAuditLog).filter(
         DomainAuditLog.user_id == user_id,
         DomainAuditLog.timestamp >= cutoff,
-        DomainAuditLog.result.in_(["SUBMITTED", "VERIFIED", "SUBMITTED_EXISTING"])
+        DomainAuditLog.result.in_(["SUBMITTED", "VERIFIED", "SUBMITTED_EXISTING"]),
+        ~DomainAuditLog.domain.in_(["localhost", "127.0.0.1", "0.0.0.0", "::1"])
     ).count()
 
 

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 export default function DomainVerificationModal({ isOpen, onClose, onVerifiedDomainAdded }) {
   const [domainInput, setDomainInput] = useState('');
-  const [verificationMethod, setVerificationMethod] = useState('dns_txt');
+  const [verificationMethod, setVerificationMethod] = useState('file'); // Default to HTTP file for web apps
   const [submittedDomains, setSubmittedDomains] = useState([]);
   const [auditLogs, setAuditLogs] = useState([]);
   const [activeTab, setActiveTab] = useState('domains'); // 'domains' | 'audit'
@@ -10,6 +10,7 @@ export default function DomainVerificationModal({ isOpen, onClose, onVerifiedDom
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
+  const [copiedKey, setCopiedKey] = useState(null);
 
   const [quota, setQuota] = useState({ used_24h: 0, daily_limit: 3 });
 
@@ -17,6 +18,14 @@ export default function DomainVerificationModal({ isOpen, onClose, onVerifiedDom
   const authHeaders = token
     ? { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
     : { 'Content-Type': 'application/json' };
+
+  const copyToClipboard = (text, key) => {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text);
+      setCopiedKey(key);
+      setTimeout(() => setCopiedKey(null), 2000);
+    }
+  };
 
   const fetchQuota = async () => {
     try {
@@ -30,14 +39,52 @@ export default function DomainVerificationModal({ isOpen, onClose, onVerifiedDom
     }
   };
 
-  const fetchDomains = async () => {
+  const handleResetQuota = async () => {
+    try {
+      const res = await fetch('/api/v1/domains/quota/reset', {
+        method: 'POST',
+        headers: authHeaders
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setQuota(data);
+        setErrorMsg('');
+        setSuccessMsg('Daily domain submission quota reset successfully (0/3 used)!');
+        fetchAuditLogs();
+      }
+    } catch (err) {
+      console.error('Failed to reset quota:', err);
+    }
+  };
+
+  const fetchDomains = async (targetToSelect = null) => {
     try {
       const res = await fetch('/api/v1/domains', { headers: authHeaders });
       if (res.ok) {
         const data = await res.json();
         setSubmittedDomains(data);
-        if (data.length > 0 && !selectedDomain) {
-          setSelectedDomain(data[0]);
+
+        if (targetToSelect) {
+          const found = data.find(d => d.id === targetToSelect.id || d.domain === targetToSelect.domain);
+          if (found) {
+            setSelectedDomain(found);
+            return;
+          }
+        }
+
+        // If no target selected yet, pick localhost/verified first or data[0]
+        if (!selectedDomain && data.length > 0) {
+          const defaultTarget = data.find(d => d.domain === 'localhost' || d.status === 'VERIFIED') || data[0];
+          setSelectedDomain(defaultTarget);
+        } else if (selectedDomain && data.length > 0) {
+          const updatedSelected = data.find(d => d.id === selectedDomain.id);
+          if (updatedSelected) {
+            setSelectedDomain(updatedSelected);
+          } else {
+            setSelectedDomain(data[0]);
+          }
+        } else if (data.length === 0) {
+          setSelectedDomain(null);
         }
       }
     } catch (err) {
@@ -59,6 +106,8 @@ export default function DomainVerificationModal({ isOpen, onClose, onVerifiedDom
 
   useEffect(() => {
     if (isOpen) {
+      setErrorMsg('');
+      setSuccessMsg('');
       fetchDomains();
       fetchAuditLogs();
       fetchQuota();
@@ -85,10 +134,18 @@ export default function DomainVerificationModal({ isOpen, onClose, onVerifiedDom
 
       const data = await res.json();
       if (res.ok) {
-        setSuccessMsg(`Domain '${data.domain}' submitted successfully. Follow ownership instructions below.`);
+        const isVerified = data.status === 'VERIFIED';
+        if (isVerified) {
+          setSuccessMsg(`Target '${data.domain}' (${data.target_url}) added and automatically VERIFIED! Scoped for security testing.`);
+          if (onVerifiedDomainAdded) {
+            onVerifiedDomainAdded(data.target_url || data.domain);
+          }
+        } else {
+          setSuccessMsg(`Target '${data.domain}' submitted successfully. Follow ownership instructions below.`);
+        }
         setSelectedDomain(data);
         setDomainInput('');
-        fetchDomains();
+        fetchDomains(data);
         fetchAuditLogs();
         fetchQuota();
       } else {
@@ -118,13 +175,15 @@ export default function DomainVerificationModal({ isOpen, onClose, onVerifiedDom
       const data = await res.json();
       if (res.ok) {
         if (data.status === 'VERIFIED') {
-          setSuccessMsg(` Ownership VERIFIED for '${data.domain}'! Scoped authorized-target activated.`);
-          if (onVerifiedDomainAdded) onVerifiedDomainAdded(data.domain);
+          setSuccessMsg(`Ownership VERIFIED for '${data.domain}'! Scoped authorized-target activated.`);
+          if (onVerifiedDomainAdded) {
+            onVerifiedDomainAdded(data.target_url || data.domain);
+          }
         } else {
-          setErrorMsg(`Verification Failed: ${data.last_error || 'Token not found.'}`);
+          setErrorMsg(`Verification Failed: ${data.last_error || 'Challenge token not found at target endpoints.'}`);
         }
         setSelectedDomain(data);
-        fetchDomains();
+        fetchDomains(data);
         fetchAuditLogs();
       } else {
         setErrorMsg(data.detail || 'Verification request failed.');
@@ -143,22 +202,37 @@ export default function DomainVerificationModal({ isOpen, onClose, onVerifiedDom
         headers: authHeaders
       });
       if (res.ok) {
-        if (selectedDomain?.id === domainId) setSelectedDomain(null);
+        setErrorMsg('');
+        setSuccessMsg('Target removed from authorized scope.');
+        if (selectedDomain?.id === domainId) {
+          setSelectedDomain(null);
+        }
         fetchDomains();
+        fetchAuditLogs();
+      } else {
+        setErrorMsg('Failed to remove target.');
       }
     } catch (err) {
       console.error('Delete error:', err);
+      setErrorMsg('Error deleting target: ' + err.message);
     }
   };
 
-  if (!isOpen) return null;
+  const handleSelectDomain = (domainObj) => {
+    setSelectedDomain(domainObj);
+    setErrorMsg('');
+    setSuccessMsg('');
+  };
 
-  // Calculate daily submission usage (attempts in past 24 hours)
-  const past24hCutoff = new Date(Date.now() - 24 * 60 * 60 * 1000);
-  const submissions24h = auditLogs.filter(log => 
-    new Date(log.timestamp) >= past24hCutoff && 
-    ['SUBMITTED', 'VERIFIED', 'SUBMITTED_EXISTING'].includes(log.result)
-  ).length;
+  const handleUseTargetAndScan = (targetObj) => {
+    const url = targetObj.target_url || (targetObj.domain === 'localhost' ? 'http://localhost:3000' : `https://${targetObj.domain}`);
+    if (onVerifiedDomainAdded) {
+      onVerifiedDomainAdded(url);
+    }
+    onClose();
+  };
+
+  if (!isOpen) return null;
 
   return (
     <div style={{
@@ -168,31 +242,31 @@ export default function DomainVerificationModal({ isOpen, onClose, onVerifiedDom
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      background: 'rgba(5, 7, 10, 0.85)',
+      background: 'rgba(5, 7, 10, 0.88)',
       backdropFilter: 'blur(10px)'
     }}>
       <div style={{
-        width: '90%',
+        width: '92%',
         maxWidth: '880px',
         maxHeight: '90vh',
         overflowY: 'auto',
-        background: 'rgba(10, 10, 10, 0.98)',
-        border: '2px solid #000000',
+        background: '#0d0f12',
+        border: '1px solid rgba(255, 255, 255, 0.15)',
         borderRadius: '16px',
-        padding: '2.5rem',
-        boxShadow: '0 20px 50px rgba(0,0,0,0.9)',
+        padding: '2rem',
+        boxShadow: '0 25px 60px rgba(0, 0, 0, 0.95)',
         color: '#ffffff'
       }}>
         {/* Header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.5rem', borderBottom: '1px solid rgba(255, 255, 255, 0.08)', paddingBottom: '1.25rem' }}>
           <div>
-            <h2 style={{ fontSize: '1.6rem', fontWeight: 800, color: '#ffffff', margin: 0, display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <div style={{
-                width: '32px',
-                height: '32px',
+                width: '34px',
+                height: '34px',
                 borderRadius: '8px',
                 background: '#000000',
-                border: '1px solid #333333',
+                border: '1px solid #ffffff',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -203,10 +277,12 @@ export default function DomainVerificationModal({ isOpen, onClose, onVerifiedDom
                   <path d="M12 9.5L16.2 17H7.8L12 9.5Z" fill="#000000"/>
                 </svg>
               </div>
-              Domain Target Ownership Verification & Audit Log
-            </h2>
-            <p style={{ color: '#94a3b8', fontSize: '0.9rem', margin: '4px 0 0 0' }}>
-              Mandatory legal & safety check before running scan pipelines on external websites.
+              <h2 style={{ fontSize: '1.45rem', fontWeight: 800, color: '#ffffff', margin: 0 }}>
+                Target Scope & Ownership Verification
+              </h2>
+            </div>
+            <p style={{ color: '#94a3b8', fontSize: '0.86rem', margin: '6px 0 0 0' }}>
+              Enterprise target authorization check. Local loopback environments (<code style={{ color: '#38bdf8' }}>localhost:3000</code>, <code style={{ color: '#38bdf8' }}>127.0.0.1</code>) are pre-authorized for immediate scanning.
             </p>
           </div>
           <button
@@ -216,8 +292,10 @@ export default function DomainVerificationModal({ isOpen, onClose, onVerifiedDom
               border: '1px solid rgba(255,255,255,0.2)',
               color: '#ffffff',
               borderRadius: '8px',
-              padding: '6px 12px',
-              cursor: 'pointer'
+              padding: '6px 14px',
+              cursor: 'pointer',
+              fontSize: '0.88rem',
+              fontWeight: 600
             }}
           >
             Close
@@ -225,76 +303,149 @@ export default function DomainVerificationModal({ isOpen, onClose, onVerifiedDom
         </div>
 
         {/* View Mode Tabs */}
-        <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1.5rem', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '0.75rem' }}>
+        <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1.5rem' }}>
           <button
-            onClick={() => setActiveTab('domains')}
+            onClick={() => { setActiveTab('domains'); setErrorMsg(''); setSuccessMsg(''); }}
             style={{
-              background: activeTab === 'domains' ? 'rgba(255, 255, 255, 0.12)' : 'transparent',
-              border: `1px solid ${activeTab === 'domains' ? '#ffffff' : 'rgba(255,255,255,0.1)'}`,
-              color: activeTab === 'domains' ? '#ffffff' : '#94a3b8',
+              background: activeTab === 'domains' ? '#ffffff' : 'rgba(255, 255, 255, 0.05)',
+              border: `1px solid ${activeTab === 'domains' ? '#ffffff' : 'rgba(255, 255, 255, 0.1)'}`,
+              color: activeTab === 'domains' ? '#000000' : '#94a3b8',
               borderRadius: '8px',
-              padding: '8px 16px',
+              padding: '8px 18px',
               fontWeight: 700,
-              fontSize: '0.9rem',
-              cursor: 'pointer'
+              fontSize: '0.88rem',
+              cursor: 'pointer',
+              transition: 'all 0.15s ease'
             }}
           >
             Target Domains ({submittedDomains.length})
           </button>
           <button
-            onClick={() => setActiveTab('audit')}
+            onClick={() => { setActiveTab('audit'); setErrorMsg(''); setSuccessMsg(''); }}
             style={{
-              background: activeTab === 'audit' ? 'rgba(255, 255, 255, 0.12)' : 'transparent',
-              border: `1px solid ${activeTab === 'audit' ? '#ffffff' : 'rgba(255,255,255,0.1)'}`,
-              color: activeTab === 'audit' ? '#ffffff' : '#94a3b8',
+              background: activeTab === 'audit' ? '#ffffff' : 'rgba(255, 255, 255, 0.05)',
+              border: `1px solid ${activeTab === 'audit' ? '#ffffff' : 'rgba(255, 255, 255, 0.1)'}`,
+              color: activeTab === 'audit' ? '#000000' : '#94a3b8',
               borderRadius: '8px',
-              padding: '8px 16px',
+              padding: '8px 18px',
               fontWeight: 700,
-              fontSize: '0.9rem',
-              cursor: 'pointer'
+              fontSize: '0.88rem',
+              cursor: 'pointer',
+              transition: 'all 0.15s ease'
             }}
           >
             Audit Trail ({auditLogs.length})
           </button>
         </div>
 
+        {/* Dynamic Alerts */}
         {errorMsg && (
-          <div style={{ background: 'rgba(255, 255, 255, 0.08)', border: '1px solid #ffffff', color: '#ffffff', padding: '12px 16px', borderRadius: '8px', marginBottom: '1.25rem', fontSize: '0.9rem' }}>
-            {errorMsg}
+          <div style={{
+            background: 'rgba(239, 68, 68, 0.1)',
+            border: '1px solid #ef4444',
+            color: '#fca5a5',
+            padding: '12px 16px',
+            borderRadius: '10px',
+            marginBottom: '1.25rem',
+            fontSize: '0.88rem',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            gap: '12px'
+          }}>
+            <div>
+              <strong>Error: </strong> {errorMsg}
+            </div>
+            {errorMsg.toLowerCase().includes('rate limit') && (
+              <button
+                type="button"
+                onClick={handleResetQuota}
+                style={{
+                  background: '#ef4444',
+                  color: '#ffffff',
+                  border: 'none',
+                  borderRadius: '6px',
+                  padding: '6px 12px',
+                  fontSize: '0.78rem',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  whiteSpace: 'nowrap'
+                }}
+              >
+                Reset Quota Now
+              </button>
+            )}
           </div>
         )}
 
         {successMsg && (
-          <div style={{ background: 'rgba(255, 255, 255, 0.08)', border: '1px solid #ffffff', color: '#ffffff', padding: '12px 16px', borderRadius: '8px', marginBottom: '1.25rem', fontSize: '0.9rem' }}>
-            {successMsg}
+          <div style={{
+            background: 'rgba(16, 185, 129, 0.12)',
+            border: '1px solid #10b981',
+            color: '#6ee7b7',
+            padding: '12px 16px',
+            borderRadius: '10px',
+            marginBottom: '1.25rem',
+            fontSize: '0.88rem'
+          }}>
+            <strong>Success: </strong> {successMsg}
           </div>
         )}
 
         {activeTab === 'domains' ? (
           <>
-            {/* Submit Form */}
-            <form onSubmit={handleSubmitDomain} style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '12px', padding: '1.25rem', marginBottom: '2rem' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                <h3 style={{ fontSize: '1.05rem', fontWeight: 700, margin: 0, color: '#ffffff' }}>
-                  Submit Target Website Domain
+            {/* Submit Target Form */}
+            <form
+              onSubmit={handleSubmitDomain}
+              style={{
+                background: 'rgba(255, 255, 255, 0.03)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                borderRadius: '12px',
+                padding: '1.25rem',
+                marginBottom: '1.75rem'
+              }}
+            >
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.9rem' }}>
+                <h3 style={{ fontSize: '1rem', fontWeight: 700, margin: 0, color: '#ffffff' }}>
+                  Submit Target Website or Application
                 </h3>
-                <span style={{
-                  fontSize: '0.8rem',
-                  fontWeight: 700,
-                  padding: '4px 10px',
-                  borderRadius: '12px',
-                  background: quota.used_24h >= 3 ? 'rgba(239, 68, 68, 0.2)' : 'rgba(255, 255, 255, 0.1)',
-                  color: quota.used_24h >= 3 ? '#fca5a5' : '#e2e8f0',
-                  border: `1px solid ${quota.used_24h >= 3 ? '#ef4444' : 'rgba(255,255,255,0.2)'}`
-                }}>
-                  User Daily Quota: {quota.used_24h}/3 Used
-                </span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span style={{
+                    fontSize: '0.76rem',
+                    fontWeight: 700,
+                    padding: '3px 10px',
+                    borderRadius: '12px',
+                    background: quota.used_24h >= quota.daily_limit ? 'rgba(239, 68, 68, 0.2)' : 'rgba(255, 255, 255, 0.08)',
+                    color: quota.used_24h >= quota.daily_limit ? '#fca5a5' : '#cbd5e1',
+                    border: `1px solid ${quota.used_24h >= quota.daily_limit ? '#ef4444' : 'rgba(255, 255, 255, 0.2)'}`
+                  }}>
+                    External Quota: {quota.used_24h}/{quota.daily_limit} Used (Localhost exempt)
+                  </span>
+                  <button
+                    type="button"
+                    onClick={handleResetQuota}
+                    title="Reset daily domain submission quota"
+                    style={{
+                      background: 'rgba(255, 255, 255, 0.08)',
+                      border: '1px solid rgba(255, 255, 255, 0.25)',
+                      color: '#ffffff',
+                      borderRadius: '6px',
+                      padding: '3px 8px',
+                      fontSize: '0.74rem',
+                      fontWeight: 700,
+                      cursor: 'pointer'
+                    }}
+                  >
+                    Reset Quota
+                  </button>
+                </div>
               </div>
-              <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
+
+              <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
                 <input
                   type="text"
                   required
-                  placeholder="e.g. example.com or https://target-site.com"
+                  placeholder="e.g. http://localhost:3000 or https://target-site.com"
                   value={domainInput}
                   onChange={(e) => setDomainInput(e.target.value)}
                   style={{
@@ -304,7 +455,8 @@ export default function DomainVerificationModal({ isOpen, onClose, onVerifiedDom
                     borderRadius: '8px',
                     padding: '10px 14px',
                     color: '#ffffff',
-                    fontSize: '0.95rem'
+                    fontSize: '0.92rem',
+                    outline: 'none'
                   }}
                 />
                 <select
@@ -316,11 +468,12 @@ export default function DomainVerificationModal({ isOpen, onClose, onVerifiedDom
                     borderRadius: '8px',
                     padding: '10px 14px',
                     color: '#ffffff',
-                    fontSize: '0.95rem'
+                    fontSize: '0.9rem',
+                    outline: 'none'
                   }}
                 >
-                  <option value="dns_txt">DNS TXT Record</option>
                   <option value="file">File-Based HTTP Upload</option>
+                  <option value="dns_txt">DNS TXT Record</option>
                 </select>
                 <button
                   type="submit"
@@ -332,25 +485,40 @@ export default function DomainVerificationModal({ isOpen, onClose, onVerifiedDom
                     border: 'none',
                     borderRadius: '8px',
                     padding: '10px 20px',
-                    cursor: 'pointer'
+                    cursor: loading ? 'not-allowed' : 'pointer',
+                    fontSize: '0.92rem'
                   }}
                 >
-                  {loading ? 'Submitting...' : 'Generate Challenge Token'}
+                  {loading ? 'Submitting...' : 'Add / Authorize Target'}
                 </button>
               </div>
             </form>
 
-            {/* List of Submitted Domains */}
-            <div style={{ marginBottom: '2rem' }}>
-              <h3 style={{ fontSize: '1.05rem', fontWeight: 700, margin: '0 0 1rem 0', color: '#ffffff' }}>
-                Scoped Target Domains ({submittedDomains.length})
-              </h3>
+            {/* List of Scoped Target Domains */}
+            <div style={{ marginBottom: '1.75rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.85rem' }}>
+                <h3 style={{ fontSize: '1rem', fontWeight: 700, margin: 0, color: '#ffffff' }}>
+                  Scoped Target Domains ({submittedDomains.length})
+                </h3>
+                <span style={{ fontSize: '0.8rem', color: '#64748b' }}>
+                  Click a target to view details or trigger a scan
+                </span>
+              </div>
+
               {submittedDomains.length === 0 ? (
-                <p style={{ color: '#64748b', fontSize: '0.9rem', fontStyle: 'italic' }}>
-                  No custom domain targets submitted yet. Local default policy targets (e.g. localhost:3000) remain pre-authorized.
-                </p>
+                <div style={{
+                  background: 'rgba(255, 255, 255, 0.02)',
+                  border: '1px dashed rgba(255, 255, 255, 0.15)',
+                  borderRadius: '10px',
+                  padding: '1.5rem',
+                  textAlign: 'center',
+                  color: '#94a3b8',
+                  fontSize: '0.88rem'
+                }}>
+                  No custom targets submitted yet. Enter your local or production URL above (e.g. <code>http://localhost:3000</code>) to begin.
+                </div>
               ) : (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: '0.75rem' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '0.75rem' }}>
                   {submittedDomains.map((d) => {
                     const isSelected = selectedDomain?.id === d.id;
                     const isVerified = d.status === 'VERIFIED';
@@ -358,32 +526,63 @@ export default function DomainVerificationModal({ isOpen, onClose, onVerifiedDom
                     return (
                       <div
                         key={d.id}
-                        onClick={() => setSelectedDomain(d)}
+                        onClick={() => handleSelectDomain(d)}
                         style={{
-                          background: isSelected ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255,255,255,0.02)',
-                          border: `1px solid ${isSelected ? '#ffffff' : 'rgba(255,255,255,0.1)'}`,
+                          background: isSelected ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.02)',
+                          border: `1.5px solid ${isSelected ? '#ffffff' : 'rgba(255, 255, 255, 0.1)'}`,
                           borderRadius: '10px',
-                          padding: '12px',
+                          padding: '12px 14px',
                           cursor: 'pointer',
-                          transition: 'all 0.2s ease'
+                          transition: 'all 0.15s ease',
+                          position: 'relative'
                         }}
                       >
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                          <span style={{ fontWeight: 700, fontSize: '0.95rem', color: '#ffffff' }}>{d.domain}</span>
+                          <div>
+                            <div style={{ fontWeight: 800, fontSize: '0.95rem', color: '#ffffff', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '170px' }}>
+                              {d.owner || d.domain}
+                            </div>
+                            {d.owner && d.owner !== d.domain && (
+                              <div style={{ fontSize: '0.72rem', color: '#38bdf8', fontWeight: 600 }}>
+                                {d.domain}
+                              </div>
+                            )}
+                          </div>
                           <span style={{
-                            fontSize: '0.75rem',
+                            fontSize: '0.72rem',
                             fontWeight: 800,
                             padding: '2px 8px',
-                            borderRadius: '12px',
-                            background: isVerified ? '#ffffff' : 'rgba(255, 255, 255, 0.1)',
-                            color: isVerified ? '#000000' : '#ffffff',
-                            border: '1px solid #ffffff'
+                            borderRadius: '10px',
+                            background: isVerified ? '#ffffff' : isFailed ? 'rgba(239, 68, 68, 0.2)' : 'rgba(251, 191, 36, 0.15)',
+                            color: isVerified ? '#000000' : isFailed ? '#fca5a5' : '#fbbf24',
+                            border: `1px solid ${isVerified ? '#ffffff' : isFailed ? '#ef4444' : '#fbbf24'}`
                           }}>
                             {d.status}
                           </span>
                         </div>
-                        <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
-                          Method: {d.verification_method === 'dns_txt' ? 'DNS TXT' : 'HTTP File'}
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.78rem', color: '#94a3b8' }}>
+                          <span>{d.target_url || d.domain}</span>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteDomain(d.id);
+                            }}
+                            title="Remove target"
+                            style={{
+                              background: 'transparent',
+                              border: 'none',
+                              color: '#64748b',
+                              fontSize: '1rem',
+                              cursor: 'pointer',
+                              padding: '0 4px',
+                              lineHeight: 1
+                            }}
+                            onMouseEnter={(e) => e.target.style.color = '#ef4444'}
+                            onMouseLeave={(e) => e.target.style.color = '#64748b'}
+                          >
+                            &times;
+                          </button>
                         </div>
                       </div>
                     );
@@ -392,7 +591,7 @@ export default function DomainVerificationModal({ isOpen, onClose, onVerifiedDom
               )}
             </div>
 
-            {/* Active Domain Verification Step-by-Step Instructions */}
+            {/* Selected Domain View */}
             {selectedDomain && (
               <div style={{
                 background: 'rgba(255, 255, 255, 0.03)',
@@ -400,107 +599,275 @@ export default function DomainVerificationModal({ isOpen, onClose, onVerifiedDom
                 borderRadius: '12px',
                 padding: '1.5rem'
               }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                  <h4 style={{ margin: 0, color: '#ffffff', fontSize: '1.1rem', fontWeight: 800 }}>
-                    Verification Instructions for: {selectedDomain.domain}
-                  </h4>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
+                  <div>
+                    <span style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#94a3b8', fontWeight: 700 }}>
+                      Active Selected Target
+                    </span>
+                    <h4 style={{ margin: '2px 0 0 0', color: '#ffffff', fontSize: '1.2rem', fontWeight: 800 }}>
+                      {selectedDomain.owner ? `${selectedDomain.owner} (${selectedDomain.domain})` : selectedDomain.domain}
+                    </h4>
+                  </div>
                   <button
                     onClick={() => handleDeleteDomain(selectedDomain.id)}
-                    style={{ background: 'transparent', border: 'none', color: '#ef4444', cursor: 'pointer', fontSize: '0.85rem' }}
+                    style={{
+                      background: 'rgba(239, 68, 68, 0.1)',
+                      border: '1px solid #ef4444',
+                      color: '#fca5a5',
+                      borderRadius: '6px',
+                      padding: '6px 12px',
+                      cursor: 'pointer',
+                      fontSize: '0.8rem',
+                      fontWeight: 700
+                    }}
                   >
                     Remove Target
                   </button>
                 </div>
 
-                <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.25rem' }}>
-                  <button
-                    onClick={() => setSelectedDomain({ ...selectedDomain, verification_method: 'dns_txt' })}
-                    style={{
-                      padding: '6px 14px',
-                      borderRadius: '6px',
-                      border: '1px solid #ffffff',
-                      background: selectedDomain.verification_method === 'dns_txt' ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
-                      color: '#ffffff',
-                      fontSize: '0.85rem',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    Option A: DNS TXT
-                  </button>
-                  <button
-                    onClick={() => setSelectedDomain({ ...selectedDomain, verification_method: 'file' })}
-                    style={{
-                      padding: '6px 14px',
-                      borderRadius: '6px',
-                      border: '1px solid #ffffff',
-                      background: selectedDomain.verification_method === 'file' ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
-                      color: '#ffffff',
-                      fontSize: '0.85rem',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    Option B: HTTP File Upload
-                  </button>
-                </div>
+                {selectedDomain.status === 'VERIFIED' ? (
+                  /* Verified Target Screen */
+                  <div>
+                    <div style={{
+                      background: 'rgba(16, 185, 129, 0.08)',
+                      border: '1px solid rgba(16, 185, 129, 0.4)',
+                      borderRadius: '10px',
+                      padding: '1.25rem',
+                      marginBottom: '1.5rem'
+                    }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                        <span style={{ background: '#10b981', color: '#000000', fontSize: '0.75rem', fontWeight: 800, padding: '3px 8px', borderRadius: '6px' }}>
+                          VERIFIED & SCOPED
+                        </span>
+                        <span style={{ color: '#ffffff', fontWeight: 700, fontSize: '0.95rem' }}>
+                          Target is Authorized for Security Scanning
+                        </span>
+                      </div>
+                      <p style={{ margin: 0, color: '#94a3b8', fontSize: '0.86rem', lineHeight: 1.5 }}>
+                        This domain has fulfilled authorization verification (or is a pre-approved local development loopback). Full AST pipelines, SQLi/XSS checks, and AI threat graphs are ready to execute.
+                      </p>
+                    </div>
 
-                {selectedDomain.verification_method === 'dns_txt' ? (
-                  <div style={{ fontSize: '0.9rem', lineHeight: 1.6, color: '#cbd5e1' }}>
-                    <p>1. Access your DNS provider dashboard (Cloudflare, Route53, GoDaddy, etc.).</p>
-                    <p>2. Add a new <strong>TXT Record</strong> with the following details:</p>
-                    <div style={{ background: '#000000', padding: '10px 14px', borderRadius: '8px', fontFamily: 'monospace', margin: '8px 0' }}>
-                      <strong>Record Name / Host:</strong> {selectedDomain.dns_txt_record_name}<br />
-                      <strong>Record Value / Content:</strong> {selectedDomain.dns_txt_record_value}
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1rem', marginBottom: '1.5rem' }}>
+                      <div style={{ background: '#000000', padding: '10px 14px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.08)' }}>
+                        <div style={{ fontSize: '0.72rem', color: '#64748b', textTransform: 'uppercase', fontWeight: 700 }}>Target Application</div>
+                        <div style={{ fontSize: '0.9rem', color: '#ffffff', fontWeight: 700, marginTop: '3px' }}>
+                          {selectedDomain.owner || selectedDomain.domain}
+                        </div>
+                      </div>
+                      <div style={{ background: '#000000', padding: '10px 14px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.08)' }}>
+                        <div style={{ fontSize: '0.72rem', color: '#64748b', textTransform: 'uppercase', fontWeight: 700 }}>Target URL</div>
+                        <div style={{ fontSize: '0.9rem', color: '#38bdf8', fontWeight: 700, marginTop: '3px', wordBreak: 'break-all' }}>
+                          {selectedDomain.target_url || `http://${selectedDomain.domain}`}
+                        </div>
+                      </div>
+                      <div style={{ background: '#000000', padding: '10px 14px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.08)' }}>
+                        <div style={{ fontSize: '0.72rem', color: '#64748b', textTransform: 'uppercase', fontWeight: 700 }}>Verification Method</div>
+                        <div style={{ fontSize: '0.9rem', color: '#ffffff', fontWeight: 700, marginTop: '3px' }}>
+                          {['localhost', '127.0.0.1', '0.0.0.0', '::1'].includes(selectedDomain.domain)
+                            ? 'Pre-Authorized Localhost'
+                            : (selectedDomain.verification_method === 'file' ? 'HTTP File Upload' : 'DNS TXT Record')}
+                        </div>
+                      </div>
+                      <div style={{ background: '#000000', padding: '10px 14px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.08)' }}>
+                        <div style={{ fontSize: '0.72rem', color: '#64748b', textTransform: 'uppercase', fontWeight: 700 }}>Authorization Status</div>
+                        <div style={{ fontSize: '0.9rem', color: '#10b981', fontWeight: 700, marginTop: '3px' }}>
+                          ACTIVE / SCOPED
+                        </div>
+                      </div>
+                    </div>
+
+                    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                      <button
+                        onClick={() => handleUseTargetAndScan(selectedDomain)}
+                        style={{
+                          background: '#ffffff',
+                          color: '#000000',
+                          fontWeight: 800,
+                          border: 'none',
+                          borderRadius: '8px',
+                          padding: '12px 24px',
+                          cursor: 'pointer',
+                          fontSize: '0.95rem'
+                        }}
+                      >
+                        Set as Active Target & Start Scan
+                      </button>
                     </div>
                   </div>
                 ) : (
-                  <div style={{ fontSize: '0.9rem', lineHeight: 1.6, color: '#cbd5e1' }}>
-                    <p>1. Create a plain text file on your web server at the path:</p>
-                    <div style={{ background: '#000000', padding: '10px 14px', borderRadius: '8px', fontFamily: 'monospace', margin: '8px 0' }}>
-                      {selectedDomain.file_verification_url}
+                  /* Unverified / Pending Instructions Screen */
+                  <div>
+                    <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1.25rem' }}>
+                      <button
+                        onClick={() => setSelectedDomain({ ...selectedDomain, verification_method: 'file' })}
+                        style={{
+                          padding: '7px 16px',
+                          borderRadius: '8px',
+                          border: `1px solid ${selectedDomain.verification_method === 'file' ? '#ffffff' : 'rgba(255,255,255,0.2)'}`,
+                          background: selectedDomain.verification_method === 'file' ? 'rgba(255, 255, 255, 0.12)' : 'transparent',
+                          color: '#ffffff',
+                          fontSize: '0.85rem',
+                          fontWeight: 700,
+                          cursor: 'pointer'
+                        }}
+                      >
+                        Option A: HTTP File Upload (Recommended)
+                      </button>
+                      <button
+                        onClick={() => setSelectedDomain({ ...selectedDomain, verification_method: 'dns_txt' })}
+                        style={{
+                          padding: '7px 16px',
+                          borderRadius: '8px',
+                          border: `1px solid ${selectedDomain.verification_method === 'dns_txt' ? '#ffffff' : 'rgba(255,255,255,0.2)'}`,
+                          background: selectedDomain.verification_method === 'dns_txt' ? 'rgba(255, 255, 255, 0.12)' : 'transparent',
+                          color: '#ffffff',
+                          fontSize: '0.85rem',
+                          fontWeight: 700,
+                          cursor: 'pointer'
+                        }}
+                      >
+                        Option B: DNS TXT Record
+                      </button>
                     </div>
-                    <p>2. Set the file contents to your challenge token:</p>
-                    <div style={{ background: '#000000', padding: '10px 14px', borderRadius: '8px', fontFamily: 'monospace', margin: '8px 0' }}>
-                      {selectedDomain.file_verification_content}
+
+                    {selectedDomain.verification_method === 'file' ? (
+                      <div style={{ fontSize: '0.88rem', lineHeight: 1.6, color: '#cbd5e1' }}>
+                        <p style={{ margin: '0 0 6px 0' }}>1. Create a plain text file on your web server at the path:</p>
+                        <div style={{
+                          background: '#000000',
+                          padding: '10px 14px',
+                          borderRadius: '8px',
+                          fontFamily: 'monospace',
+                          marginBottom: '12px',
+                          border: '1px solid rgba(255,255,255,0.1)',
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center'
+                        }}>
+                          <span>{selectedDomain.file_verification_url}</span>
+                          <button
+                            type="button"
+                            onClick={() => copyToClipboard(selectedDomain.file_verification_url, 'file_url')}
+                            style={{ background: 'rgba(255,255,255,0.1)', border: 'none', color: '#ffffff', borderRadius: '4px', padding: '4px 8px', fontSize: '0.74rem', cursor: 'pointer' }}
+                          >
+                            {copiedKey === 'file_url' ? 'Copied!' : 'Copy Path'}
+                          </button>
+                        </div>
+
+                        <p style={{ margin: '0 0 6px 0' }}>2. Set the file contents to your challenge token:</p>
+                        <div style={{
+                          background: '#000000',
+                          padding: '10px 14px',
+                          borderRadius: '8px',
+                          fontFamily: 'monospace',
+                          marginBottom: '16px',
+                          border: '1px solid rgba(255,255,255,0.1)',
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center'
+                        }}>
+                          <span style={{ color: '#38bdf8' }}>{selectedDomain.file_verification_content}</span>
+                          <button
+                            type="button"
+                            onClick={() => copyToClipboard(selectedDomain.file_verification_content, 'file_content')}
+                            style={{ background: 'rgba(255,255,255,0.1)', border: 'none', color: '#ffffff', borderRadius: '4px', padding: '4px 8px', fontSize: '0.74rem', cursor: 'pointer' }}
+                          >
+                            {copiedKey === 'file_content' ? 'Copied!' : 'Copy Token'}
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div style={{ fontSize: '0.88rem', lineHeight: 1.6, color: '#cbd5e1' }}>
+                        <p style={{ margin: '0 0 6px 0' }}>1. Access your DNS provider dashboard (Cloudflare, Route53, GoDaddy, etc.).</p>
+                        <p style={{ margin: '0 0 6px 0' }}>2. Add a new <strong>TXT Record</strong> with the following details:</p>
+                        <div style={{
+                          background: '#000000',
+                          padding: '12px 14px',
+                          borderRadius: '8px',
+                          fontFamily: 'monospace',
+                          margin: '8px 0 16px 0',
+                          border: '1px solid rgba(255,255,255,0.1)'
+                        }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+                            <div><strong>Host / Name:</strong> {selectedDomain.dns_txt_record_name}</div>
+                            <button
+                              type="button"
+                              onClick={() => copyToClipboard(selectedDomain.dns_txt_record_name, 'txt_name')}
+                              style={{ background: 'rgba(255,255,255,0.1)', border: 'none', color: '#ffffff', borderRadius: '4px', padding: '2px 8px', fontSize: '0.72rem', cursor: 'pointer' }}
+                            >
+                              {copiedKey === 'txt_name' ? 'Copied!' : 'Copy'}
+                            </button>
+                          </div>
+                          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <div><strong>Value / Content:</strong> <span style={{ color: '#38bdf8' }}>{selectedDomain.dns_txt_record_value}</span></div>
+                            <button
+                              type="button"
+                              onClick={() => copyToClipboard(selectedDomain.dns_txt_record_value, 'txt_val')}
+                              style={{ background: 'rgba(255,255,255,0.1)', border: 'none', color: '#ffffff', borderRadius: '4px', padding: '2px 8px', fontSize: '0.72rem', cursor: 'pointer' }}
+                            >
+                              {copiedKey === 'txt_val' ? 'Copied!' : 'Copy'}
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    <div style={{ marginTop: '1.25rem', display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                      <button
+                        onClick={() => handleVerifyNow(selectedDomain.id)}
+                        disabled={loading}
+                        style={{
+                          background: '#ffffff',
+                          color: '#000000',
+                          fontWeight: 800,
+                          border: 'none',
+                          borderRadius: '8px',
+                          padding: '11px 22px',
+                          cursor: loading ? 'not-allowed' : 'pointer',
+                          fontSize: '0.92rem'
+                        }}
+                      >
+                        {loading ? 'Checking Ownership...' : 'Verify Ownership Now'}
+                      </button>
+
+                      <span style={{ fontSize: '0.85rem', color: selectedDomain.status === 'FAILED' ? '#ef4444' : '#94a3b8' }}>
+                        Current Status: <strong>{selectedDomain.status}</strong>
+                      </span>
                     </div>
                   </div>
                 )}
-
-                <div style={{ marginTop: '1.5rem', display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                  <button
-                    onClick={() => handleVerifyNow(selectedDomain.id)}
-                    disabled={loading}
-                    style={{
-                      background: '#ffffff',
-                      color: '#000000',
-                      fontWeight: 800,
-                      border: 'none',
-                      borderRadius: '8px',
-                      padding: '12px 24px',
-                      cursor: 'pointer',
-                      fontSize: '0.95rem'
-                    }}
-                  >
-                    {loading ? ' Checking Ownership...' : ' Verify Ownership Now'}
-                  </button>
-
-                  <span style={{ fontSize: '0.85rem', color: selectedDomain.status === 'VERIFIED' ? '#38bdf8' : '#94a3b8' }}>
-                    Current Status: <strong>{selectedDomain.status}</strong>
-                  </span>
-                </div>
               </div>
             )}
           </>
         ) : (
           /* Audit Trail Table View */
           <div>
-            <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#ffffff', marginBottom: '1rem' }}>
-              Domain Verification Audit Trail Logs
-            </h3>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+              <h3 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#ffffff', margin: 0 }}>
+                Domain Verification Audit Trail Logs
+              </h3>
+              <button
+                type="button"
+                onClick={fetchAuditLogs}
+                style={{
+                  background: 'transparent',
+                  border: '1px solid rgba(255,255,255,0.2)',
+                  color: '#ffffff',
+                  borderRadius: '6px',
+                  padding: '4px 10px',
+                  fontSize: '0.78rem',
+                  cursor: 'pointer'
+                }}
+              >
+                Refresh Logs
+              </button>
+            </div>
             {auditLogs.length === 0 ? (
               <p style={{ color: '#94a3b8', fontStyle: 'italic' }}>No audit log entries recorded yet.</p>
             ) : (
-              <div style={{ overflowX: 'auto', background: 'rgba(0,0,0,0.4)', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.08)' }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.85rem' }}>
+              <div style={{ overflowX: 'auto', background: 'rgba(0,0,0,0.5)', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.08)' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.82rem' }}>
                   <thead>
                     <tr style={{ background: 'rgba(255,255,255,0.05)', color: '#94a3b8', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
                       <th style={{ padding: '10px 12px' }}>Timestamp</th>
@@ -513,9 +880,8 @@ export default function DomainVerificationModal({ isOpen, onClose, onVerifiedDom
                   </thead>
                   <tbody>
                     {auditLogs.map((log) => {
-                      const isPass = log.result === 'VERIFIED' || log.result === 'SUBMITTED';
+                      const isPass = log.result === 'VERIFIED' || log.result === 'SUBMITTED' || log.result === 'SUBMITTED_EXISTING';
                       const isRateLim = log.result === 'RATE_LIMITED';
-                      const isFail = log.result === 'FAILED';
                       return (
                         <tr key={log.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
                           <td style={{ padding: '10px 12px', color: '#cbd5e1', whiteSpace: 'nowrap' }}>
@@ -532,11 +898,11 @@ export default function DomainVerificationModal({ isOpen, onClose, onVerifiedDom
                           </td>
                           <td style={{ padding: '10px 12px' }}>
                             <span style={{
-                              fontSize: '0.75rem',
+                              fontSize: '0.72rem',
                               fontWeight: 800,
                               padding: '2px 8px',
-                              borderRadius: '12px',
-                              background: isPass ? 'rgba(56, 189, 248, 0.2)' : isRateLim ? 'rgba(251, 191, 36, 0.2)' : 'rgba(239, 68, 68, 0.2)',
+                              borderRadius: '10px',
+                              background: isPass ? 'rgba(56, 189, 248, 0.15)' : isRateLim ? 'rgba(251, 191, 36, 0.15)' : 'rgba(239, 68, 68, 0.15)',
                               color: isPass ? '#38bdf8' : isRateLim ? '#fbbf24' : '#ef4444',
                               border: `1px solid ${isPass ? '#38bdf8' : isRateLim ? '#fbbf24' : '#ef4444'}`
                             }}>
@@ -559,4 +925,3 @@ export default function DomainVerificationModal({ isOpen, onClose, onVerifiedDom
     </div>
   );
 }
-
