@@ -23,11 +23,16 @@ import anthropic
 
 from backend.database import SessionLocal
 from backend.models import Assessment, Scan, Subdomain, Finding, AuditLog, FindingStatus, Remediation, RemediationStatus
-from backend.services.scan_service import validate_target_authorization, score_finding_with_ml
+from backend.services.scan_service import validate_target_authorization, score_finding_with_ml, calculate_review_deadline
 from backend.services.audit_logger import log_audit_event
 from backend.services.agent_capability_gateway import orchestrator_gateway
 from backend.services.finding_correlator import correlate_assessment_findings
 from backend.services.remediation_engine import map_finding_to_source, generate_remediation_analysis_and_patch, validate_patch_safety, apply_patch_in_isolated_branch, validate_remediation_and_rescan, rollback_remediation
+
+from scanner.core import SecurityScanner
+from backend.services.katana_crawler import run_katana_crawl
+from backend.services.nuclei_scanner import run_nuclei_scan, parse_nuclei_findings
+from backend.services.remediation_advisor import generate_recommendation
 
 load_dotenv()
 logger = logging.getLogger("nkat.agent_orchestrator")
@@ -239,10 +244,6 @@ def request_deeper_scan(db: Session, subdomain_id: int, reasoning: str = None) -
     log_audit_event(db, subdomain_id=subdomain_id, action="deeper_scan_triggered", actor="agent", actor_name=f"NKAT_Agent: {reason_str[:120]}")
     db.commit()
 
-    from backend.services.katana_crawler import run_katana_crawl
-    from backend.services.nuclei_scanner import run_nuclei_scan, parse_nuclei_findings
-    from scanner.core import SecurityScanner
-
     scanners_used = []
     katana_urls = [validated_url]
     raw_findings = []
@@ -335,7 +336,13 @@ def request_deeper_scan(db: Session, subdomain_id: int, reasoning: str = None) -
         }
     except Exception as exec_err:
         db.rollback()
-        return {"status": "failed", "subdomain_id": subdomain_id, "error": str(exec_err)}
+        return {
+            "status": "failed",
+            "subdomain_id": subdomain_id,
+            "error": str(exec_err),
+            "scan_execution_status": "error",
+            "new_findings_count": 0
+        }
 
 
 def summarize_risk(db: Session, scan_id: int, reasoning: str = None) -> Dict[str, Any]:
@@ -487,5 +494,34 @@ def _run_heuristic_orchestrator_loop(db: Session, assessment_id: int, start_time
         return {"assessment_id": assessment_id, "error": str(exc), "status": "FAILED"}
 
 
-# Backward Compatibility Function Alias
-run_agent_triage_loop = run_agent_orchestrator_loop
+def run_agent_triage_loop(scan_id: int) -> Dict[str, Any]:
+    """
+    Backward-compatible Single Scan Triage Loop.
+    """
+    start_time = time.time()
+    db = SessionLocal()
+    trajectory = []
+    iterations = 0
+
+    try:
+        iterations += 1
+        findings = get_findings(db, scan_id)
+        trajectory.append({"step": iterations, "tool": "get_findings", "result": findings})
+
+        if findings and iterations < MAX_AGENT_ITERATIONS:
+            iterations += 1
+            sum_res = summarize_risk(db, scan_id)
+            trajectory.append({"step": iterations, "tool": "summarize_risk", "result": sum_res})
+
+        db.close()
+        return {
+            "scan_id": scan_id,
+            "iterations_used": iterations,
+            "max_iterations": MAX_AGENT_ITERATIONS,
+            "trajectory": trajectory,
+            "status": "COMPLETED"
+        }
+    except Exception as exc:
+        db.close()
+        return {"scan_id": scan_id, "error": str(exc), "status": "FAILED"}
+

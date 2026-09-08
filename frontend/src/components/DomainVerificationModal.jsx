@@ -11,10 +11,24 @@ export default function DomainVerificationModal({ isOpen, onClose, onVerifiedDom
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
 
+  const [quota, setQuota] = useState({ used_24h: 0, daily_limit: 3 });
+
   const token = localStorage.getItem('nkat_jwt_token');
   const authHeaders = token
     ? { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
     : { 'Content-Type': 'application/json' };
+
+  const fetchQuota = async () => {
+    try {
+      const res = await fetch('/api/v1/domains/quota', { headers: authHeaders });
+      if (res.ok) {
+        const data = await res.json();
+        setQuota(data);
+      }
+    } catch (err) {
+      console.error('Failed to fetch quota:', err);
+    }
+  };
 
   const fetchDomains = async () => {
     try {
@@ -47,6 +61,7 @@ export default function DomainVerificationModal({ isOpen, onClose, onVerifiedDom
     if (isOpen) {
       fetchDomains();
       fetchAuditLogs();
+      fetchQuota();
     }
   }, [isOpen]);
 
@@ -75,9 +90,11 @@ export default function DomainVerificationModal({ isOpen, onClose, onVerifiedDom
         setDomainInput('');
         fetchDomains();
         fetchAuditLogs();
+        fetchQuota();
       } else {
         setErrorMsg(data.detail || 'Failed to submit domain target.');
         fetchAuditLogs();
+        fetchQuota();
       }
     } catch (err) {
       setErrorMsg('Error submitting domain target: ' + err.message);
@@ -266,11 +283,11 @@ export default function DomainVerificationModal({ isOpen, onClose, onVerifiedDom
                   fontWeight: 700,
                   padding: '4px 10px',
                   borderRadius: '12px',
-                  background: submissions24h >= 3 ? 'rgba(239, 68, 68, 0.2)' : 'rgba(255, 255, 255, 0.1)',
-                  color: submissions24h >= 3 ? '#fca5a5' : '#e2e8f0',
-                  border: `1px solid ${submissions24h >= 3 ? '#ef4444' : 'rgba(255,255,255,0.2)'}`
+                  background: quota.used_24h >= 3 ? 'rgba(239, 68, 68, 0.2)' : 'rgba(255, 255, 255, 0.1)',
+                  color: quota.used_24h >= 3 ? '#fca5a5' : '#e2e8f0',
+                  border: `1px solid ${quota.used_24h >= 3 ? '#ef4444' : 'rgba(255,255,255,0.2)'}`
                 }}>
-                  Daily Quota: {submissions24h}/3 Used
+                  User Daily Quota: {quota.used_24h}/3 Used
                 </span>
               </div>
               <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', marginBottom: '1rem' }}>

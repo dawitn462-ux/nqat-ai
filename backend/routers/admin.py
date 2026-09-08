@@ -15,7 +15,7 @@ import subprocess
 from datetime import datetime, timezone
 from pydantic import BaseModel
 from typing import List, Optional, Dict
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 
@@ -38,6 +38,9 @@ class UserResponse(BaseModel):
     organization_id: Optional[int] = None
     organization_name: Optional[str] = None
     created_at: Optional[str] = None
+    is_email_verified: Optional[bool] = False
+    auth_provider: Optional[str] = "local"
+    is_default: Optional[bool] = False
 
 
 class SystemStatsResponse(BaseModel):
@@ -83,13 +86,17 @@ def get_system_stats(db: Session = Depends(get_db)):
 
 
 @router.get("/users", response_model=List[UserResponse])
-def list_all_users(db: Session = Depends(get_db)):
+def list_all_users(registered_only: bool = Query(True), db: Session = Depends(get_db)):
     """
-    Lists all platform user accounts with their organization details and roles.
+    Lists platform user accounts. When registered_only=True (default), excludes system default seed user accounts.
     """
     users = db.query(User).all()
     res = []
     for u in users:
+        is_default = (u.username.lower() == "admin")
+        if registered_only and is_default:
+            continue
+            
         org = db.query(Organization).filter(Organization.id == u.organization_id).first()
         res.append(
             UserResponse(
@@ -99,7 +106,10 @@ def list_all_users(db: Session = Depends(get_db)):
                 role=u.role,
                 organization_id=u.organization_id,
                 organization_name=org.name if org else "Default Organization",
-                created_at=str(u.created_at)[:19] if u.created_at else None
+                created_at=str(u.created_at)[:19] if u.created_at else None,
+                is_email_verified=bool(getattr(u, "is_email_verified", False)),
+                auth_provider=getattr(u, "auth_provider", "local") or "local",
+                is_default=is_default
             )
         )
     return res
@@ -130,7 +140,10 @@ def update_user_role(user_id: int, req: UserRoleUpdate, db: Session = Depends(ge
         role=user.role,
         organization_id=user.organization_id,
         organization_name=org.name if org else "Default Organization",
-        created_at=str(user.created_at)[:19] if user.created_at else None
+        created_at=str(user.created_at)[:19] if user.created_at else None,
+        is_email_verified=bool(getattr(user, "is_email_verified", False)),
+        auth_provider=getattr(user, "auth_provider", "local") or "local",
+        is_default=(user.username.lower() == "admin")
     )
 
 
@@ -478,3 +491,39 @@ def get_system_updates_report(
         },
         "updates": updates_list
     }
+
+
+@router.post("/reset-scans")
+def reset_scan_history_endpoint(
+    db: Session = Depends(get_db)
+):
+    """
+    Clears all past scans, subdomains, findings, remediations, audit logs, and assessments.
+    Resets database scan auto-increment sequence so new scans start cleanly from Scan ID 1.
+    """
+    from backend.models import Scan, Subdomain, Finding, Remediation, AuditLog, Assessment, InAppNotification
+
+    try:
+        db.query(Finding).delete()
+        db.query(Remediation).delete()
+        db.query(Subdomain).delete()
+        db.query(AuditLog).delete()
+        db.query(Assessment).delete()
+        db.query(InAppNotification).delete()
+        db.query(Scan).delete()
+        db.commit()
+
+        # Reset SQLite sequence if sqlite
+        try:
+            db.execute(text("DELETE FROM sqlite_sequence WHERE name IN ('scans', 'findings', 'subdomains', 'remediations', 'audit_logs', 'assessments');"))
+            db.commit()
+        except Exception:
+            pass
+
+        return {
+            "status": "success",
+            "message": "Past scan history wiped successfully. Next scan will start from Scan ID #1."
+        }
+    except Exception as exc:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=f"Failed to reset scan history: {exc}")

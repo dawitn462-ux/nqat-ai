@@ -17,15 +17,33 @@ class ScanStatus(str, enum.Enum):
     FAILED = "FAILED"
 
 
+class TargetStatus(str, enum.Enum):
+    DISCOVERED = "DISCOVERED"
+    PENDING_APPROVAL = "PENDING_APPROVAL"
+    APPROVED = "APPROVED"
+    SCANNING = "SCANNING"
+    PATCHING = "PATCHING"
+    VERIFYING = "VERIFYING"
+    BLOCKED = "BLOCKED"
+    REVOKED = "REVOKED"
+
+
 class FindingStatus(str, enum.Enum):
     OPEN = "OPEN"
+    CONFIRMED = "CONFIRMED"
     UNDER_TRIAGE = "UNDER_TRIAGE"
     IN_REMEDIATION = "IN_REMEDIATION"
-    RISK_ACCEPTED = "RISK_ACCEPTED"
+    PATCH_PROPOSED = "PATCH_PROPOSED"
+    PATCH_APPROVED = "PATCH_APPROVED"
+    PATCH_APPLIED = "PATCH_APPLIED"
+    PATCH_APPLIED_PENDING_VERIFICATION = "PATCH_APPLIED_PENDING_VERIFICATION"
+    VERIFYING = "VERIFYING"
     RESOLVED = "RESOLVED"
+    REOPENED = "REOPENED"
     CLOSED = "CLOSED"
     AUTO_APPROVED = "AUTO_APPROVED"
     FALSE_POSITIVE = "FALSE_POSITIVE"
+    ACCEPTED_RISK = "ACCEPTED_RISK"
 
 
 
@@ -182,6 +200,14 @@ class Finding(Base):
     priority_tier = Column(String(50), nullable=True, default="P3", index=True)
     contextual_risk_score = Column(Float, nullable=True, index=True)
     risk_acceptance_reason = Column(Text, nullable=True)
+    vulnerability_type = Column(String(255), nullable=True, index=True)
+    detection_method = Column(String(100), nullable=True, default="DAST_ACTIVE_PROBE", index=True)
+    request_evidence = Column(Text, nullable=True)
+    response_evidence = Column(Text, nullable=True)
+    code_evidence = Column(Text, nullable=True)
+    verification_scan_id = Column(Integer, nullable=True, index=True)
+    before_evidence = Column(Text, nullable=True)
+    after_evidence = Column(Text, nullable=True)
     reverified_at = Column(DateTime(timezone=True), nullable=True)
     sla_deadline = Column(DateTime(timezone=True), nullable=True, index=True)
     is_sla_breached = Column(Boolean, default=False, nullable=True, index=True)
@@ -268,6 +294,17 @@ class DomainTarget(Base):
     verification_token = Column(String(255), nullable=False, index=True)
     verification_method = Column(String(50), nullable=False, default=DomainVerificationMethod.DNS_TXT.value)
     status = Column(String(50), nullable=False, default=DomainVerificationStatus.PENDING.value, index=True)
+    target_status = Column(String(50), nullable=False, default=TargetStatus.APPROVED.value, index=True)
+    target_type = Column(String(100), nullable=True, default="WEB_APP")
+    allowed_hosts = Column(Text, nullable=True)
+    allowed_ports = Column(Text, nullable=True)
+    allowed_paths = Column(Text, nullable=True)
+    auth_method = Column(String(100), nullable=True, default="NONE")
+    scan_profile = Column(String(100), nullable=True, default="FULL_DAST_SAST")
+    owner = Column(String(255), nullable=True, default="Security Team")
+    approval_timestamp = Column(DateTime(timezone=True), nullable=True)
+    approval_expiration = Column(DateTime(timezone=True), nullable=True)
+    scope_restrictions = Column(Text, nullable=True)
     verified_at = Column(DateTime(timezone=True), nullable=True)
     last_error = Column(Text, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)

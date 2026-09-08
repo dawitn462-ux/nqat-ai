@@ -371,7 +371,7 @@ export default function QatLoadingScreen({ onComplete }) {
 
         <div className="qat-brand">
           <h1>Nqat <span>AI</span></h1>
-          <div className="qat-subtitle">Agentic web Defense</div>
+          <div className="qat-subtitle">Agentic Web Assistant</div>
         </div>
 
         <div className="qat-hud"></div>

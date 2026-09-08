@@ -5,6 +5,8 @@ from scanner.models import HTTPResponse, VulnerabilityFinding, Severity
 from scanner.exceptions import RequestEngineError, ScopeViolationError
 
 
+import json
+
 class SQLInjectionCheck(BaseCheck):
     check_id = "SQLI_001"
     name = "SQL Injection Vulnerability Scanner"
@@ -67,6 +69,8 @@ class SQLInjectionCheck(BaseCheck):
 
                         if has_db_error or is_sqli_reflected:
                             audited_endpoints.add(endpoint_key)
+                            req_ev = json.dumps({"method": "GET", "url": url, "params": test_params})
+                            resp_ev = json.dumps({"status_code": res_test.status_code, "headers": res_test.headers, "body_snippet": res_test.body[:500]})
                             findings.append(
                                 VulnerabilityFinding(
                                     id=f"{self.check_id}_{param_name.upper()}",
@@ -79,9 +83,13 @@ class SQLInjectionCheck(BaseCheck):
                                     endpoint=url,
                                     parameter=param_name,
                                     payload=payload,
-                                    evidence=f"Payload '{payload}' on parameter '{param_name}' at '{parsed.path}' produced HTTP {res_test.status_code} response containing database output context.",
+                                    evidence=f"Payload '{payload}' on parameter '{param_name}' produced HTTP {res_test.status_code} response containing database output context.",
                                     cwe="CWE-89",
                                     remediation="Use parameterized queries / prepared statements (ORM parameter binding) instead of dynamic string concatenation.",
+                                    vulnerability_type="SQL_INJECTION",
+                                    detection_method="DAST_DIFFERENTIAL_TESTING",
+                                    request_evidence=req_ev,
+                                    response_evidence=resp_ev,
                                 )
                             )
                             break
@@ -114,6 +122,8 @@ class SQLInjectionCheck(BaseCheck):
                             sev = Severity.CRITICAL if is_auth_bypass else Severity.HIGH
                             title = f"Authentication Bypass via SQL Injection on {route}" if is_auth_bypass else f"SQL Injection Vulnerability in '{param_name}' on {route}"
                             desc = f"The '{param_name}' parameter on '{route}' is vulnerable to SQL injection."
+                            req_ev = json.dumps({"method": method, "url": probe_url, "payload": payload, "param": param_name})
+                            resp_ev = json.dumps({"status_code": res_test.status_code, "headers": res_test.headers, "body_snippet": res_test.body[:500]})
 
                             findings.append(
                                 VulnerabilityFinding(
@@ -127,6 +137,10 @@ class SQLInjectionCheck(BaseCheck):
                                     evidence=f"Payload '{payload}' on parameter '{param_name}' at '{route}' produced HTTP {res_test.status_code} response containing database output/auth context.",
                                     cwe="CWE-89",
                                     remediation="Use parameterized queries / prepared statements for database queries and user authentication lookups.",
+                                    vulnerability_type="SQL_INJECTION_AUTH_BYPASS" if is_auth_bypass else "SQL_INJECTION",
+                                    detection_method="DAST_DIFFERENTIAL_TESTING",
+                                    request_evidence=req_ev,
+                                    response_evidence=resp_ev,
                                 )
                             )
                             break

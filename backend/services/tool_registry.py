@@ -103,6 +103,10 @@ class AuthorizedToolRegistry:
             return True
         return False
 
+    def execute_tool(self, db: Session, tool_id: str, **kwargs) -> Dict[str, Any]:
+        """Convenience method delegating tool execution through AgentToolGateway."""
+        return agent_gateway.execute_tool(db, tool_id, **kwargs)
+
     def _register_default_capabilities(self) -> None:
         """Populates the 100+ AppSec capability catalog mapping to backend executors."""
         
@@ -504,13 +508,20 @@ class AgentToolGateway:
             db.commit()
             return {"status": "rejected_unregistered_tool", "message": err, "tool_id": tool_id}
 
-        # 2. Check Tool Enabled Status
+        # 2. Check Tool Enabled Status & Binary Availability
         if not tool.enabled:
             err = f"Guardrail Rejection: Tool '{tool_id}' is currently disabled by administrator."
             logger.warning(err)
             log_audit_event(db, finding_id=None, action="tool_rejected_disabled", actor=actor, actor_name=f"DISABLED:{tool_id}")
             db.commit()
             return {"status": "rejected_disabled_tool", "message": err, "tool_id": tool_id}
+
+        if tool.availability_status not in ("INSTALLED", "AVAILABLE"):
+            err = f"TOOL_UNAVAILABLE: Security tool '{tool_id}' binary is not installed or available on this system ({tool.availability_status})."
+            logger.warning(err)
+            log_audit_event(db, finding_id=None, action="tool_unavailable", actor=actor, actor_name=f"TOOL_UNAVAILABLE:{tool_id}")
+            db.commit()
+            return {"status": "TOOL_UNAVAILABLE", "message": err, "tool_id": tool_id, "findings": []}
 
         # 3. Target Scope Authorization Gate
         sub_obj = None

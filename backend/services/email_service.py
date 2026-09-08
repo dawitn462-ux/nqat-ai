@@ -152,3 +152,85 @@ If you did not request this registration, please ignore this email.
         return {"status": "logged", "method": "console", "verify_url": dashboard_verify_url}
 
 
+def send_password_reset_email(
+    recipient_email: str,
+    username: str,
+    reset_code: str,
+    expires_in_minutes: int = 20
+) -> dict:
+    """
+    Dispatches a password reset email with 6-digit OTP code.
+    """
+    smtp_host, smtp_port, smtp_user, smtp_pass, smtp_from = get_smtp_config()
+    clean_email = recipient_email.strip().lower()
+    subject = f"🔐 [NKAT Security] Password Reset OTP Code ({reset_code})"
+    timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
+
+    text_content = f"""
+================================================================================
+NKAT AI SECURITY PLATFORM — PASSWORD RESET REQUEST
+================================================================================
+Hello {username},
+
+We received a request to reset the password for your NKAT AI account ({clean_email}).
+
+YOUR 6-DIGIT RESET OTP CODE IS:
+>>> {reset_code} <<<
+
+Notice: This password reset code will expire in {expires_in_minutes} minutes.
+If you did not request a password reset, please ignore this email.
+
+Dispatched on {timestamp} to {clean_email}.
+NKAT AI Security Platform
+================================================================================
+"""
+
+    html_content = f"""
+    <!DOCTYPE html>
+    <html>
+    <head><meta charset="utf-8"/></head>
+    <body style="font-family: Arial, sans-serif; background-color: #090d16; color: #f0f4fc; padding: 20px;">
+      <div style="max-width: 580px; margin: 0 auto; background: #0f172a; border: 1px solid #00f0ff; border-radius: 12px; padding: 30px;">
+        <h2 style="color: #00f0ff; margin-top: 0;">🔐 NKAT AI Password Reset</h2>
+        <p>Hello <strong>{username}</strong>,</p>
+        <p>We received a request to reset your password for registered account <code>{clean_email}</code>.</p>
+        <div style="background: #1e293b; border: 2px dashed #00f0ff; border-radius: 8px; padding: 18px; text-align: center; margin: 20px 0;">
+          <div style="font-size: 13px; color: #94a3b8; text-transform: uppercase;">Your 6-Digit Reset Code</div>
+          <div style="font-size: 32px; font-weight: 800; letter-spacing: 6px; color: #ffffff; margin-top: 6px;">{reset_code}</div>
+        </div>
+        <p style="font-size: 12px; color: #94a3b8;">This reset code will expire in {expires_in_minutes} minutes.</p>
+        <div style="border-top: 1px solid #1e293b; margin-top: 20px; padding-top: 10px; font-size: 11px; color: #64748b;">
+          Dispatched on {timestamp} to {clean_email}.<br/>
+          NKAT Enterprise Threat Sentinel Platform &copy; 2026
+        </div>
+      </div>
+    </body>
+    </html>
+    """
+
+    msg = MIMEMultipart("alternative")
+    msg["Subject"] = subject
+    msg["From"] = smtp_from
+    msg["To"] = clean_email
+    msg.attach(MIMEText(text_content, "plain"))
+    msg.attach(MIMEText(html_content, "html"))
+
+    if smtp_user and smtp_pass and len(smtp_pass.strip()) > 3:
+        try:
+            with smtplib.SMTP(smtp_host, smtp_port, timeout=10) as server:
+                server.ehlo()
+                server.starttls()
+                server.login(smtp_user, smtp_pass)
+                server.sendmail(smtp_from, [clean_email], msg.as_string())
+            logger.info(f"[+] [Password Reset Email SUCCESS] Delivered via SMTP to '{clean_email}'")
+            return {"status": "sent", "method": "smtp", "recipient": clean_email}
+        except Exception as exc:
+            logger.error(f"[!] [SMTP Error] Failed sending password reset email ({exc})")
+            print(text_content)
+            return {"status": "logged", "method": "console", "error": str(exc)}
+    else:
+        logger.info(f"[+] [Password Reset OTP Code Generated] Code: '{reset_code}' for '{clean_email}'")
+        print(text_content)
+        return {"status": "logged", "method": "console", "reset_code": reset_code}
+
+

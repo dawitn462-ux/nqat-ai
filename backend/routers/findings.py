@@ -191,20 +191,23 @@ def reverify_finding_fix(
     db: Session = Depends(get_db)
 ):
     """
-    Automated Re-Verification Engine.
-    Programmatically executes an active targeted check against the target asset to confirm resolution before closing finding.
+    Automated Independent Re-Verification Engine.
+    Programmatically executes an active targeted check against the live running target asset to confirm resolution before closing finding.
     """
-    from backend.services.governance import reverify_finding_target
-    result = reverify_finding_target(db, finding_id)
-    if result.get("status") == "NOT_FOUND":
+    from backend.services.independent_verification_engine import IndependentVerificationEngine
+    verifier = IndependentVerificationEngine()
+    success, msg, _ = verifier.verify_finding(db, finding_id)
+
+    db_finding = db.query(Finding).filter(Finding.id == finding_id).first()
+    if not db_finding:
         raise HTTPException(status_code=404, detail="Finding not found")
 
     return {
-        "finding_id": result["finding_id"],
-        "status": result["status"],
-        "is_reverified": result["is_reverified"],
-        "details": result["details"],
-        "reverified_at": datetime.now(timezone.utc)
+        "finding_id": db_finding.id,
+        "status": db_finding.status,
+        "is_reverified": success,
+        "details": msg,
+        "reverified_at": db_finding.reverified_at or datetime.now(timezone.utc)
     }
 
 
@@ -218,7 +221,7 @@ def approve_finding(
     db: Session = Depends(get_db)
 ):
     """
-    Approves a finding, updating status to RESOLVED and recording features snapshot. Requires X-API-Key header.
+    Approves a patch proposal for a finding, updating status to PATCH_APPROVED. Requires X-API-Key header.
     """
     db_finding = db.query(Finding).filter(Finding.id == finding_id).first()
     if not db_finding:
@@ -236,7 +239,7 @@ def approve_finding(
     }
     db_finding.previous_state = json.dumps(snapshot)
 
-    db_finding.status = FindingStatus.RESOLVED.value
+    db_finding.status = FindingStatus.PATCH_APPROVED.value
     db_finding.approved_at = datetime.now(timezone.utc)
     db_finding.approved_by = reviewer
 

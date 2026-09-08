@@ -316,24 +316,8 @@ def validate_remediation_and_rescan(
     # 4. DAST Rescan Validation against test application instance
     try:
         sqli_payload = "' OR '1'='1"
-        test_url = f"{target_url}?username={urllib.parse.quote(sqli_payload)}"
 
-        req = urllib.request.Request(test_url, headers={"User-Agent": "NKAT-DAST-Rescan/1.0"})
-        try:
-            with urllib.request.urlopen(req, timeout=3.0) as resp:
-                resp_body = resp.read().decode("utf-8", errors="ignore")
-                if "vulnerable" in resp_body or "SUPERADMIN" in resp_body:
-                    validation_results["dast"] = "FAILED: SQL injection payload still succeeded on rescan"
-                    return _fail_validation(db, remediation, validation_results, "DAST rescan failed: Vulnerability still present")
-                else:
-                    validation_results["dast"] = "PASSED (Vulnerability Gone)"
-        except urllib.error.HTTPError as http_err:
-            if http_err.code == 404:
-                validation_results["dast"] = "PASSED (Original Vulnerability Gone - Returns 404)"
-            else:
-                validation_results["dast"] = f"PASSED (HTTP {http_err.code})"
-        except Exception as conn_err:
-            # Fallback direct code evaluation rescan for isolated test app function
+        if "vulnerable_app" in affected_file or "tests" in affected_file:
             import importlib
             import tests.vulnerable_app.app as vuln_app
             importlib.reload(vuln_app)
@@ -343,6 +327,24 @@ def validate_remediation_and_rescan(
                 return _fail_validation(db, remediation, validation_results, "DAST rescan failed: Vulnerability active")
             else:
                 validation_results["dast"] = "PASSED (Original Vulnerability Gone)"
+        else:
+            test_url = f"{target_url}?username={urllib.parse.quote(sqli_payload)}"
+            req = urllib.request.Request(test_url, headers={"User-Agent": "NKAT-DAST-Rescan/1.0"})
+            try:
+                with urllib.request.urlopen(req, timeout=3.0) as resp:
+                    resp_body = resp.read().decode("utf-8", errors="ignore")
+                    if "vulnerable" in resp_body or "SUPERADMIN" in resp_body:
+                        validation_results["dast"] = "FAILED: SQL injection payload still succeeded on rescan"
+                        return _fail_validation(db, remediation, validation_results, "DAST rescan failed: Vulnerability still present")
+                    else:
+                        validation_results["dast"] = "PASSED (Vulnerability Gone)"
+            except urllib.error.HTTPError as http_err:
+                if http_err.code == 404:
+                    validation_results["dast"] = "PASSED (Original Vulnerability Gone - Returns 404)"
+                else:
+                    validation_results["dast"] = f"PASSED (HTTP {http_err.code})"
+            except Exception as conn_err:
+                validation_results["dast"] = f"PASSED_WITH_WARNING: {conn_err}"
 
     except Exception as exc:
         validation_results["dast"] = f"PASSED_WITH_WARNING: {exc}"
@@ -350,22 +352,20 @@ def validate_remediation_and_rescan(
     # 5. Regression Check
     validation_results["regression"] = "PASSED (No security regressions detected)"
 
-    # All validations passed! Transition status to VERIFIED
-    remediation.status = RemediationStatus.VERIFIED.value
+    # All validations passed! Invoke independent verification engine
+    from backend.services.independent_verification_engine import IndependentVerificationEngine
+    verifier = IndependentVerificationEngine()
+    success, v_msg, after_ev = verifier.verify_finding(db, remediation.finding_id)
+
+    remediation.status = RemediationStatus.VERIFIED.value if success else RemediationStatus.FAILED.value
     remediation.validation_status = json.dumps(validation_results)
     
-    # Update parent finding status to RESOLVED
-    finding = db.query(Finding).filter(Finding.id == remediation.finding_id).first()
-    if finding:
-        finding.status = FindingStatus.RESOLVED.value
-        finding.previous_state = f"VERIFIED_REMEDIATION_PASSED (Remediation #{remediation.id})"
-
     log_audit_event(
         db,
         finding_id=remediation.finding_id,
-        action="remediation_verified",
+        action="remediation_verified" if success else "remediation_failed_verification",
         actor="remediation_engine",
-        actor_name=f"Remediation #{remediation.id}: All syntax, SAST, DAST rescans PASSED"
+        actor_name=f"Remediation #{remediation.id}: {v_msg}"
     )
     db.commit()
     db.refresh(remediation)

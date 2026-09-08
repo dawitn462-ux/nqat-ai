@@ -15,12 +15,20 @@ from backend.models import Finding, FindingStatus, AuditLog, FeedbackLabel, Subd
 logger = logging.getLogger("nkat.governance")
 
 ALLOWED_TRANSITIONS = {
-    FindingStatus.OPEN.value: [FindingStatus.UNDER_TRIAGE.value, FindingStatus.IN_REMEDIATION.value, FindingStatus.RISK_ACCEPTED.value, FindingStatus.FALSE_POSITIVE.value],
-    FindingStatus.UNDER_TRIAGE.value: [FindingStatus.IN_REMEDIATION.value, FindingStatus.RISK_ACCEPTED.value, FindingStatus.FALSE_POSITIVE.value, FindingStatus.RESOLVED.value],
-    FindingStatus.IN_REMEDIATION.value: [FindingStatus.RESOLVED.value, FindingStatus.RISK_ACCEPTED.value, FindingStatus.FALSE_POSITIVE.value, FindingStatus.OPEN.value],
+    FindingStatus.OPEN.value: [FindingStatus.CONFIRMED.value, FindingStatus.UNDER_TRIAGE.value, FindingStatus.IN_REMEDIATION.value, FindingStatus.PATCH_PROPOSED.value, FindingStatus.RISK_ACCEPTED.value, FindingStatus.ACCEPTED_RISK.value, FindingStatus.FALSE_POSITIVE.value],
+    FindingStatus.CONFIRMED.value: [FindingStatus.UNDER_TRIAGE.value, FindingStatus.IN_REMEDIATION.value, FindingStatus.PATCH_PROPOSED.value, FindingStatus.RISK_ACCEPTED.value, FindingStatus.ACCEPTED_RISK.value, FindingStatus.FALSE_POSITIVE.value],
+    FindingStatus.UNDER_TRIAGE.value: [FindingStatus.IN_REMEDIATION.value, FindingStatus.PATCH_PROPOSED.value, FindingStatus.RISK_ACCEPTED.value, FindingStatus.ACCEPTED_RISK.value, FindingStatus.FALSE_POSITIVE.value],
+    FindingStatus.IN_REMEDIATION.value: [FindingStatus.PATCH_PROPOSED.value, FindingStatus.PATCH_APPROVED.value, FindingStatus.PATCH_APPLIED.value, FindingStatus.VERIFYING.value, FindingStatus.RISK_ACCEPTED.value, FindingStatus.FALSE_POSITIVE.value],
+    FindingStatus.PATCH_PROPOSED.value: [FindingStatus.PATCH_APPROVED.value, FindingStatus.IN_REMEDIATION.value, FindingStatus.REOPENED.value, FindingStatus.OPEN.value],
+    FindingStatus.PATCH_APPROVED.value: [FindingStatus.PATCH_APPLIED.value, FindingStatus.PATCH_APPLIED_PENDING_VERIFICATION.value, FindingStatus.VERIFYING.value, FindingStatus.REOPENED.value],
+    FindingStatus.PATCH_APPLIED.value: [FindingStatus.PATCH_APPLIED_PENDING_VERIFICATION.value, FindingStatus.VERIFYING.value, FindingStatus.RESOLVED.value, FindingStatus.REOPENED.value],
+    FindingStatus.PATCH_APPLIED_PENDING_VERIFICATION.value: [FindingStatus.VERIFYING.value, FindingStatus.RESOLVED.value, FindingStatus.REOPENED.value],
+    FindingStatus.VERIFYING.value: [FindingStatus.RESOLVED.value, FindingStatus.REOPENED.value, FindingStatus.OPEN.value],
+    FindingStatus.REOPENED.value: [FindingStatus.OPEN.value, FindingStatus.IN_REMEDIATION.value, FindingStatus.PATCH_PROPOSED.value],
     FindingStatus.RISK_ACCEPTED.value: [FindingStatus.OPEN.value, FindingStatus.IN_REMEDIATION.value],
-    FindingStatus.RESOLVED.value: [FindingStatus.CLOSED.value, FindingStatus.OPEN.value],
-    FindingStatus.CLOSED.value: [FindingStatus.OPEN.value],
+    FindingStatus.ACCEPTED_RISK.value: [FindingStatus.OPEN.value, FindingStatus.IN_REMEDIATION.value],
+    FindingStatus.RESOLVED.value: [FindingStatus.CLOSED.value, FindingStatus.REOPENED.value, FindingStatus.OPEN.value],
+    FindingStatus.CLOSED.value: [FindingStatus.OPEN.value, FindingStatus.REOPENED.value],
     FindingStatus.FALSE_POSITIVE.value: [FindingStatus.OPEN.value],
 }
 

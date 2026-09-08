@@ -62,6 +62,11 @@ class VulnerabilityFinding(BaseModel):
     evidence: Optional[str] = None
     cwe: Optional[str] = None
     remediation: Optional[str] = None
+    vulnerability_type: Optional[str] = None
+    detection_method: Optional[str] = "DAST_ACTIVE_PROBE"
+    request_evidence: Optional[str] = None
+    response_evidence: Optional[str] = None
+    code_evidence: Optional[str] = None
 
 
 class ScanSummary(BaseModel):

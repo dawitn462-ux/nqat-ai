@@ -5,6 +5,8 @@ from scanner.models import HTTPResponse, VulnerabilityFinding, Severity
 from scanner.exceptions import RequestEngineError, ScopeViolationError
 
 
+import json
+
 class XSSCheck(BaseCheck):
     check_id = "XSS_001"
     name = "Reflected Cross-Site Scripting (XSS) Scanner"
@@ -50,6 +52,8 @@ class XSSCheck(BaseCheck):
                         res_test = await self.client.get(url, params=test_params)
                         if res_test.status_code == 200 and payload in res_test.body:
                             audited_endpoints.add(endpoint_key)
+                            req_ev = json.dumps({"method": "GET", "url": url, "params": test_params})
+                            resp_ev = json.dumps({"status_code": res_test.status_code, "headers": res_test.headers, "body_snippet": res_test.body[:500]})
                             findings.append(
                                 VulnerabilityFinding(
                                     id=f"{self.check_id}_{param_name.upper()}",
@@ -65,6 +69,10 @@ class XSSCheck(BaseCheck):
                                     evidence=f"Payload '{payload}' on parameter '{param_name}' at '{parsed.path}' reflected unescaped in HTTP response body.",
                                     cwe="CWE-79",
                                     remediation="Contextually encode all user-supplied input before rendering it in HTML/JSON responses.",
+                                    vulnerability_type="REFLECTED_XSS",
+                                    detection_method="CANARY_PAYLOAD_CONTEXT_ANALYSIS",
+                                    request_evidence=req_ev,
+                                    response_evidence=resp_ev,
                                 )
                             )
                             break
@@ -82,6 +90,8 @@ class XSSCheck(BaseCheck):
                     try:
                         res_test = await self.client.get(probe_url, params={param_name: payload})
                         if res_test.status_code == 200 and payload in res_test.body:
+                            req_ev = json.dumps({"method": "GET", "url": probe_url, "params": {param_name: payload}})
+                            resp_ev = json.dumps({"status_code": res_test.status_code, "headers": res_test.headers, "body_snippet": res_test.body[:500]})
                             findings.append(
                                 VulnerabilityFinding(
                                     id=f"{self.check_id}_{param_name.upper()}_{route.upper().replace('/', '_')}",
@@ -94,6 +104,10 @@ class XSSCheck(BaseCheck):
                                     evidence=f"Payload '{payload}' on parameter '{param_name}' at '{route}' reflected unescaped in HTTP response body.",
                                     cwe="CWE-79",
                                     remediation="Contextually encode all user-supplied input before rendering it in HTML/JSON responses.",
+                                    vulnerability_type="REFLECTED_XSS",
+                                    detection_method="CANARY_PAYLOAD_CONTEXT_ANALYSIS",
+                                    request_evidence=req_ev,
+                                    response_evidence=resp_ev,
                                 )
                             )
                             break

@@ -10,12 +10,13 @@ from sqlalchemy.orm import Session
 
 from backend.database import get_db
 from backend.models import DomainTarget, DomainVerificationStatus, DomainVerificationMethod, DomainAuditLog
-from backend.schemas import DomainSubmissionCreate, DomainVerificationRequest, DomainTargetResponse, DomainAuditLogResponse
+from backend.schemas import DomainSubmissionCreate, DomainVerificationRequest, DomainTargetResponse, DomainAuditLogResponse, DomainQuotaResponse
 from backend.services.domain_verification_service import (
     normalize_domain,
     generate_verification_token,
     verify_domain_ownership,
     check_domain_submission_rate_limit,
+    get_user_domain_submission_count_24h,
     log_domain_audit,
 )
 from backend.auth import verify_api_key
@@ -100,7 +101,7 @@ def submit_domain(
 
     token = generate_verification_token()
 
-    preauthorized_hosts = ("localhost", "127.0.0.1", "0.0.0.0", "::1", "owasp.org")
+    preauthorized_hosts = ("localhost", "127.0.0.1", "0.0.0.0", "::1")
     initial_status = DomainVerificationStatus.VERIFIED.value if (domain_name in preauthorized_hosts or domain_name.endswith(".localhost")) else DomainVerificationStatus.PENDING.value
 
     domain_rec = DomainTarget(
@@ -205,11 +206,29 @@ def delete_domain(
         DomainTarget.id == domain_id,
         DomainTarget.organization_id == org_id
     ).first()
-
     if not domain_rec:
         raise HTTPException(status_code=404, detail=f"Domain target record with ID {domain_id} not found.")
 
     db.delete(domain_rec)
     db.commit()
     return None
+
+
+@router.get("/domains/quota", response_model=DomainQuotaResponse)
+def get_domain_quota(
+    auth_context: dict = Depends(verify_api_key),
+    db: Session = Depends(get_db)
+):
+    """
+    Returns the current authenticated user's domain submission / challenge token quota (3 per user per 24 hours).
+    Quota usage is strictly isolated per user_id.
+    """
+    user_id = auth_context.get("user_id", 1)
+    used = get_user_domain_submission_count_24h(db, user_id=user_id)
+    return DomainQuotaResponse(
+        user_id=user_id,
+        daily_limit=3,
+        used_24h=used,
+        remaining_24h=max(0, 3 - used)
+    )
 

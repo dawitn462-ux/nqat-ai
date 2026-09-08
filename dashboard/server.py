@@ -1580,7 +1580,8 @@ class SecureDashboardHandler(http.server.BaseHTTPRequestHandler):
         import urllib.error
 
         try:
-            backend_url = f"http://127.0.0.1:8000{self.path}"
+            backend_port = os.getenv("BACKEND_PORT", "8080")
+            backend_url = f"http://127.0.0.1:{backend_port}{self.path}"
             content_length = int(self.headers.get("Content-Length", 0))
             body_bytes = self.rfile.read(content_length) if content_length > 0 else None
 
@@ -1596,7 +1597,21 @@ class SecureDashboardHandler(http.server.BaseHTTPRequestHandler):
                 headers=headers,
                 method=self.command
             )
-            with urllib.request.urlopen(req) as resp:
+            try:
+                resp_ctx = urllib.request.urlopen(req)
+            except urllib.error.URLError:
+                # Fallback to port 8000 if 8080 failed
+                fallback_port = "8000" if backend_port == "8080" else "8080"
+                backend_url = f"http://127.0.0.1:{fallback_port}{self.path}"
+                req = urllib.request.Request(
+                    backend_url,
+                    data=body_bytes,
+                    headers=headers,
+                    method=self.command
+                )
+                resp_ctx = urllib.request.urlopen(req)
+
+            with resp_ctx as resp:
                 resp_data = resp.read()
                 self.send_response(resp.status)
                 for key, val in resp.headers.items():

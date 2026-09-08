@@ -22,7 +22,7 @@ export default function AdminDashboardPage({ user, onLogout }) {
     title: '',
     tag: 'ZERO-DAY ALERT',
     tag_color: '#ef4444',
-    author: 'NKAT Security Intelligence Labs',
+    author: 'Nqat Security Intelligence Labs',
     read_time: '4 min read',
     image_url: '',
     video_url: '',
@@ -54,9 +54,12 @@ export default function AdminDashboardPage({ user, onLogout }) {
     }
   };
 
-  const fetchUsers = async () => {
+  const [userFilterMode, setUserFilterMode] = useState('registered');
+
+  const fetchUsers = async (regOnly = true) => {
     try {
-      const res = await fetch('/api/v1/admin/users', { headers: getHeaders() });
+      const isReg = typeof regOnly === 'boolean' ? regOnly : (userFilterMode === 'registered');
+      const res = await fetch(`/api/v1/admin/users?registered_only=${isReg}`, { headers: getHeaders() });
       if (res.ok) setUsersList(await res.json());
     } catch (err) {
       console.error('Failed to fetch users:', err);
@@ -279,7 +282,7 @@ export default function AdminDashboardPage({ user, onLogout }) {
         snippet: snippet || title,
         tag: postForm.tag || 'ZERO-DAY ALERT',
         tag_color: postForm.tag_color || '#ef4444',
-        author: postForm.author || 'NKAT Security Intelligence Labs',
+        author: postForm.author || 'Nqat Security Intelligence Labs',
         read_time: postForm.read_time || '4 min read'
       };
 
@@ -309,7 +312,7 @@ export default function AdminDashboardPage({ user, onLogout }) {
           title: '',
           tag: 'ZERO-DAY ALERT',
           tag_color: '#ef4444',
-          author: 'NKAT Security Intelligence Labs',
+          author: 'Nqat Security Intelligence Labs',
           read_time: '4 min read',
           image_url: '',
           video_url: '',
@@ -848,7 +851,7 @@ export default function AdminDashboardPage({ user, onLogout }) {
                     type="text"
                     value={postForm.author}
                     onChange={e => setPostForm({ ...postForm, author: e.target.value })}
-                    placeholder="e.g. NKAT Threat Intelligence Group"
+                    placeholder="e.g. Nqat Threat Intelligence Group"
                     style={{ width: '100%', padding: '12px 14px', borderRadius: '8px', background: '#000000', border: '2px solid #000000', color: '#ffffff', outline: 'none' }}
                   />
                 </div>
@@ -955,7 +958,7 @@ export default function AdminDashboardPage({ user, onLogout }) {
                     type="button"
                     onClick={() => {
                       setEditingPostId(null);
-                      setPostForm({ title: '', tag: 'ZERO-DAY ALERT', tag_color: '#ef4444', author: 'NKAT Security Intelligence Labs', read_time: '4 min read', snippet: '', content: '' });
+                      setPostForm({ title: '', tag: 'ZERO-DAY ALERT', tag_color: '#ef4444', author: 'Nqat Security Intelligence Labs', read_time: '4 min read', snippet: '', content: '' });
                     }}
                     style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', color: '#ffffff', padding: '0.8rem 1.5rem', borderRadius: '8px', cursor: 'pointer' }}
                   >
@@ -1034,12 +1037,55 @@ export default function AdminDashboardPage({ user, onLogout }) {
         </div>
       )}
 
-      {/* TAB 2: User Account & Role Controls */}
+      {/* TAB 2: User Account Governance & Role Controls */}
       {activeTab === 'users' && (
         <div style={{ background: '#000000', border: '2px solid #000000', borderRadius: '16px', padding: '1.75rem' }}>
-          <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#ffffff', marginBottom: '1.25rem' }}>
-            User Account Governance & <span style={{ color: '#ef4444' }}>Role Scoping</span>
-          </h3>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
+            <div>
+              <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#ffffff', margin: 0 }}>
+                User Account Governance & <span style={{ color: '#ef4444' }}>Role Scoping</span>
+              </h3>
+              <div style={{ fontSize: '0.82rem', color: '#94a3b8', marginTop: '4px' }}>
+                Manage registered platform user accounts, permissions, and organization access.
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', background: 'rgba(255, 255, 255, 0.05)', padding: '4px', borderRadius: '10px', border: '1px solid rgba(255, 255, 255, 0.12)' }}>
+              <button
+                onClick={() => { setUserFilterMode('registered'); fetchUsers(true); }}
+                style={{
+                  padding: '6px 14px',
+                  borderRadius: '8px',
+                  fontSize: '0.8rem',
+                  fontWeight: 800,
+                  cursor: 'pointer',
+                  border: 'none',
+                  background: userFilterMode === 'registered' ? '#ef4444' : 'transparent',
+                  color: userFilterMode === 'registered' ? '#ffffff' : '#94a3b8',
+                  transition: 'all 0.2s ease',
+                  boxShadow: userFilterMode === 'registered' ? '0 2px 8px rgba(239, 68, 68, 0.4)' : 'none'
+                }}
+              >
+                Registered Users Only ({usersList.filter(u => !u.is_default).length})
+              </button>
+              <button
+                onClick={() => { setUserFilterMode('all'); fetchUsers(false); }}
+                style={{
+                  padding: '6px 14px',
+                  borderRadius: '8px',
+                  fontSize: '0.8rem',
+                  fontWeight: 800,
+                  cursor: 'pointer',
+                  border: 'none',
+                  background: userFilterMode === 'all' ? 'rgba(239, 68, 68, 0.3)' : 'transparent',
+                  color: userFilterMode === 'all' ? '#ffffff' : '#94a3b8',
+                  transition: 'all 0.2s ease'
+                }}
+              >
+                All Accounts (Inc. System Default)
+              </button>
+            </div>
+          </div>
 
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.9rem' }}>
@@ -1048,60 +1094,84 @@ export default function AdminDashboardPage({ user, onLogout }) {
                   <th style={{ padding: '12px 16px', fontWeight: 800, color: '#ffffff' }}>User ID</th>
                   <th style={{ padding: '12px 16px', fontWeight: 800, color: '#ffffff' }}>Username</th>
                   <th style={{ padding: '12px 16px', fontWeight: 800, color: '#ffffff' }}>Email Address</th>
+                  <th style={{ padding: '12px 16px', fontWeight: 800, color: '#ffffff' }}>Account Status</th>
                   <th style={{ padding: '12px 16px', fontWeight: 800, color: '#ffffff' }}>Role</th>
                   <th style={{ padding: '12px 16px', fontWeight: 800, color: '#ffffff' }}>Organization</th>
                   <th style={{ padding: '12px 16px', textAlign: 'right', fontWeight: 800, color: '#ffffff' }}>Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {usersList.map(u => (
-                  <tr key={u.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-                    <td style={{ padding: '12px 16px', color: '#ef4444', fontWeight: 800 }}>#{u.id}</td>
-                    <td style={{ padding: '12px 16px', fontWeight: 800, color: '#ffffff' }}>{u.username}</td>
-                    <td style={{ padding: '12px 16px', color: '#ffffff' }}>{u.email || '-'}</td>
-                    <td style={{ padding: '12px 16px' }}>
-                      <span style={{
-                        padding: '4px 12px',
-                        borderRadius: '12px',
-                        fontWeight: 800,
-                        fontSize: '0.75rem',
-                        background: u.role === 'admin' ? 'rgba(239, 68, 68, 0.2)' : 'rgba(255, 255, 255, 0.15)',
-                        color: u.role === 'admin' ? '#ef4444' : '#ffffff',
-                        border: `1px solid ${u.role === 'admin' ? '#ef4444' : '#ffffff'}`
-                      }}>
-                        {u.role.toUpperCase()}
-                      </span>
-                    </td>
-                    <td style={{ padding: '12px 16px', color: '#ffffff' }}>{u.organization_name}</td>
-                    <td style={{ padding: '12px 16px', textAlign: 'right' }}>
-                      <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
-                        {u.role === 'analyst' ? (
-                          <button
-                            onClick={() => handleRoleChange(u.id, 'admin')}
-                            style={{ background: 'rgba(239, 68, 68, 0.2)', border: '1px solid #ef4444', color: '#ef4444', borderRadius: '6px', padding: '6px 12px', fontSize: '0.8rem', cursor: 'pointer', fontWeight: 800 }}
-                          >
-                            Promote Admin
-                          </button>
-                        ) : (
-                          <button
-                            onClick={() => handleRoleChange(u.id, 'analyst')}
-                            style={{ background: 'rgba(255, 255, 255, 0.1)', border: '1px solid #ffffff', color: '#ffffff', borderRadius: '6px', padding: '6px 12px', fontSize: '0.8rem', cursor: 'pointer', fontWeight: 800 }}
-                          >
-                            Set Analyst
-                          </button>
-                        )}
-                        {u.username !== 'admin' && (
-                          <button
-                            onClick={() => handleDeleteUser(u.id, u.username)}
-                            style={{ background: '#ef4444', border: '1px solid #ef4444', color: '#ffffff', borderRadius: '6px', padding: '6px 12px', fontSize: '0.8rem', cursor: 'pointer', fontWeight: 800 }}
-                          >
-                            Delete
-                          </button>
-                        )}
-                      </div>
+                {usersList.length === 0 ? (
+                  <tr>
+                    <td colSpan={7} style={{ padding: '24px', textAlign: 'center', color: '#94a3b8', fontWeight: 600 }}>
+                      No registered user accounts found.
                     </td>
                   </tr>
-                ))}
+                ) : (
+                  usersList.map(u => (
+                    <tr key={u.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+                      <td style={{ padding: '12px 16px', color: '#ef4444', fontWeight: 800 }}>#{u.id}</td>
+                      <td style={{ padding: '12px 16px', fontWeight: 800, color: '#ffffff' }}>{u.username}</td>
+                      <td style={{ padding: '12px 16px', color: '#ffffff' }}>{u.email || '-'}</td>
+                      <td style={{ padding: '12px 16px' }}>
+                        {u.is_default ? (
+                          <span style={{ padding: '3px 8px', borderRadius: '10px', fontSize: '0.7rem', fontWeight: 800, background: 'rgba(245, 158, 11, 0.2)', color: '#f59e0b', border: '1px solid #f59e0b' }}>
+                            SYSTEM DEFAULT
+                          </span>
+                        ) : u.is_email_verified ? (
+                          <span style={{ padding: '3px 8px', borderRadius: '10px', fontSize: '0.7rem', fontWeight: 800, background: 'rgba(16, 185, 129, 0.2)', color: '#10b981', border: '1px solid #10b981' }}>
+                            VERIFIED USER
+                          </span>
+                        ) : (
+                          <span style={{ padding: '3px 8px', borderRadius: '10px', fontSize: '0.7rem', fontWeight: 800, background: 'rgba(148, 163, 184, 0.2)', color: '#94a3b8', border: '1px solid #94a3b8' }}>
+                            REGISTERED USER
+                          </span>
+                        )}
+                      </td>
+                      <td style={{ padding: '12px 16px' }}>
+                        <span style={{
+                          padding: '4px 12px',
+                          borderRadius: '12px',
+                          fontWeight: 800,
+                          fontSize: '0.75rem',
+                          background: u.role === 'admin' ? 'rgba(239, 68, 68, 0.2)' : 'rgba(255, 255, 255, 0.15)',
+                          color: u.role === 'admin' ? '#ef4444' : '#ffffff',
+                          border: `1px solid ${u.role === 'admin' ? '#ef4444' : '#ffffff'}`
+                        }}>
+                          {u.role.toUpperCase()}
+                        </span>
+                      </td>
+                      <td style={{ padding: '12px 16px', color: '#ffffff' }}>{u.organization_name}</td>
+                      <td style={{ padding: '12px 16px', textAlign: 'right' }}>
+                        <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
+                          {u.role === 'analyst' ? (
+                            <button
+                              onClick={() => handleRoleChange(u.id, 'admin')}
+                              style={{ background: 'rgba(239, 68, 68, 0.2)', border: '1px solid #ef4444', color: '#ef4444', borderRadius: '6px', padding: '6px 12px', fontSize: '0.8rem', cursor: 'pointer', fontWeight: 800 }}
+                            >
+                              Promote Admin
+                            </button>
+                          ) : (
+                            <button
+                              onClick={() => handleRoleChange(u.id, 'analyst')}
+                              style={{ background: 'rgba(255, 255, 255, 0.1)', border: '1px solid #ffffff', color: '#ffffff', borderRadius: '6px', padding: '6px 12px', fontSize: '0.8rem', cursor: 'pointer', fontWeight: 800 }}
+                            >
+                              Set Analyst
+                            </button>
+                          )}
+                          {!u.is_default && u.username !== 'admin' && (
+                            <button
+                              onClick={() => handleDeleteUser(u.id, u.username)}
+                              style={{ background: '#ef4444', border: '1px solid #ef4444', color: '#ffffff', borderRadius: '6px', padding: '6px 12px', fontSize: '0.8rem', cursor: 'pointer', fontWeight: 800 }}
+                            >
+                              Delete
+                            </button>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>

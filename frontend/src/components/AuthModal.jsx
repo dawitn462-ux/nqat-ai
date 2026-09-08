@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import NkatLogo from './NkatLogo';
 import { Mail, Lock, User, Building, AlertCircle, ArrowRight, ShieldCheck, RefreshCw, CheckCircle } from 'lucide-react';
 
 export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
@@ -267,32 +268,11 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
           color: '#64748b'
         }}></button>
 
-        {/* Modal Brand Header */}
-        <div style={{ textAlign: 'center', marginBottom: '1.75rem' }}>
-          <div style={{
-            width: '44px',
-            height: '44px',
-            borderRadius: '12px',
-            background: tab === 'verify' ? 'linear-gradient(135deg, #0284c7 0%, #0369a1 100%)' : 'linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.04) 100%)',
-            margin: '0 auto 0.75rem',
-            border: '1px solid #222222',
-            boxShadow: '0 0 20px rgba(0, 0, 0, 0.5)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}>
-            {tab === 'verify' ? (
-              <Mail size={22} color="#ffffff" />
-            ) : (
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 3L22 20H2L12 3Z" fill="#FFFFFF" stroke="#FFFFFF" strokeWidth="1" strokeLinejoin="round"/>
-                <path d="M12 9.5L16.5 17.5H7.5L12 9.5Z" fill="#000000"/>
-              </svg>
-            )}
+        {/* Header Branding */}
+        <div style={{ textAlign: 'center', marginBottom: '1.25rem', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <div style={{ marginBottom: '0.75rem' }}>
+            <NkatLogo size="medium" />
           </div>
-          <h2 className="heading-font" style={{ fontSize: '1.5rem', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.3px' }}>
-            {tab === 'verify' ? 'Verify Registered Email' : (tab === 'login' ? 'Sign In to Nqat AI' : 'Register New Account')}
-          </h2>
           <div className="mono-text" style={{ fontSize: '0.74rem', color: '#94a3b8', marginTop: '4px', fontWeight: 700 }}>
             {tab === 'verify' ? ' Mandatory 6-Digit Email OTP Verification' : 'Enterprise Multi-Tenant Security Platform'}
           </div>

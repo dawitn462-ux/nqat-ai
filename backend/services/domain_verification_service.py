@@ -19,19 +19,30 @@ if PROJECT_ROOT not in sys.path:
 from backend.models import DomainTarget, DomainVerificationStatus, DomainVerificationMethod, DomainAuditLog
 
 
-def check_domain_submission_rate_limit(db, user_id: int, max_limit: int = 3) -> bool:
+def get_user_domain_submission_count_24h(db, user_id: int) -> int:
     """
-    Checks if a user has reached their daily limit of domain submissions (e.g. max 3 in 24 hours).
-    Returns True if allowed, False if limit is exceeded.
+    Returns the count of domain submission attempts for a specific user in the past 24 hours.
+    Strictly isolated per user_id.
     """
     if not user_id:
-        return True
+        return 0
     cutoff = datetime.now(timezone.utc) - timedelta(days=1)
-    attempts_count = db.query(DomainAuditLog).filter(
+    return db.query(DomainAuditLog).filter(
         DomainAuditLog.user_id == user_id,
         DomainAuditLog.timestamp >= cutoff,
         DomainAuditLog.result.in_(["SUBMITTED", "VERIFIED", "SUBMITTED_EXISTING"])
     ).count()
+
+
+def check_domain_submission_rate_limit(db, user_id: int, max_limit: int = 3) -> bool:
+    """
+    Enforces daily rate limit of max_limit (3) domain target submissions / challenge token requests
+    SEPARATELY FOR EACH INDIVIDUAL USER (user_id) per 24 hours.
+    Returns True if allowed, False if limit is exceeded.
+    """
+    if not user_id:
+        return True
+    attempts_count = get_user_domain_submission_count_24h(db, user_id=user_id)
     return attempts_count < max_limit
 
 
@@ -94,13 +105,17 @@ def generate_verification_token() -> str:
 
 def verify_dns_txt_ownership(domain: str, expected_token: str) -> Tuple[bool, str]:
     """
-    Verifies domain ownership via DNS TXT record lookup.
-    Checks '_nkat-challenge.<domain>' and '<domain>'.
+    Verifies domain ownership via real DNS TXT record lookup across multiple live resolvers:
+    1. dnspython library (if installed)
+    2. Google DNS-over-HTTPS (DoH) REST API (https://dns.google/resolve)
+    3. Cloudflare DNS-over-HTTPS (DoH) REST API (https://cloudflare-dns.com/dns-query)
+    4. System nslookup subprocess tool fallback
     """
     challenge_domain = f"_nkat-challenge.{domain}"
     domains_to_check = [challenge_domain, domain]
+    doh_headers = {"Accept": "application/dns-json", "User-Agent": "NKAT-Domain-Verification-Agent/1.0"}
 
-    # Attempt dnspython if installed
+    # 1. Attempt dnspython if installed
     try:
         import dns.resolver
         for target in domains_to_check:
@@ -109,31 +124,69 @@ def verify_dns_txt_ownership(domain: str, expected_token: str) -> Tuple[bool, st
                 for rdata in answers:
                     txt_val = "".join([b.decode("utf-8") if isinstance(b, bytes) else str(b) for b in rdata.strings])
                     if expected_token in txt_val:
-                        return True, f"Verified DNS TXT record at '{target}'"
+                        return True, f"Verified DNS TXT record at '{target}' via dnspython"
             except Exception:
                 continue
     except ImportError:
         pass
 
-    # Standard socket fallback / query
-    import socket
+    # 2. Check via Google DNS-over-HTTPS (DoH) REST API
+    try:
+        with httpx.Client(timeout=6.0, verify=False) as client:
+            for target in domains_to_check:
+                try:
+                    resp = client.get(f"https://dns.google/resolve?name={target}&type=TXT", headers=doh_headers)
+                    if resp.status_code == 200:
+                        data = resp.json()
+                        answers = data.get("Answer", [])
+                        for ans in answers:
+                            txt_data = str(ans.get("data", ""))
+                            if expected_token in txt_data:
+                                return True, f"Verified DNS TXT record at '{target}' via Google DNS (DoH)"
+                except Exception:
+                    continue
+    except Exception:
+        pass
+
+    # 3. Check via Cloudflare DNS-over-HTTPS (DoH) REST API
+    try:
+        with httpx.Client(timeout=6.0, verify=False) as client:
+            for target in domains_to_check:
+                try:
+                    resp = client.get(f"https://cloudflare-dns.com/dns-query?name={target}&type=TXT", headers=doh_headers)
+                    if resp.status_code == 200:
+                        data = resp.json()
+                        answers = data.get("Answer", [])
+                        for ans in answers:
+                            txt_data = str(ans.get("data", ""))
+                            if expected_token in txt_data:
+                                return True, f"Verified DNS TXT record at '{target}' via Cloudflare DNS (DoH)"
+                except Exception:
+                    continue
+    except Exception:
+        pass
+
+    # 4. Check via system nslookup command fallback
+    import subprocess
     for target in domains_to_check:
         try:
-            records = socket.gethostbyname_ex(target)
-            if any(expected_token in str(r) for r in records):
-                return True, f"Verified DNS record for '{target}'"
+            res = subprocess.run(["nslookup", "-q=TXT", target], capture_output=True, text=True, timeout=5)
+            output = res.stdout or ""
+            if expected_token in output:
+                return True, f"Verified DNS TXT record at '{target}' via system nslookup"
         except Exception:
             continue
 
     return False, (
         f"DNS TXT record matching '{expected_token}' not found on "
-        f"'{challenge_domain}' or '{domain}'. Please set TXT record to '{expected_token}'."
+        f"'{challenge_domain}' or '{domain}'. Checked dnspython, Google DoH, Cloudflare DoH, and nslookup. "
+        f"Please set a TXT record on '{challenge_domain}' or '{domain}' with value '{expected_token}'."
     )
 
 
 def verify_file_ownership(target_url_or_domain: str, expected_token: str) -> Tuple[bool, str]:
     """
-    Verifies domain ownership by fetching /.well-known/nkat-verification.txt via HTTP GET.
+    Verifies domain ownership by fetching /.well-known/nkat-verification.txt via real HTTP GET.
     """
     hostname, clean_url = normalize_domain(target_url_or_domain)
     
@@ -152,7 +205,8 @@ def verify_file_ownership(target_url_or_domain: str, expected_token: str) -> Tup
             unique_urls.append(u)
 
     errors = []
-    with httpx.Client(timeout=8.0, verify=False, follow_redirects=True) as client:
+    headers = {"User-Agent": "NKAT-Domain-Verification-Agent/1.0"}
+    with httpx.Client(timeout=8.0, verify=False, follow_redirects=True, headers=headers) as client:
         for url in unique_urls:
             try:
                 resp = client.get(url)

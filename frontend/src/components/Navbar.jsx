@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import NkatLogo from './NkatLogo';
 import NotificationPanel from './NotificationPanel';
 import AdminPanelModal from './AdminPanelModal';
 import { Bell, User, Lock, LogOut, ShieldAlert } from 'lucide-react';
@@ -44,31 +45,7 @@ export default function Navbar({ user, onOpenAuth, onLogout }) {
       zIndex: 100
     }}>
       {/* Brand & Logo */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
-        <div style={{
-          width: '36px',
-          height: '36px',
-          borderRadius: '8px',
-          background: 'linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.04) 100%)',
-          border: '1px solid rgba(255, 255, 255, 0.4)',
-          boxShadow: '0 0 16px rgba(255, 255, 255, 0.25)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          flexShrink: 0
-        }}>
-          <img src="/logo.png" alt="Nqat AI Logo" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '7px' }} />
-        </div>
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span className="brand-font" style={{ fontFamily: "'Outfit', 'Syne', sans-serif", fontSize: '1.35rem', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.5px' }}>Nqat AI</span>
-            <span className="aegis-badge-pill" style={{ padding: '2px 8px', fontSize: '0.65rem' }}>
-              v2.0
-            </span>
-          </div>
-          <span style={{ fontSize: '0.72rem', color: '#94a3b8', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.8px' }}>WEBSITE VULNERABILITY ASSISTANT</span>
-        </div>
-      </div>
+      <NkatLogo size="small" />
 
       {/* System Status Pill & Auth Controls */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '1.2rem' }}>

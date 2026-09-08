@@ -80,6 +80,14 @@ class FindingResponse(FindingBase):
     priority_tier: Optional[str] = "P3"
     contextual_risk_score: Optional[float] = None
     risk_acceptance_reason: Optional[str] = None
+    vulnerability_type: Optional[str] = None
+    detection_method: Optional[str] = "DAST_ACTIVE_PROBE"
+    request_evidence: Optional[str] = None
+    response_evidence: Optional[str] = None
+    code_evidence: Optional[str] = None
+    verification_scan_id: Optional[int] = None
+    before_evidence: Optional[str] = None
+    after_evidence: Optional[str] = None
     reverified_at: Optional[datetime] = None
     sla_deadline: Optional[datetime] = None
     is_sla_breached: Optional[bool] = False
@@ -168,6 +176,13 @@ class DomainTargetResponse(BaseModel):
     file_verification_content: Optional[str] = None
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class DomainQuotaResponse(BaseModel):
+    user_id: int
+    daily_limit: int = 3
+    used_24h: int
+    remaining_24h: int
 
 
 class NotificationResponse(BaseModel):

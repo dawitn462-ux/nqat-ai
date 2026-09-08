@@ -147,6 +147,14 @@ uploads_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "up
 os.makedirs(uploads_dir, exist_ok=True)
 app.mount("/uploads", StaticFiles(directory=uploads_dir), name="uploads")
 
+dist_assets = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "frontend", "dist", "assets")
+if os.path.exists(dist_assets):
+    app.mount("/assets", StaticFiles(directory=dist_assets), name="assets")
+
+dist_news = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "frontend", "dist", "news")
+if os.path.exists(dist_news):
+    app.mount("/news", StaticFiles(directory=dist_news), name="news")
+
 @app.get("/favicon.ico", include_in_schema=False)
 @app.get("/favicon.png", include_in_schema=False)
 @app.get("/favicon.svg", include_in_schema=False)
@@ -179,13 +187,8 @@ async def custom_http_exception_handler(request: Request, exc: HTTPException):
 @app.middleware("http")
 async def waf_traffic_middleware(request: Request, call_next):
     path_and_query = str(request.url)
-    if not (
-        request.url.path.startswith("/uploads") or 
-        request.url.path.startswith("/assets") or 
-        request.url.path.startswith("/favicon") or
-        request.url.path.startswith("/api/v1/posts") or
-        request.url.path.startswith("/api/v1/admin")
-    ):
+    # Only evaluate WAF classifier on API data endpoints (/api/v1/...) to prevent blocking frontend SPA navigation
+    if request.url.path.startswith("/api/") and not request.url.path.startswith("/api/v1/posts") and not request.url.path.startswith("/api/v1/admin"):
         client_ip = request.client.host if request.client else "127.0.0.1"
         try:
             from backend.services.waf_service import analyze_request_payload, trigger_waf_blocked_attack_alerts
@@ -248,10 +251,13 @@ app.include_router(remediation.router)
 
 
 @app.get("/", include_in_schema=False)
-def root_redirect():
+def serve_spa_root():
     """
-    Redirects root endpoint to interactive OpenAPI docs (/docs).
+    Serves the NKAT AI Web Application frontend SPA index.html at root URL.
     """
+    dist_index = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "frontend", "dist", "index.html")
+    if os.path.exists(dist_index):
+        return FileResponse(dist_index)
     return RedirectResponse(url="/docs")
 
 
@@ -310,6 +316,20 @@ def healthcheck(db: Session = Depends(get_db)):
         "database": db_status,
         "version": "v1"
     }
+
+
+@app.get("/{full_path:path}", include_in_schema=False)
+def serve_spa_fallback(full_path: str):
+    """
+    Catch-all route returning frontend SPA index.html for client-side routing.
+    Excludes /api, /docs, /redoc, /openapi.json, /uploads, /assets, /news.
+    """
+    if full_path.startswith(("api/", "docs", "redoc", "openapi.json", "uploads/", "assets/", "news/")):
+        raise HTTPException(status_code=404, detail="Resource not found")
+    dist_index = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "frontend", "dist", "index.html")
+    if os.path.exists(dist_index):
+        return FileResponse(dist_index)
+    return RedirectResponse(url="/docs")
 
 
 if __name__ == "__main__":

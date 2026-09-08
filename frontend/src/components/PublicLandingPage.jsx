@@ -4,6 +4,7 @@ import CrowdStrikeHomepage from './CrowdStrikeHomepage';
 import AdminDashboardPage from './AdminDashboardPage';
 import SecureWebTicker from './SecureWebTicker';
 import Navbar from './Navbar';
+import NkatLogo from './NkatLogo';
 import { 
   Search, Cpu, ShieldCheck, Lock, User, ArrowRight, CheckCircle2, 
   Send, LogOut, ChevronDown, ChevronUp, Zap, Sparkles, Terminal, 
@@ -61,7 +62,7 @@ export default function PublicLandingPage({ user, onAuthSuccess, onLogout }) {
 
   const handleContactSubmit = (e) => {
     e.preventDefault();
-    setContactMsg('Thank you for contacting NKAT AI Assistant Team. We will reach out shortly.');
+    setContactMsg('Thank you for contacting Nqat AI Assistant Team. We will reach out shortly.');
     setContactForm({ name: '', email: '', message: '' });
     setTimeout(() => setContactMsg(''), 5000);
   };
@@ -101,7 +102,7 @@ export default function PublicLandingPage({ user, onAuthSuccess, onLogout }) {
       readTime: "5 min read",
       title: "CISA KEV Sync: Critical Web Application Vulnerabilities Cataloged",
       snippet: "Our autonomous threat engine synchronized 14 newly cataloged CVE vulnerabilities affecting public web endpoints. Learn how machine learning triage isolates true exploit vectors.",
-      author: "NKAT Security Intelligence Labs",
+      author: "Nqat Security Intelligence Labs",
       image: "/news/post1.jpg"
     },
     {
@@ -158,32 +159,8 @@ export default function PublicLandingPage({ user, onAuthSuccess, onLogout }) {
         borderBottom: '2px solid #000000'
       }}>
         {/* Brand Logo & Name */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', cursor: 'pointer' }} onClick={() => scrollTo('home')}>
-          <div style={{
-            width: '38px',
-            height: '38px',
-            borderRadius: '10px',
-            background: 'rgba(255, 255, 255, 0.05)',
-            border: '2px solid #000000',
-            boxShadow: '0 0 16px rgba(0, 0, 0, 0.5)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexShrink: 0
-          }}>
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 3L22 20H2L12 3Z" fill="#FFFFFF" stroke="#FFFFFF" strokeWidth="1" strokeLinejoin="round"/>
-              <path d="M12 9.5L16.5 17.5H7.5L12 9.5Z" fill="#000000"/>
-            </svg>
-          </div>
-          <div>
-            <div className="brand-font" style={{ fontFamily: "'Outfit', 'Syne', sans-serif", fontSize: '1.35rem', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.5px', lineHeight: 1.1 }}>
-              Nqat <span style={{ color: '#ffffff' }}>AI</span>
-            </div>
-            <div style={{ fontSize: '0.62rem', color: '#94a3b8', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase' }}>
-              WEBSITE VULNERABILITY ASSISTANT
-            </div>
-          </div>
+        <div style={{ cursor: 'pointer' }} onClick={() => scrollTo('home')}>
+          <NkatLogo size="small" />
         </div>
 
         {/* Navigation Links & Sign In Group */}
@@ -600,7 +577,7 @@ export default function PublicLandingPage({ user, onAuthSuccess, onLogout }) {
             <span>GET IN TOUCH</span>
           </div>
           <h2 className="aegis-section-title">
-            Contact the NKAT Security Team
+            Contact the Nqat Security Team
           </h2>
           <p className="aegis-section-subtitle">
             Have questions about platform deployment, target verification, or API integration? Send us a message.

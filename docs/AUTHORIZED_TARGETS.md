@@ -12,6 +12,8 @@
 | :--- | :--- | :--- | :--- | :--- |
 | OWASP Juice Shop (HTTP) | `http://localhost:3000` | HTTP | Local Docker / Test | **AUTHORIZED** |
 | OWASP Juice Shop (HTTPS) | `https://localhost:3000` | HTTPS (TLS) | Local Docker / Test | **AUTHORIZED** |
+| NKAT Vulnerable Security Lab | `http://127.0.0.1:8888` | HTTP | Local Test Lab | **AUTHORIZED** |
+| NKAT Vulnerable Security Lab | `http://localhost:8888` | HTTP | Local Test Lab | **AUTHORIZED** |
 | NKAT AI Dashboard (HTTPS) | `https://localhost:8443` | HTTPS (TLS) | Local Web App | **AUTHORIZED** |
 | Loopback Interface (HTTPS) | `https://127.0.0.1:3000` | HTTPS (TLS) | Local Docker / Test | **AUTHORIZED** |
 
@@ -20,7 +22,7 @@
 ## Explicitly Prohibited Targets & Out-of-Scope Rules
 
 - Any external IPv4 / IPv6 addresses or domain names not resolving strictly to local loopback (`127.0.0.1` / `localhost`).
-- Port numbers other than `3000` or `8443` unless explicitly added and approved in this document.
+- Port numbers other than `3000`, `8000`, `8888`, or `8443` unless explicitly added and approved in this document.
 - Unencrypted HTTP communication when `ENFORCE_HTTPS=true` is mandated by policy.
 - Production systems, public APIs, cloud infrastructure, or third-party web services.
 

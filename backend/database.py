@@ -70,14 +70,42 @@ try:
             if "google_sub" not in existing_cols:
                 conn.execute(text("ALTER TABLE users ADD COLUMN google_sub VARCHAR(255)"))
 
+        if "scans" in tables:
+            s_cols = {col["name"] for col in inspector.get_columns("scans")}
+            if "assessment_id" not in s_cols:
+                conn.execute(text("ALTER TABLE scans ADD COLUMN assessment_id INTEGER"))
+
+        if "audit_logs" in tables:
+            al_cols = {col["name"] for col in inspector.get_columns("audit_logs")}
+            if "assessment_id" not in al_cols:
+                conn.execute(text("ALTER TABLE audit_logs ADD COLUMN assessment_id INTEGER"))
+
         if "findings" in tables:
             f_cols = {col["name"] for col in inspector.get_columns("findings")}
+            if "assessment_id" not in f_cols:
+                conn.execute(text("ALTER TABLE findings ADD COLUMN assessment_id INTEGER"))
             if "priority_tier" not in f_cols:
                 conn.execute(text("ALTER TABLE findings ADD COLUMN priority_tier VARCHAR(50) DEFAULT 'P3'"))
             if "contextual_risk_score" not in f_cols:
                 conn.execute(text("ALTER TABLE findings ADD COLUMN contextual_risk_score FLOAT"))
             if "risk_acceptance_reason" not in f_cols:
                 conn.execute(text("ALTER TABLE findings ADD COLUMN risk_acceptance_reason TEXT"))
+            if "vulnerability_type" not in f_cols:
+                conn.execute(text("ALTER TABLE findings ADD COLUMN vulnerability_type VARCHAR(100)"))
+            if "detection_method" not in f_cols:
+                conn.execute(text("ALTER TABLE findings ADD COLUMN detection_method VARCHAR(100)"))
+            if "request_evidence" not in f_cols:
+                conn.execute(text("ALTER TABLE findings ADD COLUMN request_evidence TEXT"))
+            if "response_evidence" not in f_cols:
+                conn.execute(text("ALTER TABLE findings ADD COLUMN response_evidence TEXT"))
+            if "code_evidence" not in f_cols:
+                conn.execute(text("ALTER TABLE findings ADD COLUMN code_evidence TEXT"))
+            if "verification_scan_id" not in f_cols:
+                conn.execute(text("ALTER TABLE findings ADD COLUMN verification_scan_id INTEGER"))
+            if "before_evidence" not in f_cols:
+                conn.execute(text("ALTER TABLE findings ADD COLUMN before_evidence TEXT"))
+            if "after_evidence" not in f_cols:
+                conn.execute(text("ALTER TABLE findings ADD COLUMN after_evidence TEXT"))
             if "reverified_at" not in f_cols:
                 conn.execute(text("ALTER TABLE findings ADD COLUMN reverified_at DATETIME"))
             if "sla_deadline" not in f_cols:

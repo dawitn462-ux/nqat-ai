@@ -8,6 +8,8 @@ from scanner.checks.base import BaseCheck
 from scanner.models import HTTPResponse, VulnerabilityFinding, Severity
 
 
+import json
+
 class SecurityHeadersCheck(BaseCheck):
     check_id = "SEC_HDR_001"
     name = "Security Headers Audit"
@@ -57,6 +59,8 @@ class SecurityHeadersCheck(BaseCheck):
                 continue
 
             resp_headers = {k.lower(): v for k, v in res.headers.items()}
+            req_evidence = json.dumps({"method": "GET", "url": url, "headers": {"Host": target_url.split("//")[-1].split("/")[0]}})
+            resp_evidence = json.dumps({"status_code": res.status_code, "headers": res.headers})
 
             for header_name, (severity, desc, cwe, remediation) in self.RECOMMENDED_HEADERS.items():
                 if header_name not in resp_headers and header_name not in reported_headers:
@@ -68,10 +72,35 @@ class SecurityHeadersCheck(BaseCheck):
                             severity=severity,
                             description=f"{desc} (Target: {target_url})",
                             endpoint=target_url,
-                            evidence=f"HTTP/{res.status_code} response headers missing '{header_name}'.",
+                            evidence=f"HTTP/{res.status_code} response headers missing '{header_name}'. Actual headers: {json.dumps(res.headers)}",
                             cwe=cwe,
                             remediation=remediation,
+                            vulnerability_type="MISSING_SECURITY_HEADER",
+                            detection_method="HTTP_RESPONSE_HEADER_ANALYSIS",
+                            request_evidence=req_evidence,
+                            response_evidence=resp_evidence,
                         )
                     )
+
+            # Check X-Powered-By disclosure
+            if "x-powered-by" in resp_headers and "x-powered-by" not in reported_headers:
+                reported_headers.add("x-powered-by")
+                val = resp_headers["x-powered-by"]
+                findings.append(
+                    VulnerabilityFinding(
+                        id=f"{self.check_id}_X_POWERED_BY",
+                        title="Server Technology Disclosure (X-Powered-By)",
+                        severity=Severity.LOW,
+                        description=f"Server exposes technology stack ({val}) in X-Powered-By header.",
+                        endpoint=target_url,
+                        evidence=f"Header X-Powered-By: {val} in response headers: {json.dumps(res.headers)}",
+                        cwe="CWE-200",
+                        remediation="Remove X-Powered-By response header in application settings (e.g. app.disable('x-powered-by') or use Helmet).",
+                        vulnerability_type="SERVER_BANNER_DISCLOSURE",
+                        detection_method="HTTP_RESPONSE_HEADER_ANALYSIS",
+                        request_evidence=req_evidence,
+                        response_evidence=resp_evidence,
+                    )
+                )
 
         return findings

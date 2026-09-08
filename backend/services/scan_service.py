@@ -277,13 +277,18 @@ async def _execute_scan_async(scan_id: int, target_url: str, db: Optional[Sessio
                     evidence=f.evidence,
                     recommendation=rec_info.get("recommendation"),
                     config_snippet=rec_info.get("config_snippet"),
-                    status=FindingStatus.OPEN.value,
+                    status=FindingStatus.CONFIRMED.value,
                     ml_predicted_label=ml_label,
                     ml_confidence=ml_conf,
                     review_deadline=calculate_review_deadline(sev_val),
                     owasp_category=rec_info.get("owasp_category"),
                     cwe_id=rec_info.get("cwe_info", {}).get("cwe_id") if isinstance(rec_info.get("cwe_info"), dict) else rec_info.get("cwe_id"),
-                    is_api_endpoint=is_api_flag
+                    is_api_endpoint=is_api_flag,
+                    vulnerability_type=getattr(f, "vulnerability_type", None) or "WEB_VULNERABILITY",
+                    detection_method=getattr(f, "detection_method", "DAST_ACTIVE_PROBE"),
+                    request_evidence=getattr(f, "request_evidence", None),
+                    response_evidence=getattr(f, "response_evidence", None),
+                    code_evidence=getattr(f, "code_evidence", None)
                 )
                 existing = db.query(Finding).filter(
                     Finding.subdomain_id == primary_subdomain.id,
