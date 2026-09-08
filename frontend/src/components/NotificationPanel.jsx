@@ -141,7 +141,7 @@ export default function NotificationPanel({ isOpen, onClose }) {
             style={{
               background: 'transparent',
               border: 'none',
-              color: '#38bdf8',
+              color: '#ffffff',
               fontSize: '0.8rem',
               fontWeight: 700,
               cursor: 'pointer'

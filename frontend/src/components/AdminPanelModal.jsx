@@ -98,6 +98,29 @@ export default function AdminPanelModal({ isOpen, onClose }) {
     }
   };
 
+  const handleCleanupTestAccounts = async () => {
+    if (!window.confirm('Clean up all test fixture user accounts from the database?')) return;
+    setErrorMsg('');
+    setSuccessMsg('');
+    try {
+      const res = await fetch('/api/v1/admin/users/cleanup-test-accounts', {
+        method: 'POST',
+        headers: getHeaders()
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setSuccessMsg(data.message);
+        fetchUsers();
+        fetchStats();
+      } else {
+        const err = await res.json();
+        setErrorMsg(err.detail || 'Failed to cleanup test accounts.');
+      }
+    } catch (err) {
+      setErrorMsg('Error cleaning up test accounts: ' + err.message);
+    }
+  };
+
   const handleBulkApprove = async () => {
     if (!window.confirm('Approve ALL open vulnerability findings across all scans?')) return;
     setLoading(true);
@@ -206,7 +229,7 @@ export default function AdminPanelModal({ isOpen, onClose }) {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <ShieldAlert size={26} color="#ef4444" />
+              <ShieldAlert size={26} color="#ffffff" />
               <h2 style={{ fontSize: '1.75rem', fontWeight: 900, color: '#ffffff', margin: 0, letterSpacing: '-0.4px' }}>
                 Nqat Enterprise Admin Control Panel
               </h2>
@@ -219,7 +242,7 @@ export default function AdminPanelModal({ isOpen, onClose }) {
             onClick={onClose}
             style={{
               background: 'transparent',
-              border: '2px solid #000000',
+              border: '2px solid #ffffff',
               color: '#ffffff',
               borderRadius: '8px',
               padding: '6px 14px',
@@ -232,13 +255,13 @@ export default function AdminPanelModal({ isOpen, onClose }) {
         </div>
 
         {/* Tab Selection Navigation */}
-        <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1.5rem', borderBottom: '2px solid #000000', paddingBottom: '0.75rem' }}>
+        <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1.5rem', borderBottom: '2px solid #27272a', paddingBottom: '0.75rem' }}>
           <button
             onClick={() => setActiveTab('db_telemetry')}
             style={{
-              background: activeTab === 'db_telemetry' ? 'rgba(239, 68, 68, 0.2)' : 'transparent',
-              border: `2px solid ${activeTab === 'db_telemetry' ? '#ef4444' : '#000000'}`,
-              color: activeTab === 'db_telemetry' ? '#ef4444' : '#ffffff',
+              background: activeTab === 'db_telemetry' ? '#ffffff' : 'transparent',
+              border: `2px solid ${activeTab === 'db_telemetry' ? '#ffffff' : '#27272a'}`,
+              color: activeTab === 'db_telemetry' ? '#000000' : '#ffffff',
               borderRadius: '8px',
               padding: '8px 16px',
               fontWeight: 700,
@@ -254,9 +277,9 @@ export default function AdminPanelModal({ isOpen, onClose }) {
           <button
             onClick={() => setActiveTab('users')}
             style={{
-              background: activeTab === 'users' ? 'rgba(239, 68, 68, 0.2)' : 'transparent',
-              border: `2px solid ${activeTab === 'users' ? '#ef4444' : '#000000'}`,
-              color: activeTab === 'users' ? '#ef4444' : '#ffffff',
+              background: activeTab === 'users' ? '#ffffff' : 'transparent',
+              border: `2px solid ${activeTab === 'users' ? '#ffffff' : '#27272a'}`,
+              color: activeTab === 'users' ? '#000000' : '#ffffff',
               borderRadius: '8px',
               padding: '8px 16px',
               fontWeight: 700,
@@ -272,9 +295,9 @@ export default function AdminPanelModal({ isOpen, onClose }) {
           <button
             onClick={() => setActiveTab('overrides')}
             style={{
-              background: activeTab === 'overrides' ? 'rgba(239, 68, 68, 0.2)' : 'transparent',
-              border: `2px solid ${activeTab === 'overrides' ? '#ef4444' : '#000000'}`,
-              color: activeTab === 'overrides' ? '#ef4444' : '#ffffff',
+              background: activeTab === 'overrides' ? '#ffffff' : 'transparent',
+              border: `2px solid ${activeTab === 'overrides' ? '#ffffff' : '#27272a'}`,
+              color: activeTab === 'overrides' ? '#000000' : '#ffffff',
               borderRadius: '8px',
               padding: '8px 16px',
               fontWeight: 700,
@@ -291,12 +314,12 @@ export default function AdminPanelModal({ isOpen, onClose }) {
 
         {/* Feedback Notifications */}
         {errorMsg && (
-          <div style={{ background: 'rgba(239, 68, 68, 0.15)', border: '1px solid #ef4444', color: '#fca5a5', padding: '12px 16px', borderRadius: '8px', marginBottom: '1.25rem', fontSize: '0.9rem' }}>
+          <div style={{ background: 'rgba(255, 255, 255, 0.08)', border: '1px solid #ffffff', color: '#ffffff', padding: '12px 16px', borderRadius: '8px', marginBottom: '1.25rem', fontSize: '0.9rem' }}>
             {errorMsg}
           </div>
         )}
         {successMsg && (
-          <div style={{ background: 'rgba(56, 189, 248, 0.15)', border: '1px solid #38bdf8', color: '#38bdf8', padding: '12px 16px', borderRadius: '8px', marginBottom: '1.25rem', fontSize: '0.9rem' }}>
+          <div style={{ background: 'rgba(255, 255, 255, 0.08)', border: '1px solid #ffffff', color: '#ffffff', padding: '12px 16px', borderRadius: '8px', marginBottom: '1.25rem', fontSize: '0.9rem' }}>
             {successMsg}
           </div>
         )}
@@ -326,7 +349,7 @@ export default function AdminPanelModal({ isOpen, onClose }) {
 
                 <div style={{ background: '#000000', padding: '12px 16px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.08)' }}>
                   <div style={{ color: '#94a3b8', fontSize: '0.78rem', fontWeight: 700 }}>CURRENT DB DISK SIZE</div>
-                  <div className="mono-text" style={{ color: '#38bdf8', marginTop: '4px', fontWeight: 800, fontSize: '1.1rem' }}>
+                  <div className="mono-text" style={{ color: '#ffffff', marginTop: '4px', fontWeight: 800, fontSize: '1.1rem' }}>
                     {stats ? `${stats.database_size_mb} MB (${stats.database_size_bytes.toLocaleString()} bytes)` : '0.52 MB'}
                   </div>
                 </div>
@@ -349,17 +372,17 @@ export default function AdminPanelModal({ isOpen, onClose }) {
                 <div style={{ fontSize: '2rem', fontWeight: 800, color: '#ffffff', marginTop: '4px' }}>{stats ? stats.total_scans : 0}</div>
               </div>
 
-              <div style={{ background: 'rgba(255,255,255,0.03)', border: '2px solid #000000', padding: '1.2rem', borderRadius: '12px' }}>
+              <div style={{ background: 'rgba(255,255,255,0.03)', border: '2px solid #27272a', padding: '1.2rem', borderRadius: '12px' }}>
                 <div style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: 700 }}>TOTAL FINDINGS</div>
-                <div style={{ fontSize: '2rem', fontWeight: 800, color: '#ef4444', marginTop: '4px' }}>{stats ? stats.total_findings : 0}</div>
+                <div style={{ fontSize: '2rem', fontWeight: 800, color: '#ffffff', marginTop: '4px' }}>{stats ? stats.total_findings : 0}</div>
               </div>
 
-              <div style={{ background: 'rgba(255,255,255,0.03)', border: '2px solid #000000', padding: '1.2rem', borderRadius: '12px' }}>
+              <div style={{ background: 'rgba(255,255,255,0.03)', border: '2px solid #27272a', padding: '1.2rem', borderRadius: '12px' }}>
                 <div style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: 700 }}>APPROVED FINDINGS</div>
-                <div style={{ fontSize: '2rem', fontWeight: 800, color: '#38bdf8', marginTop: '4px' }}>{stats ? stats.total_approved_findings : 0}</div>
+                <div style={{ fontSize: '2rem', fontWeight: 800, color: '#ffffff', marginTop: '4px' }}>{stats ? stats.total_approved_findings : 0}</div>
               </div>
 
-              <div style={{ background: 'rgba(255,255,255,0.03)', border: '2px solid #000000', padding: '1.2rem', borderRadius: '12px' }}>
+              <div style={{ background: 'rgba(255,255,255,0.03)', border: '2px solid #27272a', padding: '1.2rem', borderRadius: '12px' }}>
                 <div style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: 700 }}>ML FEEDBACK LABELS</div>
                 <div style={{ fontSize: '2rem', fontWeight: 800, color: '#ffffff', marginTop: '4px' }}>{stats ? stats.total_feedback_labels : 0}</div>
               </div>
@@ -373,7 +396,7 @@ export default function AdminPanelModal({ isOpen, onClose }) {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem', flexWrap: 'wrap', gap: '1rem' }}>
               <div>
                 <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#ffffff', margin: 0 }}>
-                  User Account Governance & <span style={{ color: '#ef4444' }}>Role Scoping</span>
+                  User Account Governance & Role Scoping
                 </h3>
                 <div style={{ fontSize: '0.8rem', color: '#94a3b8', marginTop: '2px' }}>
                   Manage registered platform users and role permissions.
@@ -390,8 +413,8 @@ export default function AdminPanelModal({ isOpen, onClose }) {
                     fontWeight: 800,
                     cursor: 'pointer',
                     border: 'none',
-                    background: userFilterMode === 'registered' ? '#ef4444' : 'transparent',
-                    color: userFilterMode === 'registered' ? '#ffffff' : '#94a3b8',
+                    background: userFilterMode === 'registered' ? '#ffffff' : 'transparent',
+                    color: userFilterMode === 'registered' ? '#000000' : '#94a3b8',
                     transition: 'all 0.2s ease'
                   }}
                 >
@@ -406,20 +429,38 @@ export default function AdminPanelModal({ isOpen, onClose }) {
                     fontWeight: 800,
                     cursor: 'pointer',
                     border: 'none',
-                    background: userFilterMode === 'all' ? 'rgba(239, 68, 68, 0.3)' : 'transparent',
-                    color: userFilterMode === 'all' ? '#ffffff' : '#94a3b8',
+                    background: userFilterMode === 'all' ? '#ffffff' : 'transparent',
+                    color: userFilterMode === 'all' ? '#000000' : '#94a3b8',
                     transition: 'all 0.2s ease'
                   }}
                 >
                   All Accounts (Inc. System Default)
                 </button>
+                <button
+                  onClick={handleCleanupTestAccounts}
+                  style={{
+                    padding: '4px 12px',
+                    borderRadius: '6px',
+                    fontSize: '0.78rem',
+                    fontWeight: 800,
+                    cursor: 'pointer',
+                    border: '1px solid #ffffff',
+                    background: 'rgba(255, 255, 255, 0.1)',
+                    color: '#ffffff',
+                    marginLeft: '8px',
+                    transition: 'all 0.2s ease'
+                  }}
+                  title="Purge leftover unit test fixture accounts from database"
+                >
+                  Purge Test Fixture Accounts
+                </button>
               </div>
             </div>
 
-            <div style={{ overflowX: 'auto', background: '#000000', borderRadius: '12px', border: '2px solid #000000' }}>
+            <div style={{ overflowX: 'auto', background: '#000000', borderRadius: '12px', border: '2px solid #27272a' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.88rem' }}>
                 <thead>
-                  <tr style={{ background: '#000000', color: '#ffffff', borderBottom: '2px solid #ef4444' }}>
+                  <tr style={{ background: '#000000', color: '#ffffff', borderBottom: '2px solid #ffffff' }}>
                     <th style={{ padding: '12px 16px', fontWeight: 800, color: '#ffffff' }}>User ID</th>
                     <th style={{ padding: '12px 16px', fontWeight: 800, color: '#ffffff' }}>Username</th>
                     <th style={{ padding: '12px 16px', fontWeight: 800, color: '#ffffff' }}>Email</th>
@@ -439,20 +480,20 @@ export default function AdminPanelModal({ isOpen, onClose }) {
                   ) : (
                     usersList.map(u => (
                       <tr key={u.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-                        <td style={{ padding: '12px 16px', color: '#ef4444', fontWeight: 800 }}>#{u.id}</td>
+                        <td style={{ padding: '12px 16px', color: '#ffffff', fontWeight: 800 }}>#{u.id}</td>
                         <td style={{ padding: '12px 16px', fontWeight: 800, color: '#ffffff' }}>{u.username}</td>
                         <td style={{ padding: '12px 16px', color: '#ffffff' }}>{u.email || '-'}</td>
                         <td style={{ padding: '12px 16px' }}>
                           {u.is_default ? (
-                            <span style={{ padding: '2px 8px', borderRadius: '10px', fontSize: '0.7rem', fontWeight: 800, background: 'rgba(245, 158, 11, 0.2)', color: '#f59e0b', border: '1px solid #f59e0b' }}>
+                            <span style={{ padding: '2px 8px', borderRadius: '10px', fontSize: '0.7rem', fontWeight: 800, background: 'rgba(255, 255, 255, 0.1)', color: '#a1a1aa', border: '1px solid #a1a1aa' }}>
                               SYSTEM DEFAULT
                             </span>
                           ) : u.is_email_verified ? (
-                            <span style={{ padding: '2px 8px', borderRadius: '10px', fontSize: '0.7rem', fontWeight: 800, background: 'rgba(16, 185, 129, 0.2)', color: '#10b981', border: '1px solid #10b981' }}>
+                            <span style={{ padding: '2px 8px', borderRadius: '10px', fontSize: '0.7rem', fontWeight: 800, background: '#ffffff', color: '#000000', border: '1px solid #ffffff' }}>
                               VERIFIED USER
                             </span>
                           ) : (
-                            <span style={{ padding: '2px 8px', borderRadius: '10px', fontSize: '0.7rem', fontWeight: 800, background: 'rgba(148, 163, 184, 0.2)', color: '#94a3b8', border: '1px solid #94a3b8' }}>
+                            <span style={{ padding: '2px 8px', borderRadius: '10px', fontSize: '0.7rem', fontWeight: 800, background: 'rgba(255, 255, 255, 0.1)', color: '#94a3b8', border: '1px solid #94a3b8' }}>
                               REGISTERED USER
                             </span>
                           )}
@@ -463,9 +504,9 @@ export default function AdminPanelModal({ isOpen, onClose }) {
                             borderRadius: '12px',
                             fontWeight: 800,
                             fontSize: '0.75rem',
-                            background: u.role === 'admin' ? 'rgba(239, 68, 68, 0.2)' : 'rgba(255, 255, 255, 0.15)',
-                            color: u.role === 'admin' ? '#ef4444' : '#ffffff',
-                            border: `1px solid ${u.role === 'admin' ? '#ef4444' : '#ffffff'}`
+                            background: u.role === 'admin' ? '#ffffff' : 'rgba(255, 255, 255, 0.15)',
+                            color: u.role === 'admin' ? '#000000' : '#ffffff',
+                            border: '1px solid #ffffff'
                           }}>
                             {u.role.toUpperCase()}
                           </span>
@@ -476,7 +517,7 @@ export default function AdminPanelModal({ isOpen, onClose }) {
                             {u.role === 'analyst' ? (
                               <button
                                 onClick={() => handleRoleChange(u.id, 'admin')}
-                                style={{ background: 'rgba(239, 68, 68, 0.2)', border: '1px solid #ef4444', color: '#ef4444', borderRadius: '6px', padding: '4px 10px', fontSize: '0.78rem', cursor: 'pointer', fontWeight: 800 }}
+                                style={{ background: '#ffffff', border: '1px solid #ffffff', color: '#000000', borderRadius: '6px', padding: '4px 10px', fontSize: '0.78rem', cursor: 'pointer', fontWeight: 800 }}
                               >
                                 Promote Admin
                               </button>
@@ -491,7 +532,7 @@ export default function AdminPanelModal({ isOpen, onClose }) {
                             {!u.is_default && u.username !== 'admin' && (
                               <button
                                 onClick={() => handleDeleteUser(u.id, u.username)}
-                                style={{ background: '#ef4444', border: '1px solid #ef4444', color: '#ffffff', borderRadius: '6px', padding: '4px 10px', fontSize: '0.78rem', cursor: 'pointer', fontWeight: 800 }}
+                                style={{ background: 'transparent', border: '1px solid #ffffff', color: '#ffffff', borderRadius: '6px', padding: '4px 10px', fontSize: '0.78rem', cursor: 'pointer', fontWeight: 800 }}
                               >
                                 <Trash2 size={13} style={{ display: 'inline', verticalAlign: 'middle' }} /> Delete
                               </button>
@@ -515,29 +556,29 @@ export default function AdminPanelModal({ isOpen, onClose }) {
             </h3>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.25rem' }}>
-              <div style={{ background: '#000000', border: '1px solid rgba(56, 189, 248, 0.4)', borderRadius: '12px', padding: '1.25rem' }}>
-                <h4 style={{ color: '#38bdf8', margin: '0 0 8px 0', fontSize: '1rem', fontWeight: 800 }}> Bulk Approve All Findings</h4>
+              <div style={{ background: '#000000', border: '1px solid rgba(255, 255, 255, 0.2)', borderRadius: '12px', padding: '1.25rem' }}>
+                <h4 style={{ color: '#ffffff', margin: '0 0 8px 0', fontSize: '1rem', fontWeight: 800 }}> Bulk Approve All Findings</h4>
                 <p style={{ fontSize: '0.82rem', color: '#94a3b8', lineHeight: 1.5 }}>
                   Instantly approve all currently open vulnerability findings across all targets with admin override logging.
                 </p>
                 <button
                   onClick={handleBulkApprove}
                   disabled={loading}
-                  style={{ background: '#38bdf8', color: '#000000', border: 'none', borderRadius: '8px', padding: '8px 16px', fontWeight: 800, fontSize: '0.85rem', cursor: 'pointer', marginTop: '10px' }}
+                  style={{ background: '#ffffff', color: '#000000', border: 'none', borderRadius: '8px', padding: '8px 16px', fontWeight: 800, fontSize: '0.85rem', cursor: 'pointer', marginTop: '10px' }}
                 >
                   Approve All Findings
                 </button>
               </div>
 
-              <div style={{ background: '#000000', border: '1px solid rgba(239, 68, 68, 0.4)', borderRadius: '12px', padding: '1.25rem' }}>
-                <h4 style={{ color: '#fca5a5', margin: '0 0 8px 0', fontSize: '1rem', fontWeight: 800 }}> Bulk Reject All Findings</h4>
+              <div style={{ background: '#000000', border: '1px solid rgba(255, 255, 255, 0.2)', borderRadius: '12px', padding: '1.25rem' }}>
+                <h4 style={{ color: '#ffffff', margin: '0 0 8px 0', fontSize: '1rem', fontWeight: 800 }}> Bulk Reject All Findings</h4>
                 <p style={{ fontSize: '0.82rem', color: '#94a3b8', lineHeight: 1.5 }}>
                   Bulk reject all currently open findings to clear active telemetry stream.
                 </p>
                 <button
                   onClick={handleBulkReject}
                   disabled={loading}
-                  style={{ background: '#ef4444', color: '#ffffff', border: 'none', borderRadius: '8px', padding: '8px 16px', fontWeight: 800, fontSize: '0.85rem', cursor: 'pointer', marginTop: '10px' }}
+                  style={{ background: 'transparent', color: '#ffffff', border: '1px solid #ffffff', borderRadius: '8px', padding: '8px 16px', fontWeight: 800, fontSize: '0.85rem', cursor: 'pointer', marginTop: '10px' }}
                 >
                   Reject All Findings
                 </button>
@@ -551,13 +592,13 @@ export default function AdminPanelModal({ isOpen, onClose }) {
                 <button
                   onClick={handlePurgeScans}
                   disabled={loading}
-                  style={{ background: '#334155', color: '#ffffff', border: 'none', borderRadius: '8px', padding: '8px 16px', fontWeight: 800, fontSize: '0.85rem', cursor: 'pointer', marginTop: '10px' }}
+                  style={{ background: 'rgba(255, 255, 255, 0.1)', color: '#ffffff', border: '1px solid #ffffff', borderRadius: '8px', padding: '8px 16px', fontWeight: 800, fontSize: '0.85rem', cursor: 'pointer', marginTop: '10px' }}
                 >
                   Purge Old Scans
                 </button>
               </div>
 
-              <div style={{ background: '#090d16', border: '2px solid #000000', borderRadius: '12px', padding: '1.25rem' }}>
+              <div style={{ background: '#000000', border: '1px solid rgba(255, 255, 255, 0.2)', borderRadius: '12px', padding: '1.25rem' }}>
                 <h4 style={{ color: '#ffffff', margin: '0 0 8px 0', fontSize: '1rem', fontWeight: 800 }}> Retrain ML Classifier</h4>
                 <p style={{ fontSize: '0.82rem', color: '#94a3b8', lineHeight: 1.5 }}>
                   Execute automated machine learning retraining script (`retrain_from_feedback.py`) on human approvals.
@@ -565,7 +606,7 @@ export default function AdminPanelModal({ isOpen, onClose }) {
                 <button
                   onClick={handleRetrainML}
                   disabled={loading}
-                  style={{ background: '#ef4444', color: '#ffffff', border: 'none', borderRadius: '8px', padding: '8px 16px', fontWeight: 800, fontSize: '0.85rem', cursor: 'pointer', marginTop: '10px' }}
+                  style={{ background: '#ffffff', color: '#000000', border: 'none', borderRadius: '8px', padding: '8px 16px', fontWeight: 800, fontSize: '0.85rem', cursor: 'pointer', marginTop: '10px' }}
                 >
                   Retrain ML Model Now
                 </button>

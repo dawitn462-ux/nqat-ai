@@ -43,7 +43,7 @@ export default function SecureWebTicker({ variant = 'hero' }) {
       <div className="secure-web-ribbon-container">
         <div className="secure-web-ribbon-track">
           <div className="secure-web-ribbon-content">
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#38bdf8' }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#ffffff' }}>
               <Shield size={14} /> SECURE YOUR WEB,
             </span>
             <span className="dot-separator">•</span>
@@ -53,19 +53,19 @@ export default function SecureWebTicker({ variant = 'hero' }) {
               <Activity size={14} /> REAL-TIME THREAT CORRELATION
             </span>
             <span className="dot-separator">•</span>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#38bdf8' }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#ffffff' }}>
               <Lock size={14} /> SECURE YOUR WEB,
             </span>
             <span className="dot-separator">•</span>
             <span>MACHINE LEARNING EXPLOIT PREDICTION</span>
             <span className="dot-separator">•</span>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#ef4444' }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#ffffff' }}>
               <Cpu size={14} /> HUMAN-IN-THE-LOOP CONTROL
             </span>
             <span className="dot-separator">•</span>
           </div>
           <div className="secure-web-ribbon-content" aria-hidden="true">
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#38bdf8' }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#ffffff' }}>
               <Shield size={14} /> SECURE YOUR WEB,
             </span>
             <span className="dot-separator">•</span>
@@ -75,13 +75,13 @@ export default function SecureWebTicker({ variant = 'hero' }) {
               <Activity size={14} /> REAL-TIME THREAT CORRELATION
             </span>
             <span className="dot-separator">•</span>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#38bdf8' }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#ffffff' }}>
               <Lock size={14} /> SECURE YOUR WEB,
             </span>
             <span className="dot-separator">•</span>
             <span>MACHINE LEARNING EXPLOIT PREDICTION</span>
             <span className="dot-separator">•</span>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#ef4444' }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#ffffff' }}>
               <Cpu size={14} /> HUMAN-IN-THE-LOOP CONTROL
             </span>
             <span className="dot-separator">•</span>
@@ -97,29 +97,29 @@ export default function SecureWebTicker({ variant = 'hero' }) {
       alignItems: 'center',
       gap: '12px',
       background: 'rgba(8, 4, 4, 0.9)',
-      border: '1.5px solid #ef4444',
+      border: '1.5px solid #ffffff',
       padding: '7px 18px',
       borderRadius: '9999px',
       backdropFilter: 'blur(12px)',
-      boxShadow: '0 0 20px rgba(239, 68, 68, 0.35)',
+      boxShadow: '0 0 15px rgba(255, 255, 255, 0.2)',
       margin: '0.75rem 0'
     }}>
       <div style={{ display: 'inline-flex', alignItems: 'center', gap: '10px' }}>
-        <Shield size={18} style={{ color: '#ef4444', flexShrink: 0 }} />
+        <Shield size={18} style={{ color: '#ffffff', flexShrink: 0 }} />
         <span className="secure-web-typewriter" style={{
-          color: '#ef4444',
+          color: '#ffffff',
           fontWeight: 900,
           fontSize: '0.95rem',
           letterSpacing: '1px',
           fontFamily: 'var(--font-mono, monospace)',
-          textShadow: '0 0 10px rgba(239, 68, 68, 0.6)'
+          textShadow: '0 0 10px rgba(255, 255, 255, 0.4)'
         }}>
           {displayText}
-          <span className="typewriter-cursor" style={{ color: '#ef4444', fontWeight: 900 }}>|</span>
+          <span className="typewriter-cursor" style={{ color: '#ffffff', fontWeight: 900 }}>|</span>
         </span>
       </div>
 
-      <div style={{ width: '1.5px', height: '18px', background: 'rgba(239, 68, 68, 0.6)', flexShrink: 0 }} />
+      <div style={{ width: '1.5px', height: '18px', background: 'rgba(255, 255, 255, 0.6)', flexShrink: 0 }} />
 
       <span className="secure-sub-tag" style={{
         fontSize: '0.72rem',

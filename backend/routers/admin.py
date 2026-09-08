@@ -88,12 +88,21 @@ def get_system_stats(db: Session = Depends(get_db)):
 @router.get("/users", response_model=List[UserResponse])
 def list_all_users(registered_only: bool = Query(True), db: Session = Depends(get_db)):
     """
-    Lists platform user accounts. When registered_only=True (default), excludes system default seed user accounts.
+    Lists platform user accounts. When registered_only=True (default), excludes system default seed user accounts & test fixtures.
     """
     users = db.query(User).all()
     res = []
     for u in users:
-        is_default = (u.username.lower() == "admin")
+        uname = (u.username or "").lower()
+        uemail = (u.email or "").lower()
+        is_sys_default = (uname == "admin")
+        is_test_account = (
+            uname.startswith(("test_", "m20_user_", "dup_user_", "google_user_test")) or
+            uname == "secops_lead_m20" or
+            uemail.endswith("@example.com")
+        )
+        is_default = is_sys_default or is_test_account
+
         if registered_only and is_default:
             continue
             
@@ -113,6 +122,32 @@ def list_all_users(registered_only: bool = Query(True), db: Session = Depends(ge
             )
         )
     return res
+
+
+@router.post("/users/cleanup-test-accounts")
+def cleanup_test_accounts(db: Session = Depends(get_db)):
+    """
+    Removes test fixture accounts (e.g. test_*, google_user_test*, m20_user_*, dup_user_*, @example.com) from the database.
+    """
+    test_users = db.query(User).filter(
+        (User.username.like("test_%")) |
+        (User.username.like("google_user_test%")) |
+        (User.username.like("m20_user_%")) |
+        (User.username.like("dup_user_%")) |
+        (User.username == "secops_lead_m20") |
+        (User.email.like("%@example.com"))
+    ).all()
+
+    count = len(test_users)
+    for u in test_users:
+        db.delete(u)
+    db.commit()
+
+    return {
+        "status": "success",
+        "deleted_count": count,
+        "message": f"Successfully removed {count} test fixture user accounts from the system."
+    }
 
 
 @router.patch("/users/{user_id}/role", response_model=UserResponse)
@@ -162,6 +197,7 @@ def delete_user(user_id: int, db: Session = Depends(get_db)):
     db.delete(user)
     db.commit()
     return {"status": "success", "message": f"User '{user.username}' deleted successfully"}
+
 
 
 @router.post("/findings/bulk-approve")

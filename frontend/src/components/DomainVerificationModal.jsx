@@ -259,13 +259,13 @@ export default function DomainVerificationModal({ isOpen, onClose, onVerifiedDom
         </div>
 
         {errorMsg && (
-          <div style={{ background: 'rgba(239, 68, 68, 0.15)', border: '1px solid #ef4444', color: '#fca5a5', padding: '12px 16px', borderRadius: '8px', marginBottom: '1.25rem', fontSize: '0.9rem' }}>
+          <div style={{ background: 'rgba(255, 255, 255, 0.08)', border: '1px solid #ffffff', color: '#ffffff', padding: '12px 16px', borderRadius: '8px', marginBottom: '1.25rem', fontSize: '0.9rem' }}>
             {errorMsg}
           </div>
         )}
 
         {successMsg && (
-          <div style={{ background: 'rgba(56, 189, 248, 0.15)', border: '1px solid #38bdf8', color: '#38bdf8', padding: '12px 16px', borderRadius: '8px', marginBottom: '1.25rem', fontSize: '0.9rem' }}>
+          <div style={{ background: 'rgba(255, 255, 255, 0.08)', border: '1px solid #ffffff', color: '#ffffff', padding: '12px 16px', borderRadius: '8px', marginBottom: '1.25rem', fontSize: '0.9rem' }}>
             {successMsg}
           </div>
         )}
@@ -375,9 +375,9 @@ export default function DomainVerificationModal({ isOpen, onClose, onVerifiedDom
                             fontWeight: 800,
                             padding: '2px 8px',
                             borderRadius: '12px',
-                            background: isVerified ? 'rgba(56, 189, 248, 0.2)' : isFailed ? 'rgba(239, 68, 68, 0.2)' : 'rgba(251, 191, 36, 0.2)',
-                            color: isVerified ? '#38bdf8' : isFailed ? '#ef4444' : '#fbbf24',
-                            border: `1px solid ${isVerified ? '#38bdf8' : isFailed ? '#ef4444' : '#fbbf24'}`
+                            background: isVerified ? '#ffffff' : 'rgba(255, 255, 255, 0.1)',
+                            color: isVerified ? '#000000' : '#ffffff',
+                            border: '1px solid #ffffff'
                           }}>
                             {d.status}
                           </span>

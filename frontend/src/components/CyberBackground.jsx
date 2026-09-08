@@ -38,7 +38,7 @@ export default function CyberBackground() {
         vy: (Math.random() - 0.5) * 0.5,
         radius: Math.random() * 2 + 1,
         alpha: Math.random() * 0.5 + 0.3,
-        color: Math.random() > 0.4 ? '#ffffff' : Math.random() > 0.5 ? '#ef4444' : '#fca5a5'
+        color: '#ffffff'
       });
     }
 
@@ -91,7 +91,7 @@ export default function CyberBackground() {
       ctx.fillStyle = vignette;
       ctx.fillRect(0, 0, width, height);
 
-      // Ambient monochrome & red spotlights
+      // Ambient monochrome spotlights
       const grad1 = ctx.createRadialGradient(width * 0.2, height * 0.2, 0, width * 0.2, height * 0.2, width * 0.4);
       grad1.addColorStop(0, 'rgba(255, 255, 255, 0.04)');
       grad1.addColorStop(1, 'rgba(0, 0, 0, 0)');
@@ -99,7 +99,7 @@ export default function CyberBackground() {
       ctx.fillRect(0, 0, width, height);
 
       const grad2 = ctx.createRadialGradient(width * 0.8, height * 0.8, 0, width * 0.8, height * 0.8, width * 0.5);
-      grad2.addColorStop(0, 'rgba(239, 68, 68, 0.05)');
+      grad2.addColorStop(0, 'rgba(255, 255, 255, 0.03)');
       grad2.addColorStop(1, 'rgba(0, 0, 0, 0)');
       ctx.fillStyle = grad2;
       ctx.fillRect(0, 0, width, height);

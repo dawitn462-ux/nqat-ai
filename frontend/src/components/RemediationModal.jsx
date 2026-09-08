@@ -137,17 +137,17 @@ export default function RemediationModal({ finding, onClose, onRefresh }) {
         {remediation && (
           <div style={{ marginTop: '20px' }}>
             {/* Metadata Card */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', backgroundColor: '#0f172a', padding: '16px', borderRadius: '8px', border: '1px solid #334155' }}>
-              <div><strong style={{ color: '#38bdf8' }}>Status:</strong> <span style={{ color: remediation.status === 'VERIFIED' ? '#4ade80' : '#facc15' }}>{remediation.status}</span></div>
-              <div><strong style={{ color: '#38bdf8' }}>Target File:</strong> {remediation.affected_file || 'Unmapped'}</div>
-              <div><strong style={{ color: '#38bdf8' }}>Target Function:</strong> {remediation.affected_function || 'N/A'}</div>
-              <div><strong style={{ color: '#38bdf8' }}>Vulnerable Line:</strong> #{remediation.vulnerable_line || 'N/A'}</div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', backgroundColor: '#09090b', padding: '16px', borderRadius: '8px', border: '1px solid #27272a' }}>
+              <div><strong style={{ color: '#ffffff' }}>Status:</strong> <span style={{ color: remediation.status === 'VERIFIED' ? '#ffffff' : '#eab308' }}>{remediation.status}</span></div>
+              <div><strong style={{ color: '#ffffff' }}>Target File:</strong> {remediation.affected_file || 'Unmapped'}</div>
+              <div><strong style={{ color: '#ffffff' }}>Target Function:</strong> {remediation.affected_function || 'N/A'}</div>
+              <div><strong style={{ color: '#ffffff' }}>Vulnerable Line:</strong> #{remediation.vulnerable_line || 'N/A'}</div>
             </div>
 
             {/* Root Cause */}
             <div style={{ marginTop: '16px' }}>
-              <h4 style={{ margin: '0 0 6px 0', color: '#f87171' }}>Root Cause Analysis</h4>
-              <p style={{ margin: 0, fontSize: '13px', color: '#cbd5e1', backgroundColor: '#0f172a', padding: '10px', borderRadius: '6px' }}>
+              <h4 style={{ margin: '0 0 6px 0', color: '#ffffff' }}>Root Cause Analysis</h4>
+              <p style={{ margin: 0, fontSize: '13px', color: '#cbd5e1', backgroundColor: '#09090b', padding: '10px', borderRadius: '6px', border: '1px solid #27272a' }}>
                 {remediation.root_cause}
               </p>
             </div>
@@ -155,10 +155,10 @@ export default function RemediationModal({ finding, onClose, onRefresh }) {
             {/* Patch Diff Viewer */}
             {remediation.patch && (
               <div style={{ marginTop: '16px' }}>
-                <h4 style={{ margin: '0 0 6px 0', color: '#4ade80' }}>Generated Unified Git Diff Patch</h4>
+                <h4 style={{ margin: '0 0 6px 0', color: '#ffffff' }}>Generated Unified Git Diff Patch</h4>
                 <pre style={{
-                  backgroundColor: '#020617', border: '1px solid #1e293b', borderRadius: '6px',
-                  padding: '12px', fontSize: '12px', overflowX: 'auto', color: '#38bdf8'
+                  backgroundColor: '#000000', border: '1px solid #27272a', borderRadius: '6px',
+                  padding: '12px', fontSize: '12px', overflowX: 'auto', color: '#ffffff'
                 }}>
                   {remediation.patch}
                 </pre>
@@ -167,14 +167,14 @@ export default function RemediationModal({ finding, onClose, onRefresh }) {
 
             {/* Validation Matrix */}
             {valStatus && (
-              <div style={{ marginTop: '16px', backgroundColor: '#0f172a', padding: '16px', borderRadius: '8px', border: '1px solid #1e293b' }}>
-                <h4 style={{ margin: '0 0 10px 0', color: '#a78bfa' }}>End-to-End Security Verification Matrix</h4>
+              <div style={{ marginTop: '16px', backgroundColor: '#09090b', padding: '16px', borderRadius: '8px', border: '1px solid #27272a' }}>
+                <h4 style={{ margin: '0 0 10px 0', color: '#ffffff' }}>End-to-End Security Verification Matrix</h4>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', fontSize: '13px' }}>
-                  <div>Syntax Check: <span style={{ color: valStatus.syntax.includes('PASSED') ? '#4ade80' : '#ef4444' }}>{valStatus.syntax}</span></div>
-                  <div>Unit Tests: <span style={{ color: valStatus.tests.includes('PASSED') ? '#4ade80' : '#ef4444' }}>{valStatus.tests}</span></div>
-                  <div>SAST Scan: <span style={{ color: valStatus.sast.includes('PASSED') ? '#4ade80' : '#ef4444' }}>{valStatus.sast}</span></div>
-                  <div>DAST Rescan: <span style={{ color: valStatus.dast.includes('PASSED') ? '#4ade80' : '#ef4444' }}>{valStatus.dast}</span></div>
-                  <div style={{ gridColumn: 'span 2' }}>Regression Check: <span style={{ color: valStatus.regression.includes('PASSED') ? '#4ade80' : '#ef4444' }}>{valStatus.regression}</span></div>
+                  <div>Syntax Check: <span style={{ color: valStatus.syntax.includes('PASSED') ? '#ffffff' : '#ef4444' }}>{valStatus.syntax}</span></div>
+                  <div>Unit Tests: <span style={{ color: valStatus.tests.includes('PASSED') ? '#ffffff' : '#ef4444' }}>{valStatus.tests}</span></div>
+                  <div>SAST Scan: <span style={{ color: valStatus.sast.includes('PASSED') ? '#ffffff' : '#ef4444' }}>{valStatus.sast}</span></div>
+                  <div>DAST Rescan: <span style={{ color: valStatus.dast.includes('PASSED') ? '#ffffff' : '#ef4444' }}>{valStatus.dast}</span></div>
+                  <div style={{ gridColumn: 'span 2' }}>Regression Check: <span style={{ color: valStatus.regression.includes('PASSED') ? '#ffffff' : '#ef4444' }}>{valStatus.regression}</span></div>
                 </div>
               </div>
             )}

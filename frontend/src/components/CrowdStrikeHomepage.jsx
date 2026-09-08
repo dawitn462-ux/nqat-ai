@@ -513,8 +513,8 @@ export default function CrowdStrikeHomepage({ user, onOpenAuth }) {
       <section style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.25rem', marginBottom: '2.5rem' }}>
         <div style={{ background: 'rgba(14, 14, 14, 0.95)', padding: '1.4rem 1.6rem', borderRadius: '14px', border: '1px solid rgba(255, 255, 255, 0.12)' }}>
           <div style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: 600, textTransform: 'uppercase' }}>Security Posture</div>
-          <div style={{ fontSize: '2.2rem', fontWeight: 800, color: '#ffffff', marginTop: '4px' }}>92 <span style={{ fontSize: '1.1rem', color: '#38bdf8' }}>/ 100</span></div>
-          <div style={{ fontSize: '0.78rem', color: '#38bdf8', fontWeight: 700, marginTop: '4px' }}>GRADE: A- (GOOD)</div>
+          <div style={{ fontSize: '2.2rem', fontWeight: 800, color: '#ffffff', marginTop: '4px' }}>92 <span style={{ fontSize: '1.1rem', color: '#94a3b8' }}>/ 100</span></div>
+          <div style={{ fontSize: '0.78rem', color: '#ffffff', fontWeight: 700, marginTop: '4px' }}>GRADE: A- (GOOD)</div>
         </div>
 
         <div style={{ background: 'rgba(14, 14, 14, 0.95)', padding: '1.4rem 1.6rem', borderRadius: '14px', border: '1px solid rgba(255, 255, 255, 0.12)' }}>
@@ -525,8 +525,8 @@ export default function CrowdStrikeHomepage({ user, onOpenAuth }) {
 
         <div style={{ background: 'rgba(14, 14, 14, 0.95)', padding: '1.4rem 1.6rem', borderRadius: '14px', border: '1px solid rgba(255, 255, 255, 0.12)' }}>
           <div style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: 600, textTransform: 'uppercase' }}>CISA KEV Feed</div>
-          <div style={{ fontSize: '2.2rem', fontWeight: 800, color: '#ef4444', marginTop: '4px' }}>Active</div>
-          <div style={{ fontSize: '0.78rem', color: '#ef4444', fontWeight: 700, marginTop: '4px' }}>Automated Threat Sync</div>
+          <div style={{ fontSize: '2.2rem', fontWeight: 800, color: '#ffffff', marginTop: '4px' }}>Active</div>
+          <div style={{ fontSize: '0.78rem', color: '#ffffff', fontWeight: 700, marginTop: '4px' }}>Automated Threat Sync</div>
         </div>
 
         <div style={{ background: 'rgba(14, 14, 14, 0.95)', padding: '1.4rem 1.6rem', borderRadius: '14px', border: '1px solid rgba(255, 255, 255, 0.12)' }}>
@@ -595,7 +595,7 @@ export default function CrowdStrikeHomepage({ user, onOpenAuth }) {
                   background: 'rgba(14, 14, 14, 0.95)',
                   borderRadius: '14px',
                   padding: '1.5rem',
-                  border: isAutoApproved ? '1px solid rgba(168, 85, 247, 0.4)' : '1px solid rgba(255, 255, 255, 0.16)',
+                  border: isAutoApproved ? '1px solid #ffffff' : '1px solid rgba(255, 255, 255, 0.16)',
                   boxShadow: '0 8px 24px rgba(0,0,0,0.6)',
                   display: 'flex',
                   flexDirection: 'column',
@@ -605,7 +605,7 @@ export default function CrowdStrikeHomepage({ user, onOpenAuth }) {
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                       {(() => {
-                        const sevColor = sev === 'CRITICAL' ? '#ef4444' : sev === 'HIGH' ? '#f97316' : sev === 'MEDIUM' ? '#eab308' : '#ffffff';
+                        const sevColor = sev === 'CRITICAL' ? '#ef4444' : sev === 'HIGH' ? '#f97316' : sev === 'MEDIUM' ? '#eab308' : '#facc15';
                         return (
                           <span className="mono-text" style={{
                             fontSize: '0.75rem',
@@ -646,27 +646,25 @@ export default function CrowdStrikeHomepage({ user, onOpenAuth }) {
                     {isAutoApproved ? (
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <span className="mono-text" style={{
-                          background: 'rgba(56, 189, 248, 0.2)',
-                          color: '#38bdf8',
-                          border: '1px solid #38bdf8',
-                          padding: '4px 12px',
+                          background: 'rgba(255, 255, 255, 0.15)',
+                          color: '#ffffff',
+                          border: '1px solid #ffffff',
+                          padding: '3px 10px',
                           borderRadius: '12px',
-                          fontWeight: 800,
-                          fontSize: '0.78rem'
+                          fontSize: '0.75rem',
+                          fontWeight: 800
                         }}>
-                          AUTO-APPROVED (TIMEOUT)
+                          ⚡ AUTO APPROVED (24h Elapsed)
                         </span>
-                        <span style={{ fontSize: '0.72rem', color: '#94a3b8' }}>by auto_approval_scheduler (expired_deadline)</span>
                       </div>
                     ) : (
                       <span className="mono-text" style={{
-                        fontSize: '0.78rem',
+                        fontSize: '0.75rem',
                         fontWeight: 800,
-                        padding: '4px 12px',
+                        padding: '3px 10px',
                         borderRadius: '12px',
-                        background: isApproved ? 'rgba(56, 189, 248, 0.2)' : isRejected ? 'rgba(239, 68, 68, 0.2)' : 'rgba(255,255,255,0.05)',
-                        color: isApproved ? '#38bdf8' : isRejected ? '#ef4444' : '#94a3b8',
-                        border: `1px solid ${isApproved ? '#38bdf8' : isRejected ? '#ef4444' : '#000000'}`
+                        color: isApproved ? '#ffffff' : '#94a3b8',
+                        border: `1px solid ${isApproved ? '#ffffff' : '#000000'}`
                       }}>
                         STATUS: {f.status || 'OPEN'}
                       </span>
