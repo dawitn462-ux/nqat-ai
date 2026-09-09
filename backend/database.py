@@ -25,6 +25,8 @@ if is_pytest or not env_db_url or os.getenv("USE_SQLITE", "true").lower() == "tr
     DATABASE_URL = "sqlite:///./nkat_dev.db"
 else:
     DATABASE_URL = env_db_url
+    if DATABASE_URL.startswith("postgres://"):
+        DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
 
 if DATABASE_URL.startswith("postgres"):
     try:
@@ -33,7 +35,7 @@ if DATABASE_URL.startswith("postgres"):
             pool_pre_ping=True,
             pool_size=5,
             max_overflow=5,
-            connect_args={"connect_timeout": 1}
+            connect_args={"connect_timeout": 10}
         )
         with engine.connect() as conn:
             pass

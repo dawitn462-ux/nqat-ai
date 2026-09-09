@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import DomainVerificationModal from './DomainVerificationModal';
+import RemediationModal from './RemediationModal';
 import SecureWebTicker from './SecureWebTicker';
 import { Play, Globe, FileText, Loader2, ShieldCheck, CheckCircle2, AlertTriangle, Layers, PlusCircle, Download } from 'lucide-react';
 
@@ -9,6 +10,7 @@ export default function CrowdStrikeHomepage({ user, onOpenAuth }) {
   const [scanning, setScanning] = useState(false);
   const [message, setMessage] = useState('');
   const [isDomainModalOpen, setIsDomainModalOpen] = useState(false);
+  const [selectedRemediationFinding, setSelectedRemediationFinding] = useState(null);
 
   const [activeScanId, setActiveScanId] = useState(null);
   const [expandedGuides, setExpandedGuides] = useState({});
@@ -632,9 +634,23 @@ export default function CrowdStrikeHomepage({ user, onOpenAuth }) {
                           </span>
                         );
                       })()}
-                      <span className="mono-text" style={{ fontSize: '0.75rem', color: '#ffffff', background: 'rgba(255, 255, 255, 0.1)', padding: '4px 10px', borderRadius: '12px', border: '1px solid #000000' }}>
-                        AI Threat: High Confidence
-                      </span>
+                      {f.ml_predicted_label !== null && f.ml_predicted_label !== undefined ? (
+                        <span className="mono-text" style={{
+                          fontSize: '0.75rem',
+                          color: f.ml_predicted_label === 1 ? '#f87171' : '#4ade80',
+                          background: f.ml_predicted_label === 1 ? 'rgba(239, 68, 68, 0.15)' : 'rgba(74, 222, 128, 0.15)',
+                          padding: '4px 10px',
+                          borderRadius: '12px',
+                          border: f.ml_predicted_label === 1 ? '1px solid #ef4444' : '1px solid #4ade80',
+                          fontWeight: 700
+                        }}>
+                          🤖 ML: {f.ml_predicted_label === 1 ? 'Vulnerability Confirmed' : 'Benign Pattern'} ({(Number(f.ml_confidence || 0) * 100).toFixed(1)}% Conf)
+                        </span>
+                      ) : (
+                        <span className="mono-text" style={{ fontSize: '0.75rem', color: '#94a3b8', background: 'rgba(255, 255, 255, 0.05)', padding: '4px 10px', borderRadius: '12px', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
+                          🤖 ML: Scored
+                        </span>
+                      )}
                       {/* API Issue vs Web Page Issue Badge */}
                       <span className="mono-text" style={{
                         fontSize: '0.75rem',
@@ -799,7 +815,27 @@ export default function CrowdStrikeHomepage({ user, onOpenAuth }) {
                       Evidence: <span className="mono-text" style={{ color: '#cbd5e1' }}>{f.evidence || 'HTTP response payload vector detected'}</span>
                     </div>
 
-                    <div style={{ display: 'flex', gap: '0.6rem' }}>
+                    <div style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap' }}>
+                      <button
+                        onClick={() => setSelectedRemediationFinding(f)}
+                        style={{
+                          background: '#00f0ff',
+                          color: '#050b14',
+                          border: 'none',
+                          fontWeight: 800,
+                          padding: '8px 16px',
+                          borderRadius: '6px',
+                          cursor: 'pointer',
+                          fontSize: '0.84rem',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '6px',
+                          boxShadow: '0 0 12px rgba(0, 240, 255, 0.3)'
+                        }}
+                      >
+                        🛡️ Auto-Remediate & Patch
+                      </button>
+
                       <button
                         onClick={() => handleAction(findingId, 'approve')}
                         disabled={isApproved}
@@ -863,6 +899,14 @@ export default function CrowdStrikeHomepage({ user, onOpenAuth }) {
           )}
         </div>
       </section>
+
+      {selectedRemediationFinding && (
+        <RemediationModal
+          finding={selectedRemediationFinding}
+          onClose={() => setSelectedRemediationFinding(null)}
+          onRefresh={fetchLatestScan}
+        />
+      )}
 
     </main>
   );

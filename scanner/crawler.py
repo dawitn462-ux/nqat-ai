@@ -20,6 +20,14 @@ class EndpointCrawler:
 
     KNOWN_API_ROUTES = [
         "/",
+        "/search",
+        "/login",
+        "/register",
+        "/version",
+        "/debug/env",
+        "/fetch-cover",
+        "/admin",
+        "/book/1",
         "/#/login",
         "/#/register",
         "/#/search",

@@ -132,10 +132,14 @@ app = FastAPI(
 app.state.limiter = scans.limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
-# Enable CORS for HTTPS Dashboard and local origins
+# Enable CORS for HTTPS Dashboard, local origins, and deployed frontend domains
+allowed_origins_env = os.getenv("ALLOWED_ORIGINS", "").strip()
+custom_origins = [o.strip() for o in allowed_origins_env.split(",") if o.strip()]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origin_regex=r"https?://(localhost|127\.0\.0\.1)(:[0-9]+)?",
+    allow_origins=custom_origins if custom_origins else [],
+    allow_origin_regex=r"https?://(localhost|127\.0\.0\.1)(:[0-9]+)?|https://.*\.onrender\.com|https://.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

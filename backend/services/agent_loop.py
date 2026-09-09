@@ -19,7 +19,10 @@ from typing import Dict, Any, List, Optional
 from sqlalchemy.orm import Session
 from dotenv import load_dotenv
 
-import anthropic
+try:
+    import anthropic
+except ImportError:
+    anthropic = None
 
 from backend.database import SessionLocal
 from backend.models import Assessment, Scan, Subdomain, Finding, AuditLog, FindingStatus, Remediation, RemediationStatus
@@ -403,7 +406,7 @@ def run_agent_orchestrator_loop(assessment_id: int) -> Dict[str, Any]:
     iterations = 0
 
     api_key = os.getenv("ANTHROPIC_API_KEY")
-    if not api_key or api_key.startswith("mock_") or "pytest" in os.environ.get("PYTEST_CURRENT_TEST", ""):
+    if not anthropic or not api_key or api_key.startswith("mock_") or "pytest" in os.environ.get("PYTEST_CURRENT_TEST", ""):
         return _run_heuristic_orchestrator_loop(db, assessment_id, start_time)
 
     try:

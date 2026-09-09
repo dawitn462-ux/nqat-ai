@@ -37,6 +37,10 @@ def generate_recommendation(finding: Dict[str, Any]) -> Dict[str, Any]:
     if "missing security header" in check_name_lower or "security header" in check_name_lower or ("header" in check_name_lower and "missing" in check_name_lower):
         rec_data = _recommend_security_header(finding_id, check_name, target_url)
 
+    # 1.5 Exposed Environment Variables (/debug/env)
+    elif "debug/env" in check_name_lower or "environment variables" in check_name_lower or "env variables" in check_name_lower:
+        rec_data = _recommend_debug_env(finding_id, check_name, target_url)
+
     # 2. Exposed Git Repository / Version Control
     elif "exposed git" in check_name_lower or ".git" in check_name_lower or "exposed version control" in check_name_lower or "git repository" in check_name_lower:
         rec_data = _recommend_exposed_git(finding_id, check_name, target_url)
@@ -50,12 +54,12 @@ def generate_recommendation(finding: Dict[str, Any]) -> Dict[str, Any]:
         rec_data = _recommend_sensitive_file(finding_id, check_name, target_url)
 
     # Directory Listing / Information Leak
-    elif "directory listing" in check_name_lower or "index of" in check_name_lower or "info leak" in check_name_lower or "information disclosure" in check_name_lower:
+    elif "directory listing" in check_name_lower or "index of" in check_name_lower or "info leak" in check_name_lower or "information disclosure" in check_name_lower or "version disclosure" in check_name_lower:
         rec_data = _recommend_directory_listing(finding_id, check_name, target_url)
 
     # 3. SQL Injection
     elif "sql injection" in check_name_lower or "sqli" in check_name_lower:
-        rec_data = _recommend_sql_injection(finding_id, check_name)
+        rec_data = _recommend_sql_injection(finding_id, check_name, target_url=target_url, evidence=evidence)
 
     # 4. Nuclei / CVE-based Findings
     elif "cve-" in check_name_lower or "cve" in check_name_lower or finding.get("type") == "nuclei" or "nuclei" in check_name_lower:
@@ -229,25 +233,93 @@ def _recommend_exposed_git(finding_id: Optional[Any], check_name: str, target_ur
     }
 
 
-def _recommend_sql_injection(finding_id: Optional[Any], check_name: str) -> Dict[str, Any]:
-    title = "Use Parameterized Queries / Prepared Statements"
-    rec = "Never concatenate user input directly into SQL query strings. Use parameterized queries or prepared statements via your database driver or ORM."
+def _recommend_debug_env(finding_id: Optional[Any], check_name: str, target_url: str = "http://localhost:3000") -> Dict[str, Any]:
+    title = "Disable Exposed Environment Variables Endpoint (/debug/env)"
+    rec = "Immediately remove or disable the '/debug/env' endpoint in production to eliminate leakage of process environment variables and secrets."
     snippet = (
-        "# Python DB-API Parameterized Query Pattern Example:\n"
-        "# Vulnerable: cursor.execute(f\"SELECT * FROM users WHERE name = '{user_input}'\")\n"
-        "# Remediated:\n"
-        "cursor.execute(\"SELECT * FROM users WHERE name = %s\", (user_input,))"
+        "// Remediation for Express server.js:\n"
+        "// Disable or restrict /debug/env endpoint:\n"
+        "app.get('/debug/env', (req, res) => {\n"
+        "  res.status(403).json({ error: 'Endpoint disabled in production environment.' });\n"
+        "});"
     )
     guide = {
-        "plain_language_meaning": "User inputs (form fields, query parameters) are concatenated directly into SQL queries without escaping or parameterization.",
+        "plain_language_meaning": "The application exposes an active debug endpoint `/debug/env` that outputs all operating system and process environment variables in JSON.",
+        "why_it_is_risky": "Environment variables often contain API keys, database credentials, AWS/cloud tokens, and internal filesystem paths, allowing total account takeover.",
+        "fix_steps": {
+            "express_node": "In `server.js`, remove the route or restrict it:\n  app.get('/debug/env', (req, res) => res.status(403).send('Forbidden'));",
+            "nginx": "Block the route in Nginx:\n  location /debug/env {\n      deny all;\n      return 404;\n  }",
+            "apache": "Block the route in Apache:\n  RedirectMatch 404 /debug/env"
+        },
+        "verification_steps": f"Run `curl -i {target_url}/debug/env` and verify status is 403 Forbidden or 404 Not Found.",
+        "rollback_note": "Revert route handler if debug introspection is explicitly required in development mode."
+    }
+    return {
+        "finding_id": finding_id,
+        "check_name": check_name,
+        "recommendation_title": title,
+        "recommendation": rec,
+        "config_snippet": snippet,
+        "remediation_type": "CODE_FIX",
+        "full_fix_guide": guide,
+    }
+
+
+def _recommend_sql_injection(finding_id: Optional[Any], check_name: str, target_url: str = "http://localhost:3000", evidence: str = "") -> Dict[str, Any]:
+    check_lower = (check_name or "").lower()
+    ev_lower = (evidence or "").lower()
+
+    if "login" in check_lower or "username" in check_lower or "auth" in check_lower:
+        title = "Express.js Parameterized Authentication Query Fix (/login)"
+        rec = "Replace unsafe string concatenation in authentication query with parameterized statement placeholders (? in better-sqlite3) to prevent auth bypass."
+        snippet = (
+            "// Express.js & better-sqlite3 Parameterized Login Query:\n"
+            "// Vulnerable:\n"
+            "// const sql = `SELECT * FROM users WHERE username = '${username}' AND password = '${hash}'`;\n"
+            "// const user = db.prepare(sql).get();\n"
+            "//\n"
+            "// Remediated Secure Code:\n"
+            "const sql = 'SELECT * FROM users WHERE username = ? AND password = ?';\n"
+            "const user = db.prepare(sql).get(username, hash);"
+        )
+        plain_meaning = "The `/login` route concatenates the `username` field directly into the SQL query, allowing attackers to inject `admin' --` and log in without a password."
+    elif "search" in check_lower or "'q'" in check_lower or "book" in check_lower:
+        title = "Express.js Parameterized Query Fix (/search)"
+        rec = "Replace string interpolation in the book search query with parameterized placeholders (? in better-sqlite3) to eliminate SQL injection."
+        snippet = (
+            "// Express.js & better-sqlite3 Parameterized Search Query:\n"
+            "// Vulnerable:\n"
+            "// const sql = `SELECT * FROM books WHERE title LIKE '%${q}%' OR author LIKE '%${q}%'`;\n"
+            "// results = db.prepare(sql).all();\n"
+            "//\n"
+            "// Remediated Secure Code:\n"
+            "const sql = 'SELECT * FROM books WHERE title LIKE ? OR author LIKE ?';\n"
+            "const term = `%${q}%`;\n"
+            "results = db.prepare(sql).all(term, term);"
+        )
+        plain_meaning = "The `/search` query parameter `q` is directly interpolated into a `SELECT * FROM books` query, allowing database error leakage and full catalog enumeration."
+    else:
+        title = "Use Parameterized Queries / Prepared Statements"
+        rec = "Never concatenate user input directly into SQL query strings. Use parameterized queries or prepared statements via your database driver."
+        snippet = (
+            "// Node.js / Express Parameterized Query Pattern:\n"
+            "const sql = 'SELECT * FROM items WHERE name = ?';\n"
+            "const results = db.prepare(sql).all(userInput);\n\n"
+            "# Python DB-API Parameterized Query Pattern:\n"
+            "cursor.execute('SELECT * FROM items WHERE name = %s', (userInput,))"
+        )
+        plain_meaning = "User inputs are concatenated directly into SQL queries without escaping or parameterization."
+
+    guide = {
+        "plain_language_meaning": plain_meaning,
         "why_it_is_risky": "Allows malicious actors to manipulate SQL database commands, bypass authentication, read or modify confidential tables, or take over database hosts.",
         "fix_steps": {
-            "express_node": "Use parameterized queries with node-postgres / mysql2:\n  db.query('SELECT * FROM users WHERE username = $1', [username]);\nOr use ORM models (Prisma/Sequelize).",
+            "express_node": "In `server.js`, change SQL query to use parameter binding with `?` placeholders:\n  const sql = 'SELECT * FROM books WHERE title LIKE ? OR author LIKE ?';\n  results = db.prepare(sql).all(`%${q}%`, `%${q}%`);",
             "nginx": "Deploy ModSecurity WAF module with OWASP Core Rule Set (CRS) to detect and drop SQLi payload patterns (`UNION SELECT`, `' OR '1'='1`).",
             "apache": "Enable `mod_security2` module with OWASP Core Rule Set to inspect and block SQL injection request arguments."
         },
-        "verification_steps": "Send test payload `q=' OR '1'='1--` to affected endpoint parameter and verify application returns validation error or normal results without executing injected SQL.",
-        "rollback_note": "To undo code refactoring: revert SQL query string syntax to previous pattern, though parameterized queries are strongly recommended for safety."
+        "verification_steps": f"Send test payload `test'` and `test' OR 1=1 --` to the affected endpoint. Verify no database syntax errors or unauthorized records are returned.",
+        "rollback_note": "Revert to previous version if query parameter binding causes schema type conflicts."
     }
     return {
         "finding_id": finding_id,

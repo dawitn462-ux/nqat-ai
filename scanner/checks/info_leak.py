@@ -16,6 +16,9 @@ class InfoLeakCheck(BaseCheck):
     description = "Scans for server banner exposure, sensitive endpoints, and public API docs."
 
     SENSITIVE_PATHS = [
+        ("/debug/env", Severity.HIGH, "Exposed Server Environment Variables", "Endpoint leaks full process environment variables and host configuration."),
+        ("/version", Severity.LOW, "Technology Stack & Dependency Version Disclosure", "Exposes backend application dependencies and runtime version."),
+        ("/admin", Severity.HIGH, "Unauthenticated Admin Panel Access", "Administrative control panel exposed without role-based access control."),
         ("/api-docs", Severity.INFO, "Exposed API Documentation", "Publicly accessible OpenAPI / Swagger documentation."),
         ("/swagger-ui", Severity.INFO, "Exposed Swagger UI", "Public Swagger UI endpoint."),
         ("/ftp", Severity.LOW, "Exposed FTP Directory", "Publicly accessible FTP directory/file browser."),

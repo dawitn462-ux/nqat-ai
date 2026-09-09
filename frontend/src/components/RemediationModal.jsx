@@ -6,17 +6,17 @@ export default function RemediationModal({ finding, onClose, onRefresh }) {
   const [validating, setValidating] = useState(false);
   const [error, setError] = useState(null);
 
-  const token = localStorage.getItem('nkat_token') || 'nkat_admin_secret_key_2026';
+  const token = localStorage.getItem('nkat_jwt_token') || localStorage.getItem('nkat_token') || 'nkat_secret_api_key_2026';
 
   const handleAnalyze = async () => {
     setLoading(true);
     setError(null);
-    try:
+    try {
       const res = await fetch(`/api/v1/remediations/analyze/${finding.id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-API-Key': token,
+          'X-API-Key': 'nkat_secret_api_key_2026',
           'Authorization': `Bearer ${token}`
         }
       });
@@ -42,7 +42,7 @@ export default function RemediationModal({ finding, onClose, onRefresh }) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-API-Key': token,
+          'X-API-Key': 'nkat_secret_api_key_2026',
           'Authorization': `Bearer ${token}`
         }
       });
@@ -68,7 +68,7 @@ export default function RemediationModal({ finding, onClose, onRefresh }) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-API-Key': token,
+          'X-API-Key': 'nkat_secret_api_key_2026',
           'Authorization': `Bearer ${token}`
         }
       });
