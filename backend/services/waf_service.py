@@ -12,7 +12,7 @@ import json
 import time
 import logging
 from datetime import datetime, timezone
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 
 logger = logging.getLogger("nkat.waf")
 

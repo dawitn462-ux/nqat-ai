@@ -11,7 +11,7 @@ import sys
 import asyncio
 import urllib.request
 import urllib.error
-from typing import List, Dict, Any, Set
+from typing import List, Dict, Any, Set, Optional
 from urllib.parse import urljoin, urlparse
 
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
