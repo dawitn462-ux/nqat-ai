@@ -43,45 +43,46 @@ from backend.models import Scan, ScanStatus
 async def lifespan(app: FastAPI):
     logger.info("Initializing database migrations and tables...")
     Base.metadata.create_all(bind=engine)
-    with engine.connect() as conn:
-        def ensure_column(table_name: str, col_name: str, col_def: str):
-            res = conn.execute(text(f"PRAGMA table_info({table_name});")).fetchall()
-            existing_cols = [row[1] for row in res]
-            if col_name not in existing_cols:
-                logger.info(f"Adding missing column '{col_name}' to table '{table_name}'...")
-                conn.execute(text(f"ALTER TABLE {table_name} ADD COLUMN {col_name} {col_def};"))
+    if engine.dialect.name == "sqlite":
+        with engine.connect() as conn:
+            def ensure_column(table_name: str, col_name: str, col_def: str):
+                res = conn.execute(text(f"PRAGMA table_info({table_name});")).fetchall()
+                existing_cols = [row[1] for row in res]
+                if col_name not in existing_cols:
+                    logger.info(f"Adding missing column '{col_name}' to table '{table_name}'...")
+                    conn.execute(text(f"ALTER TABLE {table_name} ADD COLUMN {col_name} {col_def};"))
 
-        try:
-            ensure_column("audit_logs", "scan_id", "INTEGER")
-            ensure_column("audit_logs", "subdomain_id", "INTEGER")
-            ensure_column("audit_logs", "assessment_id", "INTEGER")
-            ensure_column("scans", "assessment_id", "INTEGER")
-            ensure_column("findings", "assessment_id", "INTEGER")
-            ensure_column("findings", "review_deadline", "TIMESTAMP")
-            ensure_column("findings", "previous_state", "TEXT")
-            ensure_column("findings", "owasp_category", "TEXT")
-            ensure_column("findings", "cwe_id", "TEXT")
-            ensure_column("findings", "is_in_cisa_kev", "BOOLEAN")
-            ensure_column("findings", "epss_score", "FLOAT")
-            ensure_column("findings", "epss_percentile", "FLOAT")
-            ensure_column("findings", "is_api_endpoint", "BOOLEAN DEFAULT 0")
-            ensure_column("findings", "priority_tier", "TEXT DEFAULT 'P3'")
-            ensure_column("findings", "contextual_risk_score", "FLOAT")
-            ensure_column("findings", "risk_acceptance_reason", "TEXT")
-            ensure_column("findings", "reverified_at", "TIMESTAMP")
-            ensure_column("findings", "sla_deadline", "TIMESTAMP")
-            ensure_column("findings", "is_sla_breached", "BOOLEAN DEFAULT 0")
-            ensure_column("findings", "historical_context_note", "TEXT")
-            ensure_column("subdomains", "is_api_endpoint", "BOOLEAN DEFAULT 0")
-            ensure_column("scans", "organization_id", "INTEGER")
-            ensure_column("users", "email", "TEXT")
-            ensure_column("users", "is_email_verified", "BOOLEAN DEFAULT 0")
-            ensure_column("users", "email_verification_token", "TEXT")
-            ensure_column("users", "email_verification_code", "TEXT")
-            ensure_column("users", "email_verification_sent_at", "TIMESTAMP")
-            conn.commit()
-        except Exception as exc:
-            logger.warning(f"Database migration notice: {exc}")
+            try:
+                ensure_column("audit_logs", "scan_id", "INTEGER")
+                ensure_column("audit_logs", "subdomain_id", "INTEGER")
+                ensure_column("audit_logs", "assessment_id", "INTEGER")
+                ensure_column("scans", "assessment_id", "INTEGER")
+                ensure_column("findings", "assessment_id", "INTEGER")
+                ensure_column("findings", "review_deadline", "TIMESTAMP")
+                ensure_column("findings", "previous_state", "TEXT")
+                ensure_column("findings", "owasp_category", "TEXT")
+                ensure_column("findings", "cwe_id", "TEXT")
+                ensure_column("findings", "is_in_cisa_kev", "BOOLEAN")
+                ensure_column("findings", "epss_score", "FLOAT")
+                ensure_column("findings", "epss_percentile", "FLOAT")
+                ensure_column("findings", "is_api_endpoint", "BOOLEAN DEFAULT 0")
+                ensure_column("findings", "priority_tier", "TEXT DEFAULT 'P3'")
+                ensure_column("findings", "contextual_risk_score", "FLOAT")
+                ensure_column("findings", "risk_acceptance_reason", "TEXT")
+                ensure_column("findings", "reverified_at", "TIMESTAMP")
+                ensure_column("findings", "sla_deadline", "TIMESTAMP")
+                ensure_column("findings", "is_sla_breached", "BOOLEAN DEFAULT 0")
+                ensure_column("findings", "historical_context_note", "TEXT")
+                ensure_column("subdomains", "is_api_endpoint", "BOOLEAN DEFAULT 0")
+                ensure_column("scans", "organization_id", "INTEGER")
+                ensure_column("users", "email", "TEXT")
+                ensure_column("users", "is_email_verified", "BOOLEAN DEFAULT 0")
+                ensure_column("users", "email_verification_token", "TEXT")
+                ensure_column("users", "email_verification_code", "TEXT")
+                ensure_column("users", "email_verification_sent_at", "TIMESTAMP")
+                conn.commit()
+            except Exception as exc:
+                logger.warning(f"Database migration notice: {exc}")
     Base.metadata.create_all(bind=engine)
 
     # Seed Default Organization and Admin User, then backfill existing scans

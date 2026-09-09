@@ -67,11 +67,14 @@ try:
     # Check and add new columns to users and findings tables if missing in existing DB
     inspector = inspect(engine)
     tables = inspector.get_table_names()
+    is_pg = DATABASE_URL.startswith("postgres")
+    dt_type = "TIMESTAMP WITH TIME ZONE" if is_pg else "DATETIME"
+    bool_def = "FALSE" if is_pg else "0"
     with engine.begin() as conn:
         if "users" in tables:
             existing_cols = {col["name"] for col in inspector.get_columns("users")}
             if "email_verification_expires_at" not in existing_cols:
-                conn.execute(text("ALTER TABLE users ADD COLUMN email_verification_expires_at DATETIME"))
+                conn.execute(text(f"ALTER TABLE users ADD COLUMN email_verification_expires_at {dt_type}"))
             if "auth_provider" not in existing_cols:
                 conn.execute(text("ALTER TABLE users ADD COLUMN auth_provider VARCHAR(50) DEFAULT 'local'"))
             if "google_sub" not in existing_cols:
@@ -114,11 +117,11 @@ try:
             if "after_evidence" not in f_cols:
                 conn.execute(text("ALTER TABLE findings ADD COLUMN after_evidence TEXT"))
             if "reverified_at" not in f_cols:
-                conn.execute(text("ALTER TABLE findings ADD COLUMN reverified_at DATETIME"))
+                conn.execute(text(f"ALTER TABLE findings ADD COLUMN reverified_at {dt_type}"))
             if "sla_deadline" not in f_cols:
-                conn.execute(text("ALTER TABLE findings ADD COLUMN sla_deadline DATETIME"))
+                conn.execute(text(f"ALTER TABLE findings ADD COLUMN sla_deadline {dt_type}"))
             if "is_sla_breached" not in f_cols:
-                conn.execute(text("ALTER TABLE findings ADD COLUMN is_sla_breached BOOLEAN DEFAULT 0"))
+                conn.execute(text(f"ALTER TABLE findings ADD COLUMN is_sla_breached BOOLEAN DEFAULT {bool_def}"))
             if "historical_context_note" not in f_cols:
                 conn.execute(text("ALTER TABLE findings ADD COLUMN historical_context_note TEXT"))
 
