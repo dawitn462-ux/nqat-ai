@@ -82,16 +82,9 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
         throw new Error(data.detail || `Authentication failed (HTTP ${res.status})`);
       }
 
-      // If user registered or logged in, check if email is verified
-      if (tab === 'register' || (!data.is_email_verified && data.role !== 'admin')) {
-        setPendingAuthData(data);
-        setVerifyIdentity(data.email || email || username);
-        setTab('verify');
-        setInfoMsg(`A 6-digit OTP verification code was sent to '${data.email || email}'. Please check your email inbox.`);
-      } else {
-        onAuthSuccess(data);
-        onClose();
-      }
+      // Immediately authenticate and close modal upon register or login
+      onAuthSuccess(data);
+      onClose();
     } catch (err) {
       setError(err.message || 'Network or server authentication error.');
     } finally {

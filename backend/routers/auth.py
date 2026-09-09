@@ -134,7 +134,8 @@ def register(req: RegisterRequest, request: Request, db: Session = Depends(get_d
             username=req.username,
             email=req.email,
             password=req.password,
-            organization_name=req.organization_name
+            organization_name=req.organization_name,
+            auto_verify=True
         )
     except ValueError as val_err:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(val_err))

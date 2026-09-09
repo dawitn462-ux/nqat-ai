@@ -75,13 +75,8 @@ export default function AuthLandingPage({ onAuthSuccess }) {
         throw new Error(data.detail || `Authentication failed (HTTP ${res.status})`);
       }
 
-      if (tab === 'register' || (!data.is_email_verified && data.role !== 'admin' && data.requires_verification)) {
-        setVerifyIdentity(data.email || email || username);
-        setTab('verify');
-        setInfoMsg(`A 6-digit OTP verification code was sent to '${data.email || email}'. Please check your email inbox.`);
-      } else {
-        onAuthSuccess(data);
-      }
+      // Immediately authenticate and redirect upon register or login
+      onAuthSuccess(data);
     } catch (err) {
       setError(err.message || 'Authentication error.');
     } finally {

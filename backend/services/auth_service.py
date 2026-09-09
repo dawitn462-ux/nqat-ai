@@ -179,7 +179,7 @@ def create_user_account(
     email: str | None = None,
     password: str | None = None,
     organization_name: str | None = None,
-    auto_verify: bool = False,
+    auto_verify: bool = True,
     auth_provider: str = "local",
     google_sub: str | None = None
 ) -> User:
