@@ -21,15 +21,18 @@ is_pytest = "pytest" in sys.modules or "pytest" in os.environ.get("PYTEST_CURREN
 DEFAULT_DATABASE_URL = "sqlite:///./nkat_dev.db"
 env_db_url = os.getenv("DATABASE_URL")
 
-if is_pytest or not env_db_url or os.getenv("USE_SQLITE", "true").lower() == "true":
+if is_pytest or (os.getenv("USE_SQLITE", "").lower() == "true"):
     DATABASE_URL = "sqlite:///./nkat_dev.db"
-else:
-    DATABASE_URL = env_db_url
+elif env_db_url and env_db_url.strip():
+    DATABASE_URL = env_db_url.strip()
     if DATABASE_URL.startswith("postgres://"):
         DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+else:
+    DATABASE_URL = "sqlite:///./nkat_dev.db"
 
 if DATABASE_URL.startswith("postgres"):
     try:
+        sys.stdout.write(f"[+] Connecting to PostgreSQL: {DATABASE_URL.split('@')[-1]}\n")
         engine = create_engine(
             DATABASE_URL,
             pool_pre_ping=True,
@@ -39,8 +42,10 @@ if DATABASE_URL.startswith("postgres"):
         )
         with engine.connect() as conn:
             pass
+        sys.stdout.write("[+] Successfully connected to PostgreSQL / Supabase database!\n")
     except Exception as exc:
-        sys.stderr.write(f"[!] PostgreSQL unavailable ({exc}). Falling back to local SQLite.\n")
+        sys.stderr.write(f"[!] CRITICAL: PostgreSQL connection to Supabase failed: {exc}\n")
+        sys.stderr.write(f"[!] Falling back to local SQLite temporarily.\n")
         DATABASE_URL = "sqlite:///./nkat_dev.db"
         engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 else:
