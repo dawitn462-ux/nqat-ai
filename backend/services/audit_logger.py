@@ -4,6 +4,7 @@ Tracks: finding_id, action ('approve', 'reject', 'auto-approve', 'rollback'), ac
 """
 
 import sys
+from typing import Optional
 from datetime import datetime, timezone
 from sqlalchemy.orm import Session
 from backend.models import AuditLog
