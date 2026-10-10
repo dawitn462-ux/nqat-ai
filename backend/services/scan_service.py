@@ -44,67 +44,18 @@ class SubdomainEnumModule:
 
 def validate_target_authorization(target_url: str, db: Optional[Session] = None, org_id: Optional[int] = None) -> str:
     """
-    Validates target against docs/AUTHORIZED_TARGETS.md policy AND user's verified DomainTargets in DB.
-    Raises ValueError if target ownership has not been verified or is not listed in authorization policy.
+    Validates target against authorized targets policy, registered domain targets,
+    DNS resolution, SSRF boundaries, and prohibited IP ranges.
+    Raises ValueError / TargetAuthorizationError / SSRFSecurityError if invalid.
     """
-    target_clean = (target_url or "").strip().rstrip("/")
-    if not target_clean:
-        raise ValueError("Target URL must be a non-empty string.")
+    from backend.services.target_authorization import validate_and_authorize_target, TargetAuthorizationError, SSRFSecurityError
 
-    target_parsed = urlparse(target_clean if target_clean.startswith(("http://", "https://")) else f"http://{target_clean}")
-    target_host = (target_parsed.hostname or "").lower()
-
-    # 1. Check against static policy file (built-in authorized targets)
     try:
-        auth_targets = TargetParser.get_authorized_targets()
-        for auth in auth_targets:
-            auth_clean = auth.rstrip("/")
-            auth_parsed = urlparse(auth_clean if auth_clean.startswith(("http://", "https://")) else f"http://{auth_clean}")
-            auth_host = (auth_parsed.hostname or "").lower()
+        auth_ctx = validate_and_authorize_target(target_url=target_url, db=db, org_id=org_id)
+        return auth_ctx["target_url"]
+    except (TargetAuthorizationError, SSRFSecurityError) as exc:
+        raise ValueError(str(exc))
 
-            if auth_clean and target_clean and (
-                auth_clean == target_clean or
-                (target_host and auth_host and target_host == auth_host)
-            ):
-                return target_clean
-    except Exception:
-        pass
-
-    # 2. Check against DB verified domain targets for organization
-    if db is not None:
-        from backend.models import DomainTarget, DomainVerificationStatus
-        from backend.services.domain_verification_service import normalize_domain, is_domain_verified_and_active, log_domain_audit
-
-        domain_name, _ = normalize_domain(target_clean)
-        query = db.query(DomainTarget).filter(
-            DomainTarget.domain == domain_name
-        )
-        if org_id is not None:
-            query = query.filter(DomainTarget.organization_id == org_id)
-
-        matched_domain = query.first()
-        if matched_domain:
-            if matched_domain.status == DomainVerificationStatus.VERIFIED.value:
-                if not is_domain_verified_and_active(matched_domain):
-                    matched_domain.status = DomainVerificationStatus.EXPIRED.value
-                    matched_domain.last_error = "Domain verification expired (>30 days). Re-verification required."
-                    log_domain_audit(
-                        db=db,
-                        user_id=None,
-                        domain=matched_domain.domain,
-                        method=matched_domain.verification_method,
-                        result="EXPIRED",
-                        details="Domain verification expired (older than 30 days). Re-verification required."
-                    )
-                    db.commit()
-                    raise ValueError(
-                        f"Target '{target_url}' verification has EXPIRED (>30 days). Mandatory re-verification is required prior to scanning."
-                    )
-                return target_clean
-
-    raise ValueError(
-        f"Target '{target_url}' is NOT authorized for scanning. Mandatory ownership verification (DNS TXT or File check) is required prior to scanning."
-    )
 
 
 

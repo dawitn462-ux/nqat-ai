@@ -82,6 +82,10 @@ class ScopeValidator:
         if not hostname:
             raise ScopeViolationError(url, "URL lacks a valid hostname.")
 
+        # Prohibit cloud metadata endpoints
+        if hostname in {"169.254.169.254", "metadata.google.internal", "100.100.100.200", "fd00:ec2::254"}:
+            raise ScopeViolationError(url, "Cloud metadata endpoints are strictly prohibited from scanning.")
+
         # Host check
         if hostname not in self.allowed_hosts:
             try:

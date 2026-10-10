@@ -98,17 +98,18 @@ def fetch_nvd_cve_details(cve_id: str) -> Dict[str, Any]:
                     _save_cache(cache)
                     return cve_info
     except Exception as exc:
-        sys.stderr.write(f"[!] NVD API query for {cve_id_clean} failed or timed out: {exc}. Using fallback descriptor.\n")
+        sys.stderr.write(f"[!] NVD API query for {cve_id_clean} failed or timed out: {exc}. NVD metrics unavailable.\n")
 
-    # Synthetic / Offline Fallback Descriptor
+    # Honest Descriptor without fabricated scores
     fallback_info = {
         "cve_id": cve_id_clean,
         "description": f"Common Vulnerability and Exposure record {cve_id_clean} registered in the NIST National Vulnerability Database (NVD).",
-        "cvss_score": 7.5,
-        "cvss_severity": "HIGH",
+        "cvss_score": None,
+        "cvss_severity": "UNAVAILABLE",
         "references": [f"https://nvd.nist.gov/vuln/detail/{cve_id_clean}"],
-        "source": "NIST NVD Reference Catalog (Local Fallback)",
+        "source": "NIST NVD Reference Catalog (Offline / Score Unavailable)",
     }
     cache[cve_id_clean] = fallback_info
     _save_cache(cache)
     return fallback_info
+

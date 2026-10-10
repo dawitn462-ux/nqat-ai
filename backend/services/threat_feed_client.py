@@ -300,68 +300,26 @@ def update_threat_feed_caches(force_download: bool = False) -> Dict[str, Any]:
         "timestamp": datetime.now(timezone.utc).isoformat()
     }
 
-    is_pytest = "pytest" in os.environ.get("PYTEST_CURRENT_TEST", "") or "PYTEST_CURRENT_TEST" in os.environ or "pytest" in sys.modules
-
-    if is_pytest:
-        if not os.path.exists(CISA_KEV_CACHE_PATH):
-            default_kev = {
-                "last_cached_at": datetime.now(timezone.utc).isoformat(),
-                "vulnerabilities": [
-                    {"cveID": "CVE-2021-44228", "vendorProject": "Apache", "product": "Log4j"},
-                    {"cveID": "CVE-2021-34527", "vendorProject": "Microsoft", "product": "Print Spooler"},
-                    {"cveID": "CVE-2017-5638", "vendorProject": "Apache", "product": "Struts"},
-                ]
-            }
-            with open(CISA_KEV_CACHE_PATH, "w", encoding="utf-8") as f:
-                json.dump(default_kev, f, indent=2)
-        if not os.path.exists(EPSS_CACHE_PATH):
-            default_epss = {
-                "last_cached_at": datetime.now(timezone.utc).isoformat(),
-                "scores": {
-                    "CVE-2021-44228": {"epss": 0.97, "percentile": 0.99},
-                    "CVE-2021-34527": {"epss": 0.95, "percentile": 0.98},
-                }
-            }
-            with open(EPSS_CACHE_PATH, "w", encoding="utf-8") as f:
-                json.dump(default_epss, f, indent=2)
-        if not os.path.exists(GITHUB_ADVISORIES_CACHE_PATH):
-            default_ghsa = {
-                "last_cached_at": datetime.now(timezone.utc).isoformat(),
-                "count": 2,
-                "advisories": [
-                    {"ghsaId": "GHSA-j2x6-c2p4-43wv", "summary": "Log4j Remote Code Execution", "severity": "CRITICAL"},
-                    {"ghsaId": "GHSA-c3h8-c97f-8656", "summary": "Apache Struts Remote Code Execution", "severity": "HIGH"}
-                ]
-            }
-            with open(GITHUB_ADVISORIES_CACHE_PATH, "w", encoding="utf-8") as f:
-                json.dump(default_ghsa, f, indent=2)
-        if not os.path.exists(URLHAUS_CACHE_PATH):
-            default_urlhaus = {
-                "last_cached_at": datetime.now(timezone.utc).isoformat(),
-                "count": 10,
-                "urls": [
-                    {"url": "http://malicious-c2-botnet.test/payload.bin", "url_status": "online", "threat": "malware_download", "urlhaus_reference": "https://urlhaus.abuse.ch/url/1001/"}
-                ]
-            }
-            with open(URLHAUS_CACHE_PATH, "w", encoding="utf-8") as f:
-                json.dump(default_urlhaus, f, indent=2)
-        if not os.path.exists(THREATFOX_CACHE_PATH):
-            default_tf = {
-                "last_cached_at": datetime.now(timezone.utc).isoformat(),
-                "count": 10,
-                "iocs": [
-                    {"ioc": "malicious-c2-botnet.test:8080", "threat_type": "botnet_cc", "malware_printable": "Cobalt Strike", "ioc_type": "domain:port"}
-                ]
-            }
-            with open(THREATFOX_CACHE_PATH, "w", encoding="utf-8") as f:
-                json.dump(default_tf, f, indent=2)
-
+    # Check existing caches first
+    if os.path.exists(CISA_KEV_CACHE_PATH):
         results["cisa_kev_updated"] = True
+    if os.path.exists(EPSS_CACHE_PATH):
         results["epss_updated"] = True
+    if os.path.exists(NIST_NVD_CACHE_PATH):
+        results["nist_nvd_updated"] = True
+    if os.path.exists(GITHUB_ADVISORIES_CACHE_PATH):
         results["github_advisories_updated"] = True
+    if os.path.exists(URLHAUS_CACHE_PATH):
         results["urlhaus_updated"] = True
+    if os.path.exists(THREATFOX_CACHE_PATH):
         results["threatfox_updated"] = True
+
+    if not force_download and all([
+        os.path.exists(CISA_KEV_CACHE_PATH),
+        os.path.exists(EPSS_CACHE_PATH)
+    ]):
         return results
+
 
     # 1. Fetch Live CISA KEV Catalog
     try:

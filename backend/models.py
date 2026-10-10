@@ -11,10 +11,15 @@ from backend.database import Base
 
 
 class ScanStatus(str, enum.Enum):
+    QUEUED = "QUEUED"
+    VALIDATING = "VALIDATING"
     PENDING = "PENDING"
     RUNNING = "RUNNING"
+    PARTIALLY_COMPLETED = "PARTIALLY_COMPLETED"
     COMPLETED = "COMPLETED"
     FAILED = "FAILED"
+    CANCELLED = "CANCELLED"
+    TIMED_OUT = "TIMED_OUT"
 
 
 class TargetStatus(str, enum.Enum):
@@ -29,9 +34,11 @@ class TargetStatus(str, enum.Enum):
 
 
 class FindingStatus(str, enum.Enum):
+    NEW = "NEW"
     OPEN = "OPEN"
     CONFIRMED = "CONFIRMED"
     UNDER_TRIAGE = "UNDER_TRIAGE"
+    NEEDS_VERIFICATION = "NEEDS_VERIFICATION"
     IN_REMEDIATION = "IN_REMEDIATION"
     PATCH_PROPOSED = "PATCH_PROPOSED"
     PATCH_APPROVED = "PATCH_APPROVED"
@@ -58,6 +65,9 @@ class SeverityLevel(str, enum.Enum):
 
 class UserRole(str, enum.Enum):
     ADMIN = "admin"
+    SECURITY_ANALYST = "security_analyst"
+    SECURITY_ENGINEER = "security_engineer"
+    AUDITOR = "auditor"
     ANALYST = "analyst"
     VIEWER = "viewer"
 
@@ -144,11 +154,24 @@ class Scan(Base):
     assessment_id = Column(Integer, ForeignKey("assessments.id", ondelete="SET NULL"), nullable=True, index=True)
     target = Column(String(255), nullable=False, index=True)
     status = Column(String(50), nullable=False, default=ScanStatus.PENDING.value, index=True)
+    scan_profile = Column(String(100), nullable=True, default="STANDARD")
+    tools_selected = Column(Text, nullable=True)
+    tool_versions = Column(Text, nullable=True)
+    configuration = Column(Text, nullable=True)
+    raw_results_count = Column(Integer, default=0, nullable=True)
+    normalized_findings_count = Column(Integer, default=0, nullable=True)
+    errors_and_warnings = Column(Text, nullable=True)
+    started_at = Column(DateTime(timezone=True), nullable=True)
+    completed_at = Column(DateTime(timezone=True), nullable=True)
+    duration_seconds = Column(Float, nullable=True)
+    cancelled_by = Column(String(255), nullable=True)
+    requesting_user_id = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 
     organization = relationship("Organization", back_populates="scans")
     assessment = relationship("Assessment", back_populates="scans")
     subdomains = relationship("Subdomain", back_populates="scan", cascade="all, delete-orphan")
+    observations = relationship("FindingObservation", back_populates="scan", cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"<Scan(id={self.id}, target='{self.target}', status='{self.status}')>"
@@ -203,6 +226,15 @@ class Finding(Base):
     risk_acceptance_reason = Column(Text, nullable=True)
     vulnerability_type = Column(String(255), nullable=True, index=True)
     detection_method = Column(String(100), nullable=True, default="DAST_ACTIVE_PROBE", index=True)
+    fingerprint = Column(String(64), nullable=True, index=True)
+    detection_source = Column(String(100), nullable=True, default="DAST_CORE", index=True)
+    confidence_level = Column(String(50), nullable=True, default="MEDIUM", index=True)
+    cvss_score = Column(Float, nullable=True)
+    cvss_version = Column(String(10), nullable=True)
+    raw_evidence = Column(Text, nullable=True)
+    first_seen_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=True)
+    last_seen_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=True)
+    observation_count = Column(Integer, default=1, nullable=True)
     request_evidence = Column(Text, nullable=True)
     response_evidence = Column(Text, nullable=True)
     code_evidence = Column(Text, nullable=True)
@@ -217,6 +249,7 @@ class Finding(Base):
 
     subdomain = relationship("Subdomain", back_populates="findings")
     assessment = relationship("Assessment", back_populates="findings")
+    observations = relationship("FindingObservation", back_populates="finding", cascade="all, delete-orphan")
 
     @property
     def full_fix_guide(self):
@@ -436,6 +469,53 @@ class Remediation(Base):
 
     def __repr__(self):
         return f"<Remediation(id={self.id}, finding_id={self.finding_id}, status='{self.status}', confidence={self.confidence})>"
+
+
+class FindingObservation(Base):
+    __tablename__ = "finding_observations"
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    finding_id = Column(Integer, ForeignKey("findings.id", ondelete="CASCADE"), nullable=False, index=True)
+    scan_id = Column(Integer, ForeignKey("scans.id", ondelete="CASCADE"), nullable=False, index=True)
+    scanner_name = Column(String(100), nullable=False, index=True)
+    scanner_version = Column(String(50), nullable=True)
+    observed_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    matched_target = Column(String(255), nullable=True)
+    raw_output = Column(Text, nullable=True)
+    request_evidence = Column(Text, nullable=True)
+    response_evidence = Column(Text, nullable=True)
+
+    finding = relationship("Finding", back_populates="observations")
+    scan = relationship("Scan", back_populates="observations")
+
+    def __repr__(self):
+        return f"<FindingObservation(id={self.id}, finding_id={self.finding_id}, scanner='{self.scanner_name}')>"
+
+
+class SecurityReport(Base):
+    __tablename__ = "security_reports"
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    report_uuid = Column(String(64), unique=True, index=True, nullable=False)
+    report_type = Column(String(100), nullable=False, index=True)  # EXECUTIVE, TECHNICAL, SCAN_EXECUTION, REMEDIATION, THREAT_INTELLIGENCE
+    report_format = Column(String(20), nullable=False)  # PDF, CSV, JSON
+    title = Column(String(255), nullable=False)
+    scan_id = Column(Integer, ForeignKey("scans.id", ondelete="SET NULL"), nullable=True, index=True)
+    organization_id = Column(Integer, ForeignKey("organizations.id", ondelete="CASCADE"), nullable=False, index=True)
+    requesting_user_id = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    parameters = Column(Text, nullable=True)  # JSON
+    file_path = Column(Text, nullable=True)
+    integrity_hash = Column(String(64), nullable=True)
+    generation_status = Column(String(50), default="COMPLETED", nullable=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+
+    organization = relationship("Organization")
+    scan = relationship("Scan")
+    requesting_user = relationship("User")
+
+    def __repr__(self):
+        return f"<SecurityReport(id={self.id}, uuid='{self.report_uuid}', type='{self.report_type}', format='{self.report_format}')>"
+
 
 
 
